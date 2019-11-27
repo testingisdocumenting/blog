@@ -1,4 +1,4 @@
-<mdoc>
+<znai>
   <entry>
     <url>/blog/entry/testing-makes-you-fast-day-one#tests-are-here-to-speed-you-up</url>
     <fullTitle>Testing Is Documenting: Testing Makes You Fast Day One, Tests Are Here To Speed You Up [Entry]</fullTitle>
@@ -8,11 +8,11 @@
     </text>
   </entry>
   <entry>
-    <url>/blog/entry/testing-makes-you-fast-day-one#building-medieval-castle</url>
-    <fullTitle>Testing Is Documenting: Testing Makes You Fast Day One, Building Medieval Castle [Entry]</fullTitle>
+    <url>/blog/entry/testing-makes-you-fast-day-one#building-a-medieval-castle</url>
+    <fullTitle>Testing Is Documenting: Testing Makes You Fast Day One, Building A Medieval Castle [Entry]</fullTitle>
     <text>
       <text>We are going to build a Castle, add features to it, and do a manual inspection of our creation as we go.</text>
       <score>STANDARD</score>
     </text>
   </entry>
-</mdoc>
+</znai>

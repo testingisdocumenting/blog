@@ -27,8 +27,8 @@ toc = [ {
       "title" : "Tests Are Here To Speed You Up",
       "id" : "tests-are-here-to-speed-you-up"
     }, {
-      "title" : "Building Medieval Castle",
-      "id" : "building-medieval-castle"
+      "title" : "Building A Medieval Castle",
+      "id" : "building-a-medieval-castle"
     } ]
   } ]
 } ]
