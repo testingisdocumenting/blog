@@ -15,7 +15,7 @@ any piece of your software in `O(1)` keystrokes.
    
 Let me try to explain.
 
-# Building Medieval Castle
+# Building A Medieval Castle
 
 We are going to build a Castle, add features to it, and do a manual inspection of our creation as we go.
 

@@ -17,11 +17,10 @@ trap cleanup EXIT
 git clone "$GIT_URL" --branch $GH_PAGES_BRANCH --single-branch --depth 1 "$GH_PAGES_DIR"
 
 # Cleanup existing pages
-rm -rf "$GH_PAGES_DIR"/guide/*
-rm -rf "$GH_PAGES_DIR"/znaisrc/*
+rm -rf "$GH_PAGES_DIR"/blog/*
 
 # Copy in new pages
-cp -r "$ROOT_DIR"/blog-content/target/blog "$GH_PAGES_DIR"/blog/
+cp -r "$ROOT_DIR"/blog-content/target/blog/* "$GH_PAGES_DIR"/blog/
 
 pushd "$GH_PAGES_DIR"
 
