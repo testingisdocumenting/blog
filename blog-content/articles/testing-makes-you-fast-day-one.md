@@ -19,3 +19,8 @@ Let me try to explain.
 
 We are going to build a Castle, add features to it, and do a manual inspection of our creation as we go.
 
+Let's start small. All we need is a single room and a throne to sit on.
+
+:include-svg: assets/castle.svg {idsToReveal: ["one"]}
+
+ 
