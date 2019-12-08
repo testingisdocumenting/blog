@@ -99,7 +99,7 @@
 }
 
 .blog-list-entry-title {
-    font-size: var(--znaiblog-title-size);
+    font-size: var(--znaiblog-list-title-size);
     color: var(--znai-brand-primary-color);
     font-weight: bold;
 }
@@ -141,9 +141,10 @@
     cursor: pointer;
 }
 :root {
-    --znai-brand-primary-color: #aa5c3d;
+    --znai-brand-primary-color: #9c52aa;
     --znai-single-column-full-width: 900px;
-    --znaiblog-title-size: 28px;
+    --znaiblog-title-size: 36px;
+    --znaiblog-list-title-size: 28px;
 
     --znaiblog-header-background-color: #17151d;
     --znaiblog-header-color: #afafaf;

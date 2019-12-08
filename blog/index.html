@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="/blog/static/main.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/blog/style.css">
 </head>
 <link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
 <body>
@@ -28,9 +29,11 @@
 </article>
 
 <article>
-<a href="entry/testing-makes-you-fast-day-one/">Testing Makes You Fast Day One</a>
-<a href="entry/testing-makes-you-fast-day-one/#tests-are-here-to-speed-you-up">Testing Makes You Fast Day One Tests Are Here To Speed You Up</a>
-<a href="entry/testing-makes-you-fast-day-one/#building-a-medieval-castle">Testing Makes You Fast Day One Building A Medieval Castle</a>
+<a href="entry/testing-makes-you-faster-day-one/">Testing Makes You Faster Day One</a>
+<a href="entry/testing-makes-you-faster-day-one/#tests-are-here-to-speed-you-up">Testing Makes You Faster Day One Tests Are Here To Speed You Up</a>
+<a href="entry/testing-makes-you-faster-day-one/#building-a-medieval-castle">Testing Makes You Faster Day One Building A Medieval Castle</a>
+<a href="entry/testing-makes-you-faster-day-one/#teleports-system">Testing Makes You Faster Day One Teleports System</a>
+<a href="entry/testing-makes-you-faster-day-one/#implementing-teleports">Testing Makes You Faster Day One Implementing Teleports</a>
 </article>
 </section>
 </div>
@@ -52,21 +55,21 @@ ReactDOM.render(React.createElement(Documentation, {
     "id" : "blog",
     "title" : "Testing Is Documenting",
     "type" : "Blog",
-    "previewEnabled" : true
+    "previewEnabled" : false
   },
   "page" : {
     "type" : "Page",
     "content" : [ {
       "tocItems" : [ {
         "sectionTitle" : "Entry",
-        "pageTitle" : "Testing Makes You Fast Day One",
+        "pageTitle" : "Testing Makes You Faster Day One",
         "pageMeta" : {
           "date" : [ "2019-11-25" ],
           "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
         },
         "dirName" : "entry",
-        "fileName" : "testing-makes-you-fast-day-one",
-        "viewOnRelativePath" : "articles/testing-makes-you-fast-day-one.md",
+        "fileName" : "testing-makes-you-faster-day-one",
+        "viewOnRelativePath" : "articles/testing-makes-you-faster-day-one.md",
         "pageSectionIdTitles" : [ ]
       } ],
       "type" : "ListOfBlogEntries"
@@ -82,7 +85,49 @@ ReactDOM.render(React.createElement(Documentation, {
       "pageSectionIdTitles" : [ ]
     }
   },
-  "footer" : { }
+  "footer" : {
+    "type" : "Footer",
+    "content" : [ {
+      "columns" : [ {
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "I am very passioned about testing and documentation. I believe they are two major aspects of software engineering that are being neglected",
+            "type" : "SimpleText"
+          }, {
+            "type" : "SoftLineBreak"
+          }, {
+            "text" : "by many enginneers.",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "Testing and documentation are intertwined and I hope to show you how much exactly.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "I am new at writing, and especially English writing. Please be kind and suggest grammar improvements with ",
+            "type" : "SimpleText"
+          }, {
+            "url" : "https://github.com/testingisdocumenting/blog",
+            "isFile" : false,
+            "type" : "Link",
+            "content" : [ {
+              "text" : "Pull Requests",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ],
+      "config" : { },
+      "type" : "Columns"
+    } ]
+  }
 }), document.getElementById("znai"));
 </script>
 
