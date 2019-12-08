@@ -19,6 +19,9 @@ git clone "$GIT_URL" --branch $GH_PAGES_BRANCH --single-branch --depth 1 "$GH_PA
 # Cleanup existing pages
 rm -rf "$GH_PAGES_DIR"/blog/*
 
+# Copy index.html
+cp -r "$ROOT_DIR"/blog-content/index.html "$GH_PAGES_DIR"/
+
 # Copy in new pages
 cp -r "$ROOT_DIR"/blog-content/target/blog/* "$GH_PAGES_DIR"/blog/
 
