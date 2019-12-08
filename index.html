@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Testing Is Documenting</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153393045-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'UA-153393045-1');
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --menu-item-color: #ddd;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            background-color: #3e3e3e;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+
+        .testing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            flex: 1;
+            width: 100vw;
+            color: #d8d8d8;
+            background-color: #272f33;
+        }
+
+        .menu {
+            flex-basis: 64px;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            color: var(--menu-item-color);
+            font-size: 24px;
+        }
+
+        .menu a {
+            color: var(--menu-item-color);
+            text-decoration: none;
+        }
+
+        .menu a:visited {
+            color: var(--menu-item-color);
+        }
+
+        .documenting {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+            width: 100vw;
+            font-size: 64px;
+            color: #f9d8ae;
+            background-color: #3e3e3e;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="testing">
+            Testing
+        </div>
+
+        <div class="menu">
+            <div class="item">
+                <a href="/blog">Blog</a>
+            </div>
+        </div>
+
+        <div class="documenting">
+            Documenting
+        </div>
+    </div>
+</body>
+</html>
