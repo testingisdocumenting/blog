@@ -157,4 +157,3 @@ class ChestTest {
 
 This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in `O(1)` keystrokes.
 Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand. 
-  
