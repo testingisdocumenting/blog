@@ -8,6 +8,7 @@
 }
 .main-panel {
     min-height: 100vh;
+    height: 100vh;
     max-height: 100vh;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
@@ -17,11 +18,6 @@
 }
 
 .blog-header {
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-align: center;
-            align-items: center;
-
     background-color: var(--znaiblog-header-background-color);
 
     margin-bottom: 48px;
