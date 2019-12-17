@@ -7,13 +7,10 @@ summary: How testing makes you fast day one and not in some unknown future
 
 # Tests Are Here To Speed You Up
 
-*"I am not writing tests right now as they are going to slow me down"* is one of the most common excuses I heard on 
-the projects I worked. 
+*"I am not writing tests right now as they are going to slow me down"* is one of the most common excuses I heard in 
+the projects I worked on.
 
-One possible reason for being slowed down by tests is the lack of tests writing experience. 
-
-But I think there is another, bigger reason or rather untapped, most likely unrealized super power. The power of exercising
-any piece of your software in `O(1)` keystrokes.
+A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in `O(1)` keystrokes. 
    
 Let me try to explain.
 
@@ -31,8 +28,8 @@ Let's add a few more rooms and a chest.
 
 :include-svg: assets/castle.svg {idsToReveal: ["one", "two"], actualSize: true}
 
-Our goal is to test if we can open that chest. This time we have to do a little bit more legs work.
-This time a simple check took as a few minutes longer.
+Our goal is to test if we can open that chest. This time we have to do a little bit more legwork.
+This time, a simple check took us a few minutes longer.
 
 Let's add a bit of security to our castle by adding keys and levers. 
 
@@ -41,12 +38,12 @@ Let's add a bit of security to our castle by adding keys and levers.
 We have to test each door and to do that we need to go through our entire castle. 
 This makes a good test and a very important one.
 
-During our next development iteration we decided to add a new smart lock to our chest, so we can open it
+For our next iteration we decided to add a new smart lock to our chest, so we can open it
 with our retina.
 
 :include-svg: assets/castle.svg {idsToReveal: ["one", "two", "three", "smartLock"], actualSize: true}
 
-We gotta test this feature. So we open a jar, to pick a key, to open a door and another one, to pull the lever,
+We gotta test this feature. So we open a jar, to pick a key, to open first one door and then to open the other door, to pull the lever,
 to run the stairs through the opened door. After catching our breath we try to open a chest. 
 
 A day later, we decide to add an auto lock after three failed attempt. 
@@ -58,7 +55,7 @@ A trap, puzzle and a dragon later we are ready to deploy.
 
 :include-svg: assets/castle.svg {idsToReveal: ["one", "two", "three", "smartLock", "four", "scissors"], actualSize: true}
 
-As before we gotta test every new added Security feature. This is a good test and a very important one. 
+As before, we gotta test every new added Security feature. This is a good test and a very important one. 
 We get caught in a trap, we jump over the trap, we play rock/paper/scissors to lose and to win, open the door, 
 get eaten by the dragon, defeat the dragon and finally reach the chest. All tests passed.
 
@@ -66,14 +63,14 @@ Another development iteration passes and we decided to make *scissors* game to b
 
 :include-svg: assets/castle.svg {idsToReveal: ["one", "two", "three", "smartLock", "four", "scissorsLeft"], actualSize: true}
 
-And so we bring a friend who is lefty, can jump over traps, to open a jar, to pick a key, to open a door, to jump over trap,
+And so we bring a friend who is a lefty, can jump over traps, to open a jar, to pick a key, to open a door, to jump over trap,
  to open a door, to play rock/paper/scissors
  
 A day later we decided to add a fingerprint reader to our chest 
 
 :include-svg: assets/castle.svg {idsToReveal: ["one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft"], actualSize: true}
 
-And so we bring a friend who is lefty, not registered with our castle, who can jump over traps, 
+And so we bring another friend who is a lefty, who is not registered with our castle, who can jump over traps, 
 who won't be scared of a dragon, to open a jar, to pick a key, to open a door, to jump over trap, to open a door, to 
 play rock/paper/scissors, to open a lever, to challenge a dragon, to put a finger to a chest.
  
@@ -158,7 +155,5 @@ class ChestTest {
 }
 ``` 
 
-This is the untapped power of the tests I was talking about at the begging. The power of exercising any piece of your software in `O(1)` keystrokes.
-Regardless of how large or small you software is, you are going to be consistently productive day one, day two, day hundred and day thousand. 
-
-You will be tweaking your castle and validating it in the matters of seconds, using the ever growing system of teleports.  
+This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in `O(1)` keystrokes.
+Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand. 
