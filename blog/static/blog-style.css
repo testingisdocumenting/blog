@@ -59,6 +59,8 @@
 }
 
 .blog-discuss {
+    padding-left: calc(1 * var(--znai-single-side-horizontal-min-spacing));
+    padding-right: calc(1 * var(--znai-single-side-horizontal-min-spacing));
     margin-top: 32px;
 }
 
