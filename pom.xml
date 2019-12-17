@@ -16,6 +16,7 @@
 
     <modules>
         <module>blog-content</module>
+        <module>pet-store</module>
     </modules>
 
     <properties>
@@ -28,6 +29,7 @@
         <dependencies>
         </dependencies>
     </dependencyManagement>
+
     <build>
     </build>
 </project>
