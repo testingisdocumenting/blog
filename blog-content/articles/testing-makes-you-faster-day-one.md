@@ -171,7 +171,7 @@ You probably don't face castles and dragons every day at your work, so let me ma
 Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.
 
 Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good.
-A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the sae day. 
+A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day. 
 So how do you test this scenario?
 
 You create a SysAdmin Ticket to request `WRITE` access to `DEV` database. Wait for approval. Restart the server and check your code.
@@ -239,4 +239,4 @@ You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth sy
 
 * Having a tight feedback loop is important for being efficient engineer.
 * Tests are your teleports into any part of your application.
-* Tests make you fast 
+* Tests make you fast.
