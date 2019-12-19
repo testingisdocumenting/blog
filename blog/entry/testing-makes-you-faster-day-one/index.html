@@ -25,7 +25,7 @@
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
 <article>
 <header><h1>Tests Are Here To Speed You Up</h1></header>
-<p>&quot;I am not writing tests right now as they are going to slow me down&quot; is one of the most common excuses I heard in the projects I worked on.A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in O(1) keystrokes.Let me try to explain.</p>
+<p>&quot;I am not writing tests right now as they are going to slow me down&quot; is one of the most common excuses I heard in the projects I worked on.A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in O(1) keystrokes. By O(1) I mean that regardless of how big your application becomes you will always be one button away of seeing the impact of your changes.The superpower of having the tightest feedback loop.Let me try to explain.</p>
 </article>
 
 <article>
@@ -40,7 +40,17 @@
 
 <article>
 <header><h1>Implementing Teleports</h1></header>
-<p>The castle we have built is your app. And the main entrance is your language main function.One way to implement teleports is to implement more than one main file with its own main function. java class ChestTeleport { public static void main() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); assert !chest.open(wrongAuth); FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); assert chest.open(validAuth)); } } If you do just that it is already going to be a time saver. Any time you want to test a different portion of your castle, you just use a different file to execute.As the number of teleports grow it may become harder to sort through them to pick one to use. Also teleports that are rarely used may become obsolete and point you to non existing parts of your castle.Fortunately most languages have a testing framework to define and structure teleports. Moreover they will make sure that teleports are still functioning. java class ChestTest { @Test public void invalidFingerAuth() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); Assert.assertFalse(chest.open(auth)); } @Test public void validFingerAuth() { FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); Assert.assertTrue(chest.open(auth)); } } This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in O(1) keystrokes. Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.</p>
+<p>The castle we have built is your app. And the main entrance is your language main function.One way to build teleports is to implement more than one main file with its own main function. java class ChestTeleport { public static void main() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); assert !chest.open(wrongAuth); FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); assert chest.open(validAuth)); } } If you do just that it is already going to be a time saver. Any time you want to test a different portion of your castle, you just use a different teleport - a different file to execute.As the number of teleports grow it may become harder to sort through them to pick one to use. Also teleports that are rarely used may become obsolete and point you to non existing parts of your castle.Fortunately most languages have a testing framework to define and structure your teleports. Moreover they will make sure that teleports are still functioning. java class ChestTest { @Test public void invalidFingerAuth() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); Assert.assertFalse(chest.open(auth)); } @Test public void validFingerAuth() { FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); Assert.assertTrue(chest.open(auth)); } } This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in one button press. Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.</p>
+</article>
+
+<article>
+<header><h1>Real Life Boring Example</h1></header>
+<p>You probably don't face castles and dragons every day at your work, so let me map it to a boring real life example.Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good. A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day. So how do you test this scenario?You create a SysAdmin Ticket to request WRITE access to DEV database. Wait for approval. Restart the server and check your code.Note: You may say, but hey, I can run my database locally! Sure, but not every big company and not every software has moved on to the greatest tech. And most excuses for not writing tests come from Enterprise engineers working on legacy applications. Plus it helps to make a point.Your code is in production for a month. Everyone is happy, the page is a great success and have many daily visitors. Hence a new request comes up: you need to change the sorting works. text Smith Bo Smith Bob Smith Bobed Smith Al Smith Alice text Smith Alice Smith Al Smith Bobed Smith Bob Smith Bo Basically, still sort alphabetically, but put longer names at the top. It makes page looks better!You fire up your DEV to realize the data is gone. You create a SysAdmin Ticket to request WRITE access to DEV database. Wait for approval. Restart the server and start coding.Let's rewind and try again. Instead of jumping to deploy and database manipulations, let's build a teleport. java class EmployeesSorterTest { @Test public void matchingLastName() { EmployeesList list = new EmployeesList(); list.add(&quot;Smith&quot;, &quot;Bobed&quot;); list.add(&quot;Smith&quot;, &quot;Alice&quot;); list.add(&quot;Smith&quot;, &quot;Al&quot;); list.add(&quot;Smith&quot;, &quot;Bob&quot;); EmployeesSorter employeesSorter = new EmployeesSorter(); EmployeesList sorted = employeesSorter.sort(list); Assert.assertEqual(&quot;Alice&quot;, sorted.get(0).getFirstName()); Assert.assertEqual(&quot;Al&quot;, sorted.get(1).getFirstName()); Assert.assertEqual(&quot;Bobed&quot;, sorted.get(2).getFirstName()); Assert.assertEqual(&quot;Bob&quot;, sorted.get(3).getFirstName()); } } Whether you implement EmployeesSorterTest first or EmployeesSorter is not that important to me.What important is you have a very tight feedback loop between your changes and the result. You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth systems and get straight to the business logic at hand.</p>
+</article>
+
+<article>
+<header><h1>Summary</h1></header>
+<p>Having a tight feedback loop is important for being efficient engineer.Tests are your teleports into any part of your application.Tests make you fast.</p>
 </article>
 </section>
 </div>
@@ -93,13 +103,40 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in ",
+          "text" : "A lack of test writing experience can make you feel this way, but I think there is another,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower:",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "the power of exercising any piece of your software in ",
           "type" : "SimpleText"
         }, {
           "code" : "O(1)",
           "type" : "InlinedCode"
         }, {
-          "text" : " keystrokes.",
+          "text" : " keystrokes. By ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "O(1)",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " I mean that regardless of how big",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "your application becomes you will always be one button away of seeing the impact of your changes.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The superpower of having the tightest feedback loop.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -479,7 +516,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "One way to implement teleports is to implement more than one ",
+          "text" : "One way to build teleports is to implement more than one ",
           "type" : "SimpleText"
         }, {
           "code" : "main",
@@ -508,7 +545,7 @@ ReactDOM.render(React.createElement(Documentation, {
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "different file to execute.",
+          "text" : "different teleport - a different file to execute.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -525,7 +562,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Fortunately most languages have a testing framework to define and structure teleports. Moreover they will make sure",
+          "text" : "Fortunately most languages have a testing framework to define and structure your teleports. Moreover they will make sure",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
@@ -542,28 +579,233 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in ",
-          "type" : "SimpleText"
-        }, {
-          "code" : "O(1)",
-          "type" : "InlinedCode"
-        }, {
-          "text" : " keystrokes.",
+          "text" : "This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in one button press.",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.",
+          "text" : "Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.",
           "type" : "SimpleText"
         } ]
       } ]
+    }, {
+      "title" : "Real Life Boring Example",
+      "id" : "real-life-boring-example",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You probably don't face castles and dragons every day at your work, so let me map it to a boring real life example.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "So how do you test this scenario?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You create a SysAdmin Ticket to request ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WRITE",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " access to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " database. Wait for approval. Restart the server and check your code.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Note: You may say, but hey, I can run my database locally! Sure, but not every big company and not every software has moved on to the greatest tech.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "And most excuses for not writing tests come from Enterprise engineers working on legacy applications. Plus it helps to make a point.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Your code is in production for a month. Everyone is happy, the page is a great success and have many daily visitors.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Hence a new request comes up: you need to change the sorting works.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "columns" : [ {
+          "content" : [ {
+            "lang" : "text",
+            "snippet" : "Smith Bo\nSmith Bob\nSmith Bobed\nSmith Al\nSmith Alice\n",
+            "lineNumber" : "",
+            "title" : "insted of",
+            "type" : "Snippet"
+          } ]
+        }, {
+          "content" : [ {
+            "lang" : "text",
+            "snippet" : "Smith Alice\nSmith Al\nSmith Bobed\nSmith Bob\nSmith Bo\n",
+            "lineNumber" : "",
+            "title" : "expected",
+            "type" : "Snippet"
+          } ]
+        } ],
+        "config" : { },
+        "type" : "Columns"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Basically, still sort alphabetically, but put longer names at the top. It makes page looks better!",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You fire up your ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " to realize the data is gone. You create a SysAdmin Ticket to request ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WRITE",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " access to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " database.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Wait for approval. Restart the server and start coding.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's rewind and try again. Instead of jumping to deploy and database manipulations, let's build a teleport.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "class EmployeesSorterTest {\n    @Test\n    public void matchingLastName() {\n        EmployeesList list = new EmployeesList();\n        list.add(\"Smith\", \"Bobed\");\n        list.add(\"Smith\", \"Alice\");\n        list.add(\"Smith\", \"Al\");\n        list.add(\"Smith\", \"Bob\");\n\n        EmployeesSorter employeesSorter = new EmployeesSorter();\n        EmployeesList sorted = employeesSorter.sort(list);\n        \n        Assert.assertEqual(\"Alice\", sorted.get(0).getFirstName());\n        Assert.assertEqual(\"Al\", sorted.get(1).getFirstName());\n        Assert.assertEqual(\"Bobed\", sorted.get(2).getFirstName());\n        Assert.assertEqual(\"Bob\", sorted.get(3).getFirstName());\n    }\n}\n",
+        "lineNumber" : "",
+        "title" : "Employees Sort Teleport",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Whether you implement ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "EmployeesSorterTest",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " first or ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "EmployeesSorter",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " is not that important to me.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "What important is you have a very tight feedback loop between your changes and the result.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth systems and get straight to the business logic at hand.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "title" : "Summary",
+      "id" : "summary",
+      "type" : "Section",
+      "content" : [ {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Having a tight feedback loop is important for being efficient engineer.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Tests are your teleports into any part of your application.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Tests make you fast.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ]
     } ],
-    "lastModifiedTime" : 1576557020000,
+    "lastModifiedTime" : 1576794105000,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Testing Makes You Faster Day One",
       "pageMeta" : {
-        "date" : [ "2019-11-25" ],
+        "date" : [ "2019-12-19" ],
         "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
       },
       "dirName" : "entry",
@@ -581,6 +823,12 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "title" : "Implementing Teleports",
         "id" : "implementing-teleports"
+      }, {
+        "title" : "Real Life Boring Example",
+        "id" : "real-life-boring-example"
+      }, {
+        "title" : "Summary",
+        "id" : "summary"
       } ]
     }
   },
@@ -591,12 +839,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "content" : [ {
           "type" : "Paragraph",
           "content" : [ {
-            "text" : "I am very passioned about testing and documentation. I believe they are two major aspects of software engineering that are being neglected",
-            "type" : "SimpleText"
-          }, {
-            "type" : "SoftLineBreak"
-          }, {
-            "text" : "by many enginneers.",
+            "text" : "I am very passionate about testing and documentation. I believe they are two major aspects of software engineering that are being neglected by many engineers.",
             "type" : "SimpleText"
           } ]
         }, {

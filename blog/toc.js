@@ -17,7 +17,7 @@ toc = [ {
     "sectionTitle" : "Entry",
     "pageTitle" : "Testing Makes You Faster Day One",
     "pageMeta" : {
-      "date" : [ "2019-11-25" ],
+      "date" : [ "2019-12-19" ],
       "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
     },
     "dirName" : "entry",
@@ -35,6 +35,12 @@ toc = [ {
     }, {
       "title" : "Implementing Teleports",
       "id" : "implementing-teleports"
+    }, {
+      "title" : "Real Life Boring Example",
+      "id" : "real-life-boring-example"
+    }, {
+      "title" : "Summary",
+      "id" : "summary"
     } ]
   } ]
 } ]
