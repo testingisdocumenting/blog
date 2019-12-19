@@ -1,7 +1,6 @@
 ```columns
 left:
-I am very passioned about testing and documentation. I believe they are two major aspects of software engineering that are being neglected
-by many enginneers. 
+I am very passionate about testing and documentation. I believe they are two major aspects of software engineering that are being neglected by many engineers.
 
 Testing and documentation are intertwined and I hope to show you how much exactly. 
 
