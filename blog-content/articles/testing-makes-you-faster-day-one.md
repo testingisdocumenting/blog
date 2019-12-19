@@ -1,5 +1,5 @@
 ---
-date: 2019-11-25
+date: 2019-12-19
 summary: How testing makes you fast day one and not in some unknown future
 ---
 
@@ -10,7 +10,12 @@ summary: How testing makes you fast day one and not in some unknown future
 *"I am not writing tests right now as they are going to slow me down"* is one of the most common excuses I heard in 
 the projects I worked on.
 
-A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in `O(1)` keystrokes. 
+A lack of test writing experience can make you feel this way, but I think there is another, 
+bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower:
+the power of exercising any piece of your software in `O(1)` keystrokes. By `O(1)` I mean that regardless of how big 
+your application becomes you will always be one button away of seeing the impact of your changes.  
+
+The superpower of having the tightest feedback loop. 
    
 Let me try to explain.
 
@@ -112,7 +117,7 @@ Teleporting would make us faster day one.
 
 The castle we have built is your app. And the main entrance is your language `main` function. 
 
-One way to implement teleports is to implement more than one `main` file with its own `main` function.
+One way to build teleports is to implement more than one `main` file with its own `main` function.
 
 ```java {title: "Java example of Chest Teleport"}
 class ChestTeleport {
@@ -129,12 +134,12 @@ class ChestTeleport {
 ``` 
 
 If you do just that it is already going to be a time saver. Any time you want to test a different portion of your castle, you just use a 
-different file to execute. 
+different teleport - a different file to execute. 
 
 As the number of teleports grow it may become harder to sort through them to pick one to use. 
 Also teleports that are rarely used may become obsolete and point you to non existing parts of your castle. 
 
-Fortunately most languages have a testing framework to define and structure teleports. Moreover they will make sure
+Fortunately most languages have a testing framework to define and structure your teleports. Moreover they will make sure
 that teleports are still functioning.
  
 ```java {title: "Java example of Chest Test"}
@@ -155,5 +160,83 @@ class ChestTest {
 }
 ``` 
 
-This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in `O(1)` keystrokes.
-Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand. 
+This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in one button press.
+Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using 
+an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand. 
+
+# Real Life Boring Example
+
+You probably don't face castles and dragons every day at your work, so let me map it to a boring real life example.
+
+Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.
+
+Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good.
+A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day. 
+So how do you test this scenario?
+
+You create a SysAdmin Ticket to request `WRITE` access to `DEV` database. Wait for approval. Restart the server and check your code.
+
+Note: You may say, but hey, I can run my database locally! Sure, but not every big company and not every software has moved on to the greatest tech.
+And most excuses for not writing tests come from Enterprise engineers working on legacy applications. Plus it helps to make a point.   
+
+Your code is in production for a month. Everyone is happy, the page is a great success and have many daily visitors. 
+Hence a new request comes up: you need to change the sorting works.
+
+````columns
+left:
+```text {title: "insted of"}
+Smith Bo
+Smith Bob
+Smith Bobed
+Smith Al
+Smith Alice
+```
+
+right:
+```text {title: "expected"}
+Smith Alice
+Smith Al
+Smith Bobed
+Smith Bob
+Smith Bo
+```    
+````
+
+Basically, still sort alphabetically, but put longer names at the top. It makes page looks better!
+
+You fire up your `DEV` to realize the data is gone. You create a SysAdmin Ticket to request `WRITE` access to `DEV` database. 
+Wait for approval. Restart the server and start coding. 
+
+Let's rewind and try again. Instead of jumping to deploy and database manipulations, let's build a teleport.
+
+```java {title: "Employees Sort Teleport"}
+class EmployeesSorterTest {
+    @Test
+    public void matchingLastName() {
+        EmployeesList list = new EmployeesList();
+        list.add("Smith", "Bobed");
+        list.add("Smith", "Alice");
+        list.add("Smith", "Al");
+        list.add("Smith", "Bob");
+
+        EmployeesSorter employeesSorter = new EmployeesSorter();
+        EmployeesList sorted = employeesSorter.sort(list);
+        
+        Assert.assertEqual("Alice", sorted.get(0).getFirstName());
+        Assert.assertEqual("Al", sorted.get(1).getFirstName());
+        Assert.assertEqual("Bobed", sorted.get(2).getFirstName());
+        Assert.assertEqual("Bob", sorted.get(3).getFirstName());
+    }
+}
+``` 
+
+Whether you implement `EmployeesSorterTest` first or `EmployeesSorter` is not that important to me.
+
+What important is you have a very tight feedback loop between your changes and the result. 
+You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth systems and get straight to the business logic at hand.
+
+# Summary
+
+* Having a tight feedback loop is important for being efficient engineer.
+* Tests are your teleports into any part of your application.
+* Tests make you fast.
