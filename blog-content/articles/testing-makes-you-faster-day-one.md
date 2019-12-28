@@ -184,7 +184,7 @@ Hence a new request comes up: you need to change the sorting works.
 
 ````columns
 left:
-```text {title: "insted of"}
+```text {title: "instead of"}
 Smith Bo
 Smith Bob
 Smith Bobed
