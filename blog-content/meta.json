@@ -3,6 +3,6 @@
   "type": "Blog",
   "viewOn": {
     "title": "Edit on GitHub",
-    "link": "https://github.com/testingisdocumenting/blog/edit/master/blog-content"
+    "link": "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
   }
 }
