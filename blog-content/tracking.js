@@ -32,6 +32,14 @@ const blogTracker = {
     },
     onTocItemSelect(currentPageId, tocItem) {
     },
+    onScrollToSection(currentPageId, sectionIdTitle) {
+        ga('send', 'event', {
+            eventCategory: 'navigation',
+            eventAction: 'scrollToSection',
+            eventLabel: sectionIdTitle.id,
+            currentPageId: currentPageId.fileName
+        })
+    },
     onSearchResultSelect(currentPageId, query, selectedPageId) {
         ga('send', 'event', {
             eventCategory: 'navigation',
