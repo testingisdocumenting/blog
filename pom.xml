@@ -15,18 +15,39 @@
     </licenses>
 
     <modules>
-        <module>blog-content</module>
         <module>pet-store</module>
+        <module>deps-artifacts</module>
+        <module>functional-test-docs</module>
+        <module>blog-content</module>
     </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <groovy.version>2.5.7</groovy.version>
+        <webtau.version>1.18-SNAPSHOT</webtau.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.twosigma.webtau</groupId>
+                <artifactId>webtau-core</artifactId>
+                <version>${webtau.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.twosigma.webtau</groupId>
+                <artifactId>webtau-core-groovy</artifactId>
+                <version>${webtau.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/blog-content/blog-content.iml" filepath="$PROJECT_DIR$/blog-content/blog-content.iml" />
       <module fileurl="file://$PROJECT_DIR$/blog-parent.iml" filepath="$PROJECT_DIR$/blog-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/deps-artifacts/deps-artifacts.iml" filepath="$PROJECT_DIR$/deps-artifacts/deps-artifacts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/functional-test-docs/functional-test-docs.iml" filepath="$PROJECT_DIR$/functional-test-docs/functional-test-docs.iml" />
       <module fileurl="file://$PROJECT_DIR$/pet-store/pet-store.iml" filepath="$PROJECT_DIR$/pet-store/pet-store.iml" />
     </modules>
   </component>

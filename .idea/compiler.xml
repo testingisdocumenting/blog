@@ -7,7 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="functional-test-docs" />
         <module name="blog-content" />
+        <module name="deps-artifacts" />
       </profile>
       <profile name="Annotation profile for blog-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -34,6 +36,8 @@
     <bytecodeTargetLevel>
       <module name="blog-content" target="1.8" />
       <module name="blog-parent" target="1.8" />
+      <module name="deps-artifacts" target="1.8" />
+      <module name="functional-test-docs" target="1.8" />
       <module name="pet-store" target="9" />
     </bytecodeTargetLevel>
   </component>

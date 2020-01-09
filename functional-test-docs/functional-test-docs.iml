@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/groovy" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-core:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-console:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-utils:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: commons-io:commons-io:2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.10.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.10" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.10" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-core-groovy:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-groovy-ast:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy:2.5.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy-nio:2.5.7" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+  </component>
+</module>
