@@ -97,7 +97,7 @@ While I am not working at [Two Sigma](https://www.twosigma.com/) anymore I am st
 Notice how `createTransactions` defaults values when they are not present?
 As a result of this, tests that don't need say `id` or `lot` are free to ignore them.
 
-:include-java: com/example/portfolio/ProfitCalculatorWithTableDataNoIdNoLotTest.java {title: "ignored id,lot Transaction properties", commentsType: "inline", entry: "profitShouldBeZeroIfNoLotsSet"}
+:include-java: com/example/portfolio/ProfitCalculatorWithTableDataNoIdNoPriceTest.java {title: "ignored id,lot Transaction properties", commentsType: "inline", entry: "profitShouldBeZeroIfNoLotsSet"}
 
 If later a new required property will be added to `Transaction`, you won't have to change all your existing tests. 
 Instead you will update `createTransaction` with a new default value. 
