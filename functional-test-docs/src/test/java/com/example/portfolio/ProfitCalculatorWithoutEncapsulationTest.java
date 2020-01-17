@@ -12,11 +12,13 @@ public class ProfitCalculatorWithoutEncapsulationTest {
     @Test
     public void profitShouldBeZeroIfNoLotsSet() {
         Transaction t1 = new Transaction();
+        t1.setId("T1");
         t1.setSymbol("SYM.B");
         t1.setLot(0);
         t1.setPrice(8);
 
         Transaction t2 = new Transaction();
+        t1.setId("T2");
         t1.setSymbol("SYM.C");
         t1.setLot(0);
         t1.setPrice(19);

@@ -1,10 +1,5 @@
 const blogTracker = {
     onPageOpen(pageId) {
-        ga('send', 'event', {
-            eventCategory: 'navigation',
-            eventAction: 'pageOpen',
-            eventLabel: pageId.fileName
-        })
     },
     onLinkClick(currentPageId, url) {
         ga('send', 'event', {
@@ -44,9 +39,9 @@ const blogTracker = {
         ga('send', 'event', {
             eventCategory: 'navigation',
             eventAction: 'searchResult',
-            eventLabel: query,
+            eventLabel: query + '-' + selectedPageId.fileName,
             currentPageId: currentPageId.fileName,
-            selectedPageId: currentPageId.fileName
+            selectedPageId: selectedPageId.fileName
         })
     },
     onPresentationOpen(currentPageId) {
@@ -56,7 +51,15 @@ const blogTracker = {
             eventLabel: '',
             currentPageId: currentPageId.fileName,
         })
-    }
+    },
+    onInteraction(currentPageId, type, id) {
+        ga('send', 'event', {
+            eventCategory: 'interaction',
+            eventAction: type,
+            eventLabel: currentPageId.fileName + '-' + id,
+            currentPageId: currentPageId.fileName,
+        })
+    },
 }
 
 documentationTracking.addListener(blogTracker)
