@@ -37,8 +37,8 @@ we need to validate new business logic will grow, as will grow the number of ins
 
 Question: But why **verbose** test can be bad?  
 
-```spoiler {title: "tap me to see why verbose test can be a problem"}
-* Verbose test can be bad as it gets harder to spot the test intention due to the setup noise. 
+```spoiler {title: "tap me to see why a verbose test can be a problem"}
+* A verbose test can be bad, because the boilerplate code used to setup the test makes it harder to read intent behind the test.
 * Additionally it may discourage you to write separate test scenario and instead you may want to clump test scenarios together and re-use the test data setup.
 * Test data re-use can lead to a random test being broken as you setup data for an unrelated scenario.    
 ```
@@ -46,7 +46,7 @@ Question: But why **verbose** test can be bad?
 **Verbosity** is not the only potential problem here. The way `Transaction` instance is being constructed for testing 
 purposes can lead to a maintenance burden. 
 
-First iteration of `Transaction` class uses `setters` to set the data. 
+The First iteration of `Transaction` class uses `setters` to set the data. 
 A future iteration may switch to using fluent API instead of `setters`.
 
 :include-java: com/example/portfolio/ProfitCalculatorWithoutEncapsulationFluentTest.java {title: "fluent API", entry: "createTransaction", bodyOnly: true, removeReturn: true}
