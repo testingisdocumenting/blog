@@ -6,7 +6,7 @@ summary: Examples of how to reduce verbosity and brittleness of your tests by en
 # Tests Brittleness and Verbosity slows you down
 
 In [Testing Makes You Faster Day one](entry/testing-makes-you-faster-day-one) article I claimed that writing tests makes you faster.
-However there are test patterns that most likely will slow you down and you need to be ready to handle them. 
+However, there are test patterns that most likely will slow you down and you need to be ready to handle them. 
 
 Writing tests for a simple logic with a simple input is a breeze. Take for example a test for a simple calculator class. 
 Two numeric inputs and we are done: 
@@ -14,13 +14,13 @@ Two numeric inputs and we are done:
 :include-file: com/example/portfolio/SimpleCalculatorTest.java {title: "SimpleCalculatorTest.java"}
 
 However real apps require real domain, and real domain is rarely represented by a couple of numbers.
-Let's take Financial domain as an example. It is full of complex types such as `Transaction` and has a lot of business logic.
+Let's take Finance as an example. It is full of types with multiple fields such as `Transaction`, and it has a lot of business logic.
 
 One example of such business logic is `ProfitCalculator`. Its job is to calculate profit based on the executed `Transactions`.
 
-After consulting with the business people we are ready to give our implementation a shot.
+After consulting with the business people, we are ready to give our implementation a shot.
 
-`Transaction` is a simple data class with a few fields (number of fields is reduced for simplicity).
+`Transaction` is a data class with a few fields (number of fields is reduced for simplicity).
 
 :include-file: com/example/portfolio/Transaction.java {title: "Transaction.java", readMore: true, readMoreVisibleLines: 20}
 
@@ -32,7 +32,7 @@ And here is the first version of our test.
 
 :include-file: com/example/portfolio/ProfitCalculatorWithoutEncapsulationTest.java {title: "ProfitCalculatorTest.java"}
 
-This test is already on a **verbose** side. As the `ProfitCalculator` requirements evolve, the number of setters 
+This test is already on the **verbose** side. As requirements for the `ProfitCalculator` evolve, the number of setters 
 we need to validate new business logic will grow, as will grow the number of instances that we may need to create. 
 
 Question: But why **verbose** test can be bad?  
@@ -47,7 +47,7 @@ Question: But why **verbose** test can be bad?
 purposes can lead to a maintenance burden. 
 
 First iteration of `Transaction` class uses `setters` to set the data. 
-Future iteration may switch to using fluent API instead of `setters`.
+A future iteration may switch to using fluent API instead of `setters`.
 
 :include-java: com/example/portfolio/ProfitCalculatorWithoutEncapsulationFluentTest.java {title: "fluent API", entry: "createTransaction", bodyOnly: true, removeReturn: true}
 
@@ -55,7 +55,8 @@ From the `ProfitCalculator`'s perspective the way `Transaction` instances are cr
 But refactoring `Transaction` will break `ProfitCalculatorTest`. 
 
 `Transaction` is going to be used in other tests. As the number of tests that use `Transaction` instances increases you will be more and more reluctant
-to do refactoring. All your tests that create `Transaction` instances are **brittle** tests now.
+to do refactoring. All your tests that create `Transaction` instances are **brittle** tests now. 
+They are **brittle** because they won't survive `Transaction` refactoring. 
 
 If you ever want to refactor `Transaction` class you will have two choices:
 * Refactor and waste time fixing tests.
@@ -95,7 +96,7 @@ While I am not working at [Two Sigma](https://www.twosigma.com/) anymore I am st
 :include-java: com/example/portfolio/TestTransactions.java {title: "TestTransactions.createTransactions", commentsType: "inline", entries: ["createTransactions", "genTransactionId"]}
 
 Notice how `createTransactions` defaults values when they are not present?
-As a result of this, tests that don't need say `id` or `lot` are free to ignore them.
+As a result of this, tests that don't need, say, `id` or `lot` are free to ignore them.
 
 :include-java: com/example/portfolio/ProfitCalculatorWithTableDataNoIdNoPriceTest.java {title: "ignored id,lot Transaction properties", commentsType: "inline", entry: "profitShouldBeZeroIfNoLotsSet"}
 
