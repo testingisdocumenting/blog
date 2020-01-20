@@ -42,5 +42,31 @@ toc = [ {
       "title" : "Summary",
       "id" : "summary"
     } ]
+  }, {
+    "sectionTitle" : "Entry",
+    "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",
+    "pageMeta" : {
+      "date" : [ "2020-01-07" ],
+      "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation " ]
+    },
+    "dirName" : "entry",
+    "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
+    "viewOnRelativePath" : "articles/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+    "pageSectionIdTitles" : [ {
+      "title" : "Tests Brittleness and Verbosity slows you down",
+      "id" : "tests-brittleness-and-verbosity-slows-you-down"
+    }, {
+      "title" : "Test Input Initial Encapsulation",
+      "id" : "test-input-initial-encapsulation"
+    }, {
+      "title" : "Test Input Encapsulation With Webtau Table Data",
+      "id" : "test-input-encapsulation-with-webtau-table-data"
+    }, {
+      "title" : "Try it out",
+      "id" : "try-it-out"
+    }, {
+      "title" : "Summary",
+      "id" : "summary"
+    } ]
   } ]
 } ]

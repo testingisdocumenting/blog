@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<title>Testing Is Documenting: Protect Your Future Self By Encapsulating Test Input Preparation</title><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-153393045-1', 'auto');
+    ga('send', 'pageview');
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/main.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/blog/style.css">
+</head>
+<link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
+<body>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<header><h1>Tests Brittleness and Verbosity slows you down</h1></header>
+<p>In entry/testing-makes-you-faster-day-one Testing Makes You Faster Day one article I claimed that writing tests makes you faster. However, there are test patterns that most likely will slow you down and you need to be ready to handle them.Writing tests for a simple logic with a simple input is a breeze. Take for example a test for a simple calculator class. Two numeric inputs and we are done: package com.example.portfolio; import org.junit.Assert; import org.junit.Test; public class SimpleCalculatorTest { @Test public void zeroMultiply() { SimpleCalculator simpleCalculator = new SimpleCalculator(); Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0); Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0); } } However real apps require real domain, and real domain is rarely represented by a couple of numbers. Let's take Finance as an example. It is full of types with multiple fields such as Transaction , and it has a lot of business logic.One example of such business logic is ProfitCalculator . Its job is to calculate profit based on the executed Transactions .After consulting with the business people, we are ready to give our implementation a shot. Transaction is a data class with a few fields (number of fields is reduced for simplicity). package com.example.portfolio; import javax.persistence.Entity; import javax.persistence.Id; @Entity public class Transaction { private String id; private double lot; private double price; private String symbol; @Id public String getId() { return id; } public void setId(String id) { this.id = id; } public double getLot() { return lot; } public void setLot(double lot) { this.lot = lot; } public double getPrice() { return price; } public void setPrice(double price) { this.price = price; } public String getSymbol() { return symbol; } public void setSymbol(String symbol) { this.symbol = symbol; } } Here is our first ProfitCalculator implementation, ready to be tested. package com.example.portfolio; import java.util.List; public class ProfitCalculator { public ProfitCalculator() { } public double calculate(List&lt;Transaction&gt; transactions) { return 0; } } And here is the first version of our test. package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithoutEncapsulationTest { private ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = new Transaction(); t1.setId(&quot;T1&quot;); t1.setSymbol(&quot;SYM.B&quot;); t1.setLot(0); t1.setPrice(8); Transaction t2 = new Transaction(); t1.setId(&quot;T2&quot;); t1.setSymbol(&quot;SYM.C&quot;); t1.setLot(0); t1.setPrice(19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } This test is already on the verbose side. As requirements for the ProfitCalculator evolve, the number of setters we need to validate new business logic will grow, as will grow the number of instances that we may need to create.Question: But why verbose test can be bad? A verbose test can be bad, because the boilerplate code used to setup the test makes it harder to read intent behind the test.Additionally it may discourage you to write separate test scenario and instead you may want to clump test scenarios together and re-use the test data setup.Test data re-use can lead to a random test being broken as you setup data for an unrelated scenario. Verbosity is not the only potential problem here. The way Transaction instance is being constructed for testing purposes can lead to a maintenance burden.The First iteration of Transaction class uses setters to set the data. A future iteration may switch to using fluent API instead of setters . transaction(&quot;T1&quot;) .symbol(&quot;SYM.B&quot;) .lot(0) .price(0); From the ProfitCalculator 's perspective the way Transaction instances are created is irrelevant as it doesn't affect the calculation logic. But refactoring Transaction will break ProfitCalculatorTest . Transaction is going to be used in other tests. As the number of tests that use Transaction instances increases you will be more and more reluctant to do refactoring. All your tests that create Transaction instances are brittle tests now. They are brittle because they won't survive Transaction refactoring.If you ever want to refactor Transaction class you will have two choices:Refactor and waste time fixing tests.Convince yourself that Transaction is good as it is.Neither is a good choice.I want you to have a way to protect your future self by encapsulating test input preparation</p>
+</article>
+
+<article>
+<header><h1>Test Input Initial Encapsulation</h1></header>
+<p>Let's extract Transaction creation code into TestTransactions package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static com.example.portfolio.TestTransactions.createTransaction; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithBasicEncapsulationTest { private ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = createTransaction(&quot;t1&quot;, &quot;SYM.B&quot;, 0, 8); Transaction t2 = createTransaction(&quot;t2&quot;, &quot;SYM.C&quot;, 0, 19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } public static Transaction createTransaction(String id, String symbol, double lot, double price) { Transaction transaction = new Transaction(); transaction.setId(id); transaction.setSymbol(symbol); transaction.setLot(lot); transaction.setPrice(price); return transaction; } Less verbosity. A good start.Question: Can you still spot the problem? As we add more properties to Transaction class, some of the tests may need to set extra transaction properties.Additionally some of the properties will be completely irrelevant to the business logic under a test, yet you will be forced to set them anyway.</p>
+</article>
+
+<article>
+<header><h1>Test Input Encapsulation With Webtau Table Data</h1></header>
+<p>I was dealing with test problems like above for years and eventually came up with a solution that fits my needs. I hope it will fit your needs as well. The solution is to use flexible data structure like https://twosigma.github.io/webtau/guide/reference/table-data Webtau TableData package com.example.portfolio; import com.twosigma.webtau.data.table.TableData; import org.junit.Test; import static com.example.portfolio.TestTransactions.createTransactions; import static com.twosigma.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore public class ProfitCalculatorWithTableDataTest { private ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table( &quot;id&quot;, &quot;symbol&quot;, &quot;lot&quot;, &quot;price&quot;, // webtau TableData definition ________________________________, // header and values separator &quot;t1&quot;, &quot;SYM.B&quot; , 0.0 , 8.0, &quot;t2&quot;, &quot;SYM.C&quot; , 0.0 , 19.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } } Note: https://github.com/twosigma/webtau Webtau open source project started as my answer to common testing problems I encountered. While I am not working at https://www.twosigma.com/ Two Sigma anymore I am still contributing and using it on a regular basis. public static List&lt;Transaction&gt; createTransactions(TableData tableData) { return tableData.rowsStream() .map(row -&gt; { Transaction transaction = new Transaction(); transaction.setId(row.get(&quot;id&quot;, genTransactionId())); // default value is auto generated transaction.setSymbol(row.get(&quot;symbol&quot;)); transaction.setLot(row.get(&quot;lot&quot;, 0.0)); // default value is hardcoded transaction.setPrice(row.get(&quot;price&quot;, 0.0)); return transaction; }) .collect(toList()); } private static String genTransactionId() { return &quot;t-id-&quot; + idCount.incrementAndGet(); } Notice how createTransactions defaults values when they are not present? As a result of this, tests that don't need, say, id or lot are free to ignore them. @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table(&quot;symbol&quot;, &quot;lot&quot;, ________________, &quot;SYM.B&quot; , 0.0, &quot;SYM.C&quot; , 0.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } If later a new required property will be added to Transaction , you won't have to change all your existing tests. Instead you will update createTransaction with a new default value. The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.Essentially your test will use as little data to prove logic works as possible.Question: Why it is important to minimize the data in your test? Test is crucial to understanding complex business logicThe more data the harder it to comprehend the logicWe want business people to look at our data sets (stay tuned to see a good way to expose test data to business)</p>
+</article>
+
+<article>
+<header><h1>Try it out</h1></header>
+<p>&lt;dependency&gt; &lt;groupId&gt;com.twosigma.webtau&lt;/groupId&gt; &lt;artifactId&gt;webtau-core&lt;/artifactId&gt; &lt;version&gt;1.16&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; https://twosigma.github.io/webtau/guide/ Webtau user guide https://github.com/twosigma/webtau Webtau github</p>
+</article>
+
+<article>
+<header><h1>Summary</h1></header>
+<p>Tests input preparation can be verbose and brittle.Identify core domain objects and provide a convenient way to create them.Use as little data as necessary to prove logic correctness. Default the rest.</p>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/blog/toc.js"></script>
+<script type="text/javascript" src="/blog/assets.js"></script>
+<script type="text/javascript" src="/blog/static/react.min.js"></script>
+<script type="text/javascript" src="/blog/static/react-dom.min.js"></script>
+<script type="text/javascript" src="/blog/static/main.js"></script>
+<script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
+<script type="text/javascript" src="/blog/tracking.js"></script>
+<script type="text/javascript" src="/blog/search-index.js"></script>
+<script>
+document.getElementById('znai').innerHTML = '';
+ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "title" : "Edit on GitHub",
+      "link" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
+    },
+    "id" : "blog",
+    "title" : "Testing Is Documenting",
+    "type" : "Blog",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "title" : "Tests Brittleness and Verbosity slows you down",
+      "id" : "tests-brittleness-and-verbosity-slows-you-down",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "In ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "/blog/entry/testing-makes-you-faster-day-one",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Testing Makes You Faster Day one",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " article I claimed that writing tests makes you faster.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "However, there are test patterns that most likely will slow you down and you need to be ready to handle them.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Writing tests for a simple logic with a simple input is a breeze. Take for example a test for a simple calculator class.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Two numeric inputs and we are done:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport org.junit.Assert;\nimport org.junit.Test;\n\npublic class SimpleCalculatorTest {\n    @Test\n    public void zeroMultiply() {\n        SimpleCalculator simpleCalculator = new SimpleCalculator();\n        Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0);\n        Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0);\n    }\n}",
+        "title" : "SimpleCalculatorTest.java",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "However real apps require real domain, and real domain is rarely represented by a couple of numbers.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Let's take Finance as an example. It is full of types with multiple fields such as ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ", and it has a lot of business logic.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "One example of such business logic is ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "ProfitCalculator",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ". Its job is to calculate profit based on the executed ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transactions",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "After consulting with the business people, we are ready to give our implementation a shot.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " is a data class with a few fields (number of fields is reduced for simplicity).",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport javax.persistence.Entity;\nimport javax.persistence.Id;\n\n@Entity\npublic class Transaction {\n    private String id;\n    private double lot;\n    private double price;\n    private String symbol;\n\n    @Id\n    public String getId() {\n        return id;\n    }\n\n    public void setId(String id) {\n        this.id = id;\n    }\n\n    public double getLot() {\n        return lot;\n    }\n\n    public void setLot(double lot) {\n        this.lot = lot;\n    }\n\n    public double getPrice() {\n        return price;\n    }\n\n    public void setPrice(double price) {\n        this.price = price;\n    }\n\n    public String getSymbol() {\n        return symbol;\n    }\n\n    public void setSymbol(String symbol) {\n        this.symbol = symbol;\n    }\n}",
+        "title" : "Transaction.java",
+        "readMore" : true,
+        "readMoreVisibleLines" : 20,
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Here is our first ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "ProfitCalculator",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " implementation, ready to be tested.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport java.util.List;\n\npublic class ProfitCalculator {\n    public ProfitCalculator() {\n    }\n\n    public double calculate(List<Transaction> transactions) {\n        return 0;\n    }\n}",
+        "title" : "ProfitCalculator.java",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "And here is the first version of our test.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport org.junit.Test;\n\nimport java.util.Arrays;\n\nimport static org.junit.Assert.assertEquals;\n\npublic class ProfitCalculatorWithoutEncapsulationTest {\n    private ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        Transaction t1 = new Transaction();\n        t1.setId(\"T1\");\n        t1.setSymbol(\"SYM.B\");\n        t1.setLot(0);\n        t1.setPrice(8);\n\n        Transaction t2 = new Transaction();\n        t1.setId(\"T2\");\n        t1.setSymbol(\"SYM.C\");\n        t1.setLot(0);\n        t1.setPrice(19);\n\n        assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0);\n    }\n}",
+        "title" : "ProfitCalculatorTest.java",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "This test is already on the ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "verbose",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " side. As requirements for the ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "ProfitCalculator",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " evolve, the number of setters",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "we need to validate new business logic will grow, as will grow the number of instances that we may need to create.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Question: But why ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "verbose",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " test can be bad?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "tap me to see why a verbose test can be a problem",
+        "content" : [ {
+          "bulletMarker" : "*",
+          "tight" : true,
+          "type" : "BulletList",
+          "content" : [ {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "A verbose test can be bad, because the boilerplate code used to setup the test makes it harder to read intent behind the test.",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          }, {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "Additionally it may discourage you to write separate test scenario and instead you may want to clump test scenarios together and re-use the test data setup.",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          }, {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "Test data re-use can lead to a random test being broken as you setup data for an unrelated scenario.",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          } ]
+        } ],
+        "type" : "Spoiler"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "Verbosity",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " is not the only potential problem here. The way ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " instance is being constructed for testing",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "purposes can lead to a maintenance burden.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The First iteration of ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " class uses ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "setters",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " to set the data.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "A future iteration may switch to using fluent API instead of ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "setters",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "transaction(\"T1\")\n .symbol(\"SYM.B\")\n .lot(0)\n .price(0);",
+        "title" : "fluent API",
+        "entry" : "createTransaction",
+        "bodyOnly" : true,
+        "removeReturn" : true,
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "From the ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "ProfitCalculator",
+          "type" : "InlinedCode"
+        }, {
+          "text" : "'s perspective the way ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " instances are created is irrelevant as it doesn't affect the calculation logic.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "But refactoring ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " will break ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "ProfitCalculatorTest",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " is going to be used in other tests. As the number of tests that use ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " instances increases you will be more and more reluctant",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "to do refactoring. All your tests that create ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " instances are ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "brittle",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " tests now.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "They are ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "brittle",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " because they won't survive ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " refactoring.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "If you ever want to refactor ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " class you will have two choices:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Refactor and waste time fixing tests.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Convince yourself that ",
+              "type" : "SimpleText"
+            }, {
+              "code" : "Transaction",
+              "type" : "InlinedCode"
+            }, {
+              "text" : " is good as it is.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Neither is a good choice.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "BlockQuote",
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "I want you to have a way to protect your future self by encapsulating test input preparation",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      } ]
+    }, {
+      "title" : "Test Input Initial Encapsulation",
+      "id" : "test-input-initial-encapsulation",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's extract ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " creation code into ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "TestTransactions",
+          "type" : "InlinedCode"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport org.junit.Test;\n\nimport java.util.Arrays;\n\nimport static com.example.portfolio.TestTransactions.createTransaction;\nimport static org.junit.Assert.assertEquals;\n\npublic class ProfitCalculatorWithBasicEncapsulationTest {\n    private ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        Transaction t1 = createTransaction(\"t1\", \"SYM.B\", 0, 8);\n        Transaction t2 = createTransaction(\"t2\", \"SYM.C\", 0, 19);\n\n        assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0);\n    }\n}",
+        "title" : "ProfitCalculatorTest.java with initial encapsulation",
+        "type" : "Snippet"
+      }, {
+        "lang" : "java",
+        "snippet" : "public static Transaction createTransaction(String id, String symbol, double lot, double price) {\n    Transaction transaction = new Transaction();\n    transaction.setId(id);\n    transaction.setSymbol(symbol);\n    transaction.setLot(lot);\n    transaction.setPrice(price);\n\n    return transaction;\n}",
+        "title" : "TestTransactions.createTransaction",
+        "entry" : "createTransaction",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Less verbosity. A good start.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Question: Can you still spot the problem?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "tap me to see remaining problems",
+        "content" : [ {
+          "bulletMarker" : "*",
+          "tight" : true,
+          "type" : "BulletList",
+          "content" : [ {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "As we add more properties to ",
+                "type" : "SimpleText"
+              }, {
+                "code" : "Transaction",
+                "type" : "InlinedCode"
+              }, {
+                "text" : " class, some of the tests may need to set ",
+                "type" : "SimpleText"
+              }, {
+                "type" : "Emphasis",
+                "content" : [ {
+                  "text" : "extra transaction properties",
+                  "type" : "SimpleText"
+                } ]
+              }, {
+                "text" : ".",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          }, {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "Additionally some of the properties will be completely ",
+                "type" : "SimpleText"
+              }, {
+                "type" : "Emphasis",
+                "content" : [ {
+                  "text" : "irrelevant to the business logic",
+                  "type" : "SimpleText"
+                } ]
+              }, {
+                "text" : " under a test, yet you will be forced to set them anyway.",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          } ]
+        } ],
+        "type" : "Spoiler"
+      } ]
+    }, {
+      "title" : "Test Input Encapsulation With Webtau Table Data",
+      "id" : "test-input-encapsulation-with-webtau-table-data",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "I was dealing with test problems like above for years and eventually came up with a solution that fits my needs.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "I hope it will fit your needs as well. The solution is to use flexible data structure like ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://twosigma.github.io/webtau/guide/reference/table-data",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Webtau TableData",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "package com.example.portfolio;\n\nimport com.twosigma.webtau.data.table.TableData;\nimport org.junit.Test;\n\nimport static com.example.portfolio.TestTransactions.createTransactions;\nimport static com.twosigma.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore\n\npublic class ProfitCalculatorWithTableDataTest {\n    private ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        TableData transactionsData = table( \"id\", \"symbol\", \"lot\", \"price\",  // webtau TableData definition\n                                           ________________________________, // header and values separator\n                                            \"t1\", \"SYM.B\" ,  0.0 ,    8.0,\n                                            \"t2\", \"SYM.C\" ,  0.0 ,    19.0);\n\n        double margin = profitCalculator.calculate(createTransactions(transactionsData));\n        actual(margin).should(equal(0));\n    }\n}",
+        "title" : "ProfitCalculatorTest.java with TableData encapsulation",
+        "commentsType" : "inline",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Note: ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/twosigma/webtau",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Webtau",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " open source project started as my answer to common testing problems I encountered.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "While I am not working at ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://www.twosigma.com/",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Two Sigma",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " anymore I am still contributing and using it on a regular basis.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "public static List<Transaction> createTransactions(TableData tableData) {\n    return tableData.rowsStream()\n            .map(row -> {\n                Transaction transaction = new Transaction();\n                transaction.setId(row.get(\"id\", genTransactionId())); // default value is auto generated\n                transaction.setSymbol(row.get(\"symbol\"));\n                transaction.setLot(row.get(\"lot\", 0.0)); // default value is hardcoded\n                transaction.setPrice(row.get(\"price\", 0.0));\n\n                return transaction;\n            })\n            .collect(toList());\n}\n\nprivate static String genTransactionId() {\n    return \"t-id-\" + idCount.incrementAndGet();\n}",
+        "title" : "TestTransactions.createTransactions",
+        "commentsType" : "inline",
+        "entries" : [ "createTransactions", "genTransactionId" ],
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Notice how ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "createTransactions",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " defaults values when they are not present?",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "As a result of this, tests that don't need, say, ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "id",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " or ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "lot",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " are free to ignore them.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "@Test\npublic void profitShouldBeZeroIfNoLotsSet() {\n    TableData transactionsData = table(\"symbol\", \"lot\",\n                                       ________________,\n                                       \"SYM.B\" , 0.0,\n                                       \"SYM.C\" , 0.0);\n\n    double margin = profitCalculator.calculate(createTransactions(transactionsData));\n    actual(margin).should(equal(0));\n}",
+        "title" : "ignored id,lot Transaction properties",
+        "commentsType" : "inline",
+        "entry" : "profitShouldBeZeroIfNoLotsSet",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "If later a new required property will be added to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "Transaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : ", you won't have to change all your existing tests.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Instead you will update ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "createTransaction",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " with a new default value.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Essentially your test will use as little data to prove logic works as possible.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Question: Why it is important to minimize the data in your test?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "tap me to see why minimizing data is important",
+        "content" : [ {
+          "bulletMarker" : "*",
+          "tight" : true,
+          "type" : "BulletList",
+          "content" : [ {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "Test is crucial to understanding ",
+                "type" : "SimpleText"
+              }, {
+                "type" : "Emphasis",
+                "content" : [ {
+                  "text" : "complex business logic",
+                  "type" : "SimpleText"
+                } ]
+              } ]
+            } ]
+          }, {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "The more data the harder it to comprehend the logic",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          }, {
+            "type" : "ListItem",
+            "content" : [ {
+              "type" : "Paragraph",
+              "content" : [ {
+                "text" : "We want business people to look at our data sets (stay tuned to see a good way to expose test data to business)",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          } ]
+        } ],
+        "type" : "Spoiler"
+      } ]
+    }, {
+      "title" : "Try it out",
+      "id" : "try-it-out",
+      "type" : "Section",
+      "content" : [ {
+        "lang" : "xml",
+        "snippet" : "<dependency>\n    <groupId>com.twosigma.webtau</groupId>\n    <artifactId>webtau-core</artifactId>\n    <version>1.16</version>\n    <scope>test</scope>\n</dependency>",
+        "title" : "Maven dependency",
+        "type" : "Snippet"
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "url" : "https://twosigma.github.io/webtau/guide/",
+              "isFile" : false,
+              "type" : "Link",
+              "content" : [ {
+                "text" : "Webtau user guide",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "url" : "https://github.com/twosigma/webtau",
+              "isFile" : false,
+              "type" : "Link",
+              "content" : [ {
+                "text" : "Webtau github",
+                "type" : "SimpleText"
+              } ]
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "title" : "Summary",
+      "id" : "summary",
+      "type" : "Section",
+      "content" : [ {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Tests input preparation can be verbose and brittle.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Identify core domain objects and provide a convenient way to create them.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Use as little data as necessary to prove logic correctness. Default the rest.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ],
+    "lastModifiedTime" : 1579554067000,
+    "tocItem" : {
+      "sectionTitle" : "Entry",
+      "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",
+      "pageMeta" : {
+        "date" : [ "2020-01-07" ],
+        "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation " ]
+      },
+      "dirName" : "entry",
+      "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
+      "viewOnRelativePath" : "articles/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+      "pageSectionIdTitles" : [ {
+        "title" : "Tests Brittleness and Verbosity slows you down",
+        "id" : "tests-brittleness-and-verbosity-slows-you-down"
+      }, {
+        "title" : "Test Input Initial Encapsulation",
+        "id" : "test-input-initial-encapsulation"
+      }, {
+        "title" : "Test Input Encapsulation With Webtau Table Data",
+        "id" : "test-input-encapsulation-with-webtau-table-data"
+      }, {
+        "title" : "Try it out",
+        "id" : "try-it-out"
+      }, {
+        "title" : "Summary",
+        "id" : "summary"
+      } ]
+    }
+  },
+  "footer" : {
+    "type" : "Footer",
+    "content" : [ {
+      "columns" : [ {
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "I am very passionate about testing and documentation. I believe they are two major aspects of software engineering that are being neglected by many engineers.",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "Testing and documentation are intertwined and I hope to show you how much exactly.",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      }, {
+        "content" : [ {
+          "type" : "Paragraph",
+          "content" : [ {
+            "text" : "I am new at writing, and especially English writing. Please be kind and suggest grammar improvements with ",
+            "type" : "SimpleText"
+          }, {
+            "url" : "https://github.com/testingisdocumenting/blog",
+            "isFile" : false,
+            "type" : "Link",
+            "content" : [ {
+              "text" : "Pull Requests",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ],
+      "config" : { },
+      "type" : "Columns"
+    } ]
+  }
+}), document.getElementById("znai"));
+</script>
+
+</body>
+</html>
