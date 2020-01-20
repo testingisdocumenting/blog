@@ -1,0 +1,4 @@
+../deps-artifacts/target/classes
+../functional-test-docs/src/main/java
+../functional-test-docs/src/test/java
+../functional-test-docs/src/test/groovy

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.twosigma.webtau:webtau-core:1.18-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/twosigma/webtau/webtau-core/1.18-SNAPSHOT/webtau-core-1.18-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/twosigma/webtau/webtau-core/1.18-SNAPSHOT/webtau-core-1.18-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/twosigma/webtau/webtau-core/1.18-SNAPSHOT/webtau-core-1.18-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
