@@ -75,7 +75,7 @@
     <url>/blog/entry/protect-your-future-self-by-encapsulating-test-input-preparation#try-it-out</url>
     <fullTitle>Testing Is Documenting: Protect Your Future Self By Encapsulating Test Input Preparation, Try it out [Entry]</fullTitle>
     <text>
-      <text>&lt;dependency> &lt;groupId>com.twosigma.webtau&lt;/groupId> &lt;artifactId>webtau-core&lt;/artifactId> &lt;version>1.16&lt;/version> &lt;scope>test&lt;/scope> &lt;/dependency> https://twosigma.github.io/webtau/guide/ Webtau user guide https://github.com/twosigma/webtau Webtau github</text>
+      <text>&lt;dependency> &lt;groupId>com.twosigma.webtau&lt;/groupId> &lt;artifactId>webtau-core&lt;/artifactId> &lt;version>1.18&lt;/version> &lt;scope>test&lt;/scope> &lt;/dependency> https://twosigma.github.io/webtau/guide/ Webtau user guide https://github.com/twosigma/webtau Webtau github</text>
       <score>STANDARD</score>
     </text>
   </entry>

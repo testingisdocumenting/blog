@@ -185,7 +185,7 @@ html, body {
         margin-right: calc(-1 *var(--znai-single-side-horizontal-min-spacing));
     }
 
-    .snippet-container .title-container,
+    .snippet-container .title-container .title,
     .snippet-container .snippet {
         border: none;
     }
