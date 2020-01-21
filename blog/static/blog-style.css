@@ -179,5 +179,21 @@ html, body {
     svg {
         max-width: 100%;
     }
+
+    .snippet-container {
+        margin-left: calc(-1 *var(--znai-single-side-horizontal-min-spacing));
+        margin-right: calc(-1 *var(--znai-single-side-horizontal-min-spacing));
+    }
+
+    .snippet-container .title-container,
+    .snippet-container .snippet {
+        border: none;
+    }
+
+    .snippet-container pre {
+        white-space: nowrap;
+        word-wrap: normal;
+        overflow-x: auto;
+    }
 }
 
