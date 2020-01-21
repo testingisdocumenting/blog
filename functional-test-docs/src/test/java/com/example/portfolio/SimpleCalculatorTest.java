@@ -8,6 +8,6 @@ public class SimpleCalculatorTest {
     public void zeroMultiply() {
         SimpleCalculator simpleCalculator = new SimpleCalculator();
         Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0);
-        Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0);
+        Assert.assertEquals(0, simpleCalculator.multiply(-100.0, 0.0), 0.0);
     }
 }
