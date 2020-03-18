@@ -11,7 +11,7 @@
         <module name="blog-content" />
         <module name="deps-artifacts" />
       </profile>
-      <profile name="Annotation profile for blog-parent" enabled="true">
+      <profile name="Annotation profile for site-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
