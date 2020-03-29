@@ -20,7 +20,7 @@ git clone "$GIT_URL" --branch $GH_PAGES_BRANCH --single-branch --depth 1 "$GH_PA
 mkdir -p "$GH_PAGES_DIR"/
 
 ## Cleanup existing pages
-rm -rf "$GH_PAGES_DIR"//*
+rm -rf "$GH_PAGES_DIR"/*
 
 # Copy in new blog pages
 cp -r "$ROOT_DIR"/blog-content/target/blog/* "$GH_PAGES_DIR"/
