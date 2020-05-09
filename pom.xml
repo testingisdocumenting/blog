@@ -15,7 +15,6 @@
     </licenses>
 
     <modules>
-<!--        <module>pet-store</module>-->
         <module>deps-artifacts</module>
         <module>functional-test-docs</module>
         <module>blog-content</module>

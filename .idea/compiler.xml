@@ -8,7 +8,6 @@
       <module name="blog-content" target="1.8" />
       <module name="blog-parent" target="1.8" />
       <module name="deps-artifacts" target="1.8" />
-      <module name="functional-test-docs" target="1.8" />
       <module name="pet-store" target="9" />
     </bytecodeTargetLevel>
   </component>
