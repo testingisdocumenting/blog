@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.testingisdocumenting</groupId>
-    <artifactId>blog-parent</artifactId>
+    <artifactId>site-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -15,7 +15,7 @@
     </licenses>
 
     <modules>
-        <module>pet-store</module>
+<!--        <module>pet-store</module>-->
         <module>deps-artifacts</module>
         <module>functional-test-docs</module>
         <module>blog-content</module>
