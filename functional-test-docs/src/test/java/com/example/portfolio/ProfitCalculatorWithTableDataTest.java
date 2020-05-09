@@ -1,13 +1,13 @@
 package com.example.portfolio;
 
-import com.twosigma.webtau.data.table.TableData;
 import org.junit.Test;
+import org.testingisdocumenting.webtau.data.table.TableData;
 
 import static com.example.portfolio.TestTransactions.createTransactions;
-import static com.twosigma.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore
+import static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore
 
 public class ProfitCalculatorWithTableDataTest {
-    private ProfitCalculator profitCalculator = new ProfitCalculator();
+    private final ProfitCalculator profitCalculator = new ProfitCalculator();
 
     @Test
     public void profitShouldBeZeroIfNoLotsSet() {

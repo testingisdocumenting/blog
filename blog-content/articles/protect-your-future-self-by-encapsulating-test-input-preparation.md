@@ -86,12 +86,11 @@ Question: Can you still spot the problem?
 # Test Input Encapsulation With Webtau Table Data   
 
 I was dealing with test problems like above for years and eventually came up with a solution that fits my needs.
-I hope it will fit your needs as well. The solution is to use flexible data structure like [Webtau TableData](https://twosigma.github.io/webtau/guide/reference/table-data)
+I hope it will fit your needs as well. The solution is to use flexible data structure like [Webtau TableData](https://testingisdocumenting.org/webtau/reference/table-data)
 
 :include-file: com/example/portfolio/ProfitCalculatorWithTableDataTest.java {title: "ProfitCalculatorTest.java with TableData encapsulation", commentsType: "inline"}
 
-Note: [Webtau](https://github.com/twosigma/webtau) open source project started as my answer to common testing problems I encountered. 
-While I am not working at [Two Sigma](https://www.twosigma.com/) anymore I am still contributing and using it on a regular basis.     
+Note: [Webtau](https://github.com/testingisdocumenting/webtau) is open source project that I started as my answer to common testing problems I encountered. 
 
 :include-java: com/example/portfolio/TestTransactions.java {title: "TestTransactions.createTransactions", commentsType: "inline", entries: ["createTransactions", "genTransactionId"]}
 
@@ -118,8 +117,8 @@ Question: Why it is important to minimize the data in your test?
 
 :include-file: webtau-core-java-dep.xml {title: "Maven dependency"}
 
-* [Webtau user guide](https://twosigma.github.io/webtau/guide/)
-* [Webtau github](https://github.com/twosigma/webtau)
+* [Webtau user guide](https://testingisdocumenting.org/webtau)
+* [Webtau github](https://github.com/testingisdocumenting/webtau)
 
 # Summary
 

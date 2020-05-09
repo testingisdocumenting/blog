@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 
 public class ProfitCalculatorWithoutEncapsulationTest {
-    private ProfitCalculator profitCalculator = new ProfitCalculator();
+    private final ProfitCalculator profitCalculator = new ProfitCalculator();
 
     @Test
     public void profitShouldBeZeroIfNoLotsSet() {

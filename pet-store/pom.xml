@@ -3,9 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.testingisdocumenting</groupId>
+    <parent>
+        <groupId>org.testingisdocumenting</groupId>
+        <artifactId>blog-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
     <artifactId>pet-store</artifactId>
-    <version>${project.version}</version>
 
     <properties>
         <micronaut.version>1.2.7</micronaut.version>
