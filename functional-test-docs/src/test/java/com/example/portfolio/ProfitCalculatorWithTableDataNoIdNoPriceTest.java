@@ -1,13 +1,13 @@
 package com.example.portfolio;
 
-import com.twosigma.webtau.data.table.TableData;
+import org.testingisdocumenting.webtau.data.table.TableData;
 import org.junit.Test;
 
 import static com.example.portfolio.TestTransactions.createTransactions;
-import static com.twosigma.webtau.WebTauCore.*;
+import static org.testingisdocumenting.webtau.WebTauCore.*;
 
 public class ProfitCalculatorWithTableDataNoIdNoPriceTest {
-    private ProfitCalculator profitCalculator = new ProfitCalculator();
+    private final ProfitCalculator profitCalculator = new ProfitCalculator();
 
     @Test
     public void profitShouldBeZeroIfNoLotsSet() {

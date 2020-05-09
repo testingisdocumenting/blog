@@ -1,6 +1,6 @@
 package com.example.portfolio;
 
-import com.twosigma.webtau.data.table.TableData;
+import org.testingisdocumenting.webtau.data.table.TableData;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

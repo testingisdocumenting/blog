@@ -12,16 +12,17 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-core:1.18-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-console:1.18-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-utils:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testingisdocumenting.webtau:webtau-core:1.21.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testingisdocumenting.webtau:webtau-console:1.21.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testingisdocumenting.webtau:webtau-utils:1.21.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-io:commons-io:2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-csv:1.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.10.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-core-groovy:1.18-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.twosigma.webtau:webtau-groovy-ast:1.18-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testingisdocumenting.webtau:webtau-core-groovy:1.21.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.testingisdocumenting.webtau:webtau-groovy-ast:1.21.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy:2.5.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.groovy:groovy-nio:2.5.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />

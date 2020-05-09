@@ -8,7 +8,7 @@ import static com.example.portfolio.TestTransactions.createTransaction;
 import static org.junit.Assert.assertEquals;
 
 public class ProfitCalculatorWithBasicEncapsulationTest {
-    private ProfitCalculator profitCalculator = new ProfitCalculator();
+    private final ProfitCalculator profitCalculator = new ProfitCalculator();
 
     @Test
     public void profitShouldBeZeroIfNoLotsSet() {
