@@ -18,6 +18,7 @@
         <module>deps-artifacts</module>
         <module>functional-test-docs</module>
         <module>blog-content</module>
+        <module>game-store</module>
     </modules>
 
     <properties>
