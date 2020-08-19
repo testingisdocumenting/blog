@@ -41,6 +41,7 @@ Question: Why are we talking about REPL in the context of end to end testing?
 
 We want to have a fast feedback loop. 
  * Browser, Servers, DB setup takes time
+ * Preserving context
  * Interactive test development      
 
 # HTTP GET
@@ -128,32 +129,31 @@ If you have a command line tool you plan on running multiple times, we can extra
 
 Let's start with a simple example of openning google site and searching for a word `test`.
 
-:include-file: scenarios/browserBasics.groovy {
-    title: "example of browser interaction",
-    startLine: "browser-basics",
-    endLine: "browser-basics-end",
-    excludeStartEnd: true,
-    stickySlide: "top 25%"
+:include-image: browser-basic.png { 
+    stickySlide: "left",
+    fit: true 
 }
 
-:include-image: browser-basic.png { fit: true }
+:include-cli-output: browser-basic-repl/out.txt {
+    revealLineStop: [0, "input", "setValue", 15, 19, 24]
+}
 
-Let's test admin web page
+Let's test landing web page
 
-:include-image: admin-page.png { fit: true }
+:include-image: landing-page.png { fit: true }
 
-:include-file: scenarios/gamestore/browserAdmin.groovy {
-    title: "Browser Admin test", 
+:include-file: scenarios/gamestore/browserLanding.groovy {
+    title: "Browser Landing test", 
     excludeRegexp: ["browser.doc", "hide"],
     highlight: "waitTo",
     revealLineStop: ['waitTo']
 }
 
-:include-image: admin-page-reduced.png { fit: true }
+:include-image: landing-page-reduced.png { fit: true }
 
 let's test the filters
 
-:include-file: scenarios/gamestore/browserAdminFilterNoPage.groovy { 
+:include-file: scenarios/gamestore/browserLandingFilterNoPage.groovy { 
     title: "filtering games",
     highlight: ["#filter", "#below60"], 
     excludeRegexp: ["hide", "browser.doc"]
@@ -161,19 +161,37 @@ let's test the filters
 
 let's move page elements definitions to page objects
 
-:include-file: pages/Admin.groovy {title: "page object", stickySlide: "left"}
+:include-file: pages/LandingPage.groovy {title: "page object", stickySlide: "left"}
 
 :include-file: pages/Pages.groovy {
     title: "pages",
     stickySlide: "top 20%",
-    highlight: "admin",
+    highlight: "landing",
     excludeRegexp: "report"
 }
 
-:include-file: scenarios/gamestore/browserAdminFilter.groovy { 
+:include-file: scenarios/gamestore/browserLandingFilter.groovy { 
     title: "filtering games",
     highlight: ["pages.Pages.*", "filterText", "filterBelow60"], 
     excludeRegexp: ["hide", "browser.doc"]
+}
+
+# Persona 
+
+double browsers persona demo
+
+:include-image: admin-send-message.png { fit: true, stickySlide: "left" }
+
+:include-image: landing-received-message.png { fit: true }
+
+:include-file: pages/AdminPage.groovy {
+    title: "page object"
+}
+
+:include-file: scenarios/gamestore/browserAdminMessage.groovy {
+    title: "Persona for multiple browsers", 
+    excludeRegexp: ["browser.doc", "hide"],
+    highlight: ["Admin = ", "Admin {", "waitTo"]
 }
 
 # Database
@@ -198,7 +216,6 @@ Not all the operations can be done through REST or UI. For those cases using DB 
     highlight: "_embedded.games",
     excludeRegexp: ["//", "doc.capture"]
 }
-
 
 :include-file: scenarios/gamestore/database.groovy {
     title: "HTTP response Table comparsion",
@@ -244,7 +261,7 @@ As we test access layers, we often perform actions users would perform.
     excludeRegexp: ["//"]
 }
 
-:include-file: scenarios/gamestore/browserAdminFilter.groovy { 
+:include-file: scenarios/gamestore/browserLandingFilter.groovy { 
     title: "UI doc capture",
     startLine: "filter by price",
     highlight: ["browser.doc"], 

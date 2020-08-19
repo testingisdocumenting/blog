@@ -7,7 +7,7 @@ scenario('basic cli command') {
     cli.run("ls -l")
 
     cli.run("ls -l") {
-        output.should contain("webtau.cfg")
+        output.should contain("webtau.cfg.groovy")
     }
     // cli-basics-end
 

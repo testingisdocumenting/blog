@@ -13,7 +13,7 @@ scenario('admin browser test') {
     http.post("/api/game", [id: "g3", title: "Doom", type: "fps", priceUsd: 40])
 
     browser.open("/")
-    browser.doc.capture("admin-page")
+    browser.doc.capture("landing-page")
 
     def titles = $('[class*="GamesList_title"]')
 
@@ -22,5 +22,5 @@ scenario('admin browser test') {
     http.delete("/api/game/g3")
 
     titles.waitTo == ['Civilization 6', 'Slay The Spire']
-    browser.doc.capture("admin-page-reduced")
+    browser.doc.capture("landing-page-reduced")
 }

@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@stomp/stompjs": "^5.4.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-query": "^1.5.7",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "sockjs": "^0.3.21",
+    "websocket": "^1.0.31"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,7 +36,8 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.14.1"
+    "node-sass": "^4.14.1",
+    "react-router-dom": "^5.2.0"
   },
   "proxy": "http://localhost:8080"
 }

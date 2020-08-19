@@ -4,7 +4,7 @@ import java.nio.file.Paths
 
 import static org.testingisdocumenting.webtau.WebTauDsl.*
 
-class Report {
+class ReportPage {
     def collapsedHeader = $(".collapsed-http-header")
     def groupNames = $(".group-of-tests .navigation-entry-group-label")
     def testNames = $(".navigation-entry .label")

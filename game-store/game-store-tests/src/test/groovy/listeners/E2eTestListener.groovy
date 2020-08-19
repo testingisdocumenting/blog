@@ -24,11 +24,4 @@ class E2eTestListener implements TestListener {
         server = gameStoreServer.runInBackground()
         server.output.waitTo contain("Started GameStoreApp")
     }
-
-    @Override
-    void afterAllTests() {
-        if (server) {
-            server.stop()
-        }
-    }
 }

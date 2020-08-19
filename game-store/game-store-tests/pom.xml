@@ -44,7 +44,7 @@
                                     <include>scenarios/cliBasics.groovy</include>
                                     <include>scenarios/adminCliTool.groovy</include>
                                     <include>scenarios/browserBasics.groovy</include>
-                                    <include>scenarios/browserAdmin.groovy</include>
+                                    <include>scenarios/browserLanding.groovy</include>
                                     <include>scenarios/database.groovy</include>
                                 </includes>
                             </tests>

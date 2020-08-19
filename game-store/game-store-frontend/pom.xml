@@ -38,6 +38,17 @@
                     </execution>
 
                     <execution>
+                        <id>rebuild sass</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>rebuild node-sass</arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>Frontend production build</id>
                         <phase>generate-resources</phase>
                         <goals>
