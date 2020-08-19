@@ -1,4 +1,4 @@
-package org.testingisdocumenting.examples.gamestore.storage;
+package org.testingisdocumenting.examples.gamestore.server;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
