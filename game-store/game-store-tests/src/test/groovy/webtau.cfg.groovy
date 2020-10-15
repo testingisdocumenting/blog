@@ -14,3 +14,18 @@ dbUrl = "jdbc:h2:file:~/gamestore/h2-db;AUTO_SERVER=TRUE"
 dbDriverClassName = "org.h2.Driver"
 dbUserName = "sa"
 dbPassword = "password"
+
+Admin {
+    dbPassword = 'adminPassword'
+    authToken = 'admin-token'
+}
+
+environments {
+    cloud {
+        url = "google.cloud"
+    }
+
+    uat {
+        url = ""
+    }
+}

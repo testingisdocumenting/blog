@@ -1,8 +1,8 @@
 {
-  "title": "Your Product",
+  "title": "Curated Games",
   "type": "Guide",
   "viewOn": {
     "link": "your-custom-base-url",
-    "title": "View On Label"
+    "title": "View On GitHub"
   }
 }

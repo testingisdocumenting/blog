@@ -241,7 +241,10 @@ Not all the operations can be done through REST or UI. For those cases using DB 
 
 # Testing is Documenting
 
-As we test access layers, we often perform actions users would perform. 
+When we document things, we try them out and make sure they work as intended. 
+When we test things, we follow happy paths and edge cases.
+
+Happy path tests often cover what our users will do. Happy path tests also often match the things we document.  
 
 :include-meta: {presentationBulletListType: "RevealBoxes"}
 
@@ -268,4 +271,4 @@ As we test access layers, we often perform actions users would perform.
     excludeRegexp: ["hide"]
 }
 
-
+# Example of Generated Documentation
