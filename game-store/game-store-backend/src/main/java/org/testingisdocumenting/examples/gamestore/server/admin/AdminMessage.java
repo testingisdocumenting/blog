@@ -1,4 +1,4 @@
-package org.testingisdocumenting.examples.gamestore.server;
+package org.testingisdocumenting.examples.gamestore.server.admin;
 
 public class AdminMessage {
     private String message;
