@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.testingisdocumenting.blog</groupId>
+        <artifactId>game-store-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>game-store-tests</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-groovy</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.testingisdocumenting.webtau</groupId>
+                <artifactId>webtau-maven-plugin</artifactId>
+                <version>${webtau.version}</version>
+                <executions>
+                    <execution>
+                        <id>webtau-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
+                            <tests>
+                                <directory>${project.basedir}/src/test/groovy</directory>
+                                <includes>
+                                    <include>scenarios/replDemo.groovy</include>
+                                    <include>scenarios/postGet.groovy</include>
+                                    <include>scenarios/postGetStreamlined.groovy</include>
+                                    <include>scenarios/cliBasics.groovy</include>
+                                    <include>scenarios/adminCliTool.groovy</include>
+                                    <include>scenarios/browserBasics.groovy</include>
+                                    <include>scenarios/browserLanding.groovy</include>
+                                    <include>scenarios/database.groovy</include>
+                                </includes>
+                            </tests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>webtau-report-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
+                            <tests>
+                                <directory>${project.basedir}/src/test/groovy</directory>
+                                <includes>
+                                    <include>scenarios/webtauReport.groovy</include>
+                                </includes>
+                            </tests>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addTestSources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
