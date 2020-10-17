@@ -1,7 +1,9 @@
 package personas
 
-import org.testingisdocumenting.webtau.persona.Persona
+import static org.testingisdocumenting.webtau.WebTauCore.persona
 
 class Personas {
-    public static final Persona Admin = new Persona('admin')
+    public static final def Admin = persona('Admin')
+    public static final def John = persona('John')
+    public static final def Bob = persona('Bob')
 }
