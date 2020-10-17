@@ -1,9 +1,11 @@
 @GrabConfig(systemClassLoader=true)
 @Grab(group='com.h2database', module='h2', version='1.4.199')
 
+import auth.HttpHeaderProvider
 import listeners.E2eTestListener
 
 testListeners = [E2eTestListener]
+httpHeaderProvider = HttpHeaderProvider.&provide
 
 url = "http://localhost:8080"
 waitTimeout = 10000
@@ -15,9 +17,18 @@ dbDriverClassName = "org.h2.Driver"
 dbUserName = "sa"
 dbPassword = "password"
 
-Admin {
-    dbPassword = 'adminPassword'
-    authToken = 'admin-token'
+personas {
+    John {
+        userIdToInject = 'uid-john'
+    }
+
+    Bob {
+        userIdToInject = 'uid-bob'
+    }
+
+    Admin {
+        userIdToInject = 'uid-admin'
+    }
 }
 
 environments {
