@@ -9,6 +9,9 @@ import {
 
 import {GamesListScreen} from './GamesListScreen';
 import {AdminScreen} from './AdminScreen';
+import {ProtectedRoute} from './auth/ProtectedRoute';
+import {UserPreferencesScreen} from './user/UserPreferencesScreen';
+import {LoginScreen} from './auth/LoginScreen';
 
 function App() {
   return (
@@ -18,9 +21,16 @@ function App() {
           <Route path="/" exact>
             <GamesListScreen/>
           </Route>
+
+          <Route path="/login" exact>
+            <LoginScreen/>
+          </Route>
+
           <Route path="/admin">
             <AdminScreen/>
           </Route>
+
+          <ProtectedRoute path="/user" component={UserPreferencesScreen}/>
         </Switch>
       </Router>
     </div>

@@ -8,6 +8,13 @@ public class UserPreferences {
     private String userId;
     private String favoriteGenre;
 
+    public UserPreferences() {
+    }
+
+    public UserPreferences(String userId) {
+        this.userId = userId;
+    }
+
     @Id
     public String getUserId() {
         return userId;

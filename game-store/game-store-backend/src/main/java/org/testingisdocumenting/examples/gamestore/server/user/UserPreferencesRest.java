@@ -36,7 +36,7 @@ public class UserPreferencesRest {
         userPreferences.setUserId(userId);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(repository.save(userPreferences));
     }
 
@@ -46,7 +46,7 @@ public class UserPreferencesRest {
         String userId = authorizationService.userId(header);
         return userId.equals(id) || authorizationService.isAdmin(userId) ?
                 userPreferencesById(id) :
-                ResponseEntity.notFound().build();
+                emptyUserPreferences(userId);
     }
 
     @PutMapping("/user-preferences/{id}")
@@ -55,12 +55,6 @@ public class UserPreferencesRest {
         String userId = authorizationService.userId(header);
         if (!authorizationService.isAdmin(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
-        Optional<UserPreferences> existing = repository.findById(id);
-
-        if (!existing.isPresent()) {
-            return ResponseEntity.notFound().build();
         }
 
         repository.save(userPreferences);
@@ -84,7 +78,11 @@ public class UserPreferencesRest {
         Optional<UserPreferences> game = repository.findById(id);
         return game
                 .map(value -> ResponseEntity.status(HttpStatus.OK).body(value))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> emptyUserPreferences(id));
+    }
+
+    private ResponseEntity<UserPreferences> emptyUserPreferences(String userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(new UserPreferences(userId));
     }
 }
 
