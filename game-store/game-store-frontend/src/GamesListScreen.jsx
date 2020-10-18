@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 
-import style from './GamesListScreen.module.scss'
 import {GamesList} from './GamesList';
 import {services} from './services/services';
 
 import {useQuery} from 'react-query';
 import {createWsClient} from './websocket';
+
+import style from './GamesListScreen.module.scss'
 
 export function GamesListScreen() {
   const gamesQuery = useQuery({

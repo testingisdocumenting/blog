@@ -1,7 +1,6 @@
 package pages
 
-import static org.testingisdocumenting.webtau.WebTauDsl.$
-import static org.testingisdocumenting.webtau.WebTauDsl.browser
+import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class AdminPage {
     def message = $('#message')

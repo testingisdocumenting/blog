@@ -1,9 +1,26 @@
+import {extractAuthToken} from './auth/authTokens';
+
 export function getJsonData(url) {
     const init = {
         method: 'GET',
-        headers: {
+        headers: withAuth({
             'Accept': 'application/json'
-        }
+        })
+    }
+
+    return fetch(url, init)
+        .then(handleErrors)
+        .then(response => response.json());
+}
+
+export function putJsonData(url, data) {
+    const init = {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: withAuth({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        })
     }
 
     return fetch(url, init)
@@ -18,5 +35,10 @@ function handleErrors(response) {
     }
 
     return response;
+}
+
+function withAuth(headers) {
+    const authToken = extractAuthToken()
+    return authToken ? {...headers, Authorization: 'Bearer ' + authToken} : headers
 }
 

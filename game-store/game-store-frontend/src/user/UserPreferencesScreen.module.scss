@@ -1,0 +1,37 @@
+.screen {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 16px;
+}
+
+.saveButton {
+  margin-top: 16px;
+}
+
+.saving,
+.saveResult {
+  margin-top: 16px;
+}
+
+.loading {
+}
+
+.loadingError {
+  color: white;
+  background-color: #d56e6e;
+  padding: 8px;
+  margin-bottom: 8px;
+}
