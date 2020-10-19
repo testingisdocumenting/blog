@@ -1,0 +1,15 @@
+type Query {
+    games: [Game]
+    game(id: String): Game
+}
+
+type Mutation {
+    createGame(id: String!, title: String!, type: String!, priceUsd: Int!): Game
+}
+
+type Game {
+    id: String
+    title: String
+    type: String
+    priceUsd: Int
+}
