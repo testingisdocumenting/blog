@@ -2,5 +2,6 @@
 ../functional-test-docs/src/main/java
 ../functional-test-docs/src/test/java
 ../functional-test-docs/src/test/groovy
+../game-store/game-store-backend/src/main
 ../game-store/game-store-tests/target/doc-artifacts
 ../game-store/game-store-tests/src/test/groovy

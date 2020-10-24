@@ -1,6 +1,6 @@
 package utils
 
-import static org.testingisdocumenting.webtau.WebTauDsl.db
+import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class TestUtils {
     static def resetData() {

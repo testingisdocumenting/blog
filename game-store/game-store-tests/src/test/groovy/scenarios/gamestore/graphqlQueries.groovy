@@ -23,8 +23,8 @@ mutation createGame($id: String!, $title: String!, $type: String!, $priceUsd: In
     http.doc.capture("game-store-graphql-mutation")
 }
 
-scenario('query game') {
-    def query = '''
+// query-definition-start
+def query = '''
 query {
   game(id: "g1") {
     title
@@ -32,16 +32,20 @@ query {
   }
 }
 '''
+// query-definition-end
+
+// query-game-start
+scenario('query game') {
     graphql.execute(query) {
         game.title.should == "Slay The Spire"
         title.should == "Slay The Spire"
     }
-
     http.doc.capture("game-store-graphql-game")
 }
+// query-game-end
 
-scenario('query game with param') {
-    def query = '''
+// query-params-definition-start
+def queryWithParams = '''
 query game($id: String!) {
   game(id: $id) {
     title
@@ -49,12 +53,16 @@ query game($id: String!) {
   }
 }
 '''
-    graphql.execute(query, [id: 'g1']) {
+// query-params-definition-end
+
+// query-game-param-start
+scenario('query game with param') {
+    graphql.execute(queryWithParams, [id: 'g1']) {
         title.should == "Slay The Spire"
     }
-
     http.doc.capture("game-store-graphql-game-with-params")
 }
+// query-game-param-end
 
 scenario('clean up') {
     http.delete("/api/game/g1")
