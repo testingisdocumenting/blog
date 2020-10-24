@@ -1,5 +1,7 @@
 package org.testingisdocumenting.examples.gamestore.server.auth;
 
+import graphql.kickstart.servlet.context.DefaultGraphQLServletContext;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +20,13 @@ public class AuthorizationService {
 
     public String userId(HttpHeaders httpHeaders) {
         String auth = httpHeaders.toSingleValueMap().get(AUTH_KEY);
-        String userId = AuthUtils.extractUserIdFromAuth(auth);
-        return !userId.isEmpty() ? userId : "";
+        return AuthUtils.extractUserIdFromAuth(auth);
+    }
+
+    public String userId(DataFetchingEnvironment env) {
+        DefaultGraphQLServletContext context = env.getContext();
+        String auth = context.getHttpServletRequest().getHeader(AUTH_KEY);
+        return AuthUtils.extractUserIdFromAuth(auth);
     }
 
     public boolean isAdmin(String userId) {

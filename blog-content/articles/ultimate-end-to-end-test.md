@@ -143,37 +143,37 @@ right:
     stickySlide: "top"
 }
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy {
+:include-file: scenarios/gamestore/userPreferencesRest.groovy {
     title: "single include",
     includeRegexp: "import static personas"
 }
 
 # HTTP Authentication
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+:include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "auth required end-point", 
   startLine: "without-auth", endLine: "without-auth-end", excludeStartEnd: true,
   highlight: ["403"]
 }
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+:include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "explicit auth", 
   startLine: "with-explicit-auth", endLine: "with-explicit-auth-end", excludeStartEnd: true,
   highlight: ["generateToken", "http.header"]
 }
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+:include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth PUT", 
   startLine: "with-personas-put", endLine: "with-personas-put-end", excludeStartEnd: true,
   highlight: ["John", "Bob"]
 }
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+:include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth GET", 
   startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true
 }
 
-:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+:include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth Admin", 
   startLine: "with-personas-admin-get", endLine: "with-personas-admin-get-end", excludeStartEnd: true,
   highlight: ["uid-john", "uid-bob"]
@@ -181,12 +181,12 @@ right:
 
 :include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy - header provider", 
   startLine: "header-provider-start", endLine: "header-provider-end", excludeStartEnd: true,
-  stickySlide: "top 10%"
+  stickySlide: "top 20%"
 }
 
 :include-file: auth/HttpHeaderProvider.groovy {
-  title: "HTTP Header Provider", 
-  highlight: ["cfg.userId", "httpHeaders.with"],
+  title: "HTTP Header Provider",
+  commentsType: "inline", 
   stickySlide: "left 60%"
 }
 
@@ -221,7 +221,6 @@ right:
    stickySlide: "top"
 }
 
-
 :include-file: scenarios/gamestore/graphqlQueries.groovy {title: "query parameters", 
    startLine: "query-game-param-start", endLine: "query-game-param-end", excludeStartEnd: true,
    highlight: "id:",
@@ -230,7 +229,46 @@ right:
 
 # GraphQL Persona Auth
 
-> TODO
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "mutation to change preferences", 
+   startLine: "mutation-definition-start", endLine: "mutation-definition-end", excludeStartEnd: true,
+   stickySlide: "top"
+}
+
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "not authenticated error", 
+   startLine: "without-auth", endLine: "without-auth-end", excludeStartEnd: true,
+   excludeRegexp: ".doc",
+   commentsType: "inline",
+   stickySlide: "left"
+}
+
+:include-json: graphql-auth-error/response.json { 
+    title: "GraphQL error response", 
+    pathsFile: "graphql-auth-error/paths.json"
+} 
+
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "explicit authentication", 
+   startLine: "with-explicit-auth", endLine: "with-explicit-auth-end", excludeStartEnd: true
+}
+
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "Persona authentication", 
+   startLine: "with-personas-put", endLine: "with-personas-put-end", excludeStartEnd: true,
+   commentsType: "inline",
+   stickySlide: "left"
+}
+
+:include-file: auth/HttpHeaderProvider.groovy {
+  title: "same HTTP Header Provider",
+  commentsType: "inline"  
+}
+
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "query to fetch preferences", 
+   startLine: "query-definition-start", endLine: "query-definition-end", excludeStartEnd: true,
+   stickySlide: "top"
+}
+
+:include-file: scenarios/gamestore/userPreferencesGraphQL.groovy {title: "Persona authentication", 
+   startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true
+}
 
 
 # CLI Command

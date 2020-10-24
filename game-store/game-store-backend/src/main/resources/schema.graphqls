@@ -1,10 +1,12 @@
 type Query {
     games: [Game]
     game(id: String): Game
+    userPreferences: UserPreferences
 }
 
 type Mutation {
     createGame(id: String!, title: String!, type: String!, priceUsd: Int!): Game
+    updateUserPreferences(favoriteGenre: String): UserPreferences
 }
 
 type Game {
@@ -12,4 +14,9 @@ type Game {
     title: String
     type: String
     priceUsd: Int
+}
+
+type UserPreferences {
+    userId: String
+    favoriteGenre: String
 }
