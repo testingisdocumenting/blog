@@ -51,12 +51,14 @@ public class UserPreferencesRest {
 
     @PutMapping("/user-preferences/{id}")
     public ResponseEntity<UserPreferences> updatePreferences(@RequestHeader HttpHeaders header,
-                                                             @RequestBody UserPreferences userPreferences, @PathVariable String id) {
+                                                             @RequestBody UserPreferences userPreferences,
+                                                             @PathVariable String id) {
         String userId = authorizationService.userId(header);
         if (!authorizationService.isAdmin(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
+        userPreferences.setUserId(id);
         repository.save(userPreferences);
 
         return ResponseEntity.status(HttpStatus.OK).body(userPreferences);
