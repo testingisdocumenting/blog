@@ -2,7 +2,7 @@ package pages
 
 import java.nio.file.Paths
 
-import static org.testingisdocumenting.webtau.WebTauDsl.*
+import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class ReportPage {
     def collapsedHeader = $(".collapsed-http-header")

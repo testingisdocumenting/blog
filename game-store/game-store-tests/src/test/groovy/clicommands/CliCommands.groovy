@@ -1,6 +1,6 @@
 package clicommands
 
-import static org.testingisdocumenting.webtau.WebTauDsl.*
+import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class CliCommands {
     static final def gameStoreServer = cli.command(

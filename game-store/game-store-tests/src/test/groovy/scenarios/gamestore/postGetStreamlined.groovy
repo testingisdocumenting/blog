@@ -1,8 +1,8 @@
+// register-new-game
 package scenarios.gamestore
 
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
-// register-new-game
 scenario('register new game') {
     def payload = [id: "g1", title: "Slay The Spire", type: "card rpg", priceUsd: 20]
 

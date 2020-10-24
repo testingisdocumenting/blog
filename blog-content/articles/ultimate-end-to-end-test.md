@@ -10,7 +10,7 @@ summary: End to end of REST API, Command Line Interface, Web User Interface and 
 
 :include-meta: {presentationBulletListType: "RevealBoxes"}
 
-* REST API
+* REST/GraphQL API
 * Web UI
 * Command Line 
 * Database 
@@ -96,6 +96,143 @@ Let's combine `http.get` and `http.post` together into a full test
     highlight: ["return id", "should == payload"]
 }
 
+# Basic Configuration
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
+    includeRegexp: ["base url for all http requests", "custom config value"], 
+    commentsType: "inline"
+}
+
+:include-file: scenarios/configDemo.groovy { title: "config access" }
+
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
+   startLine: "environments config", endLine: "environments config-end", excludeStartEnd: true,
+   highlight: ["dev", "cloud"],
+   stickySlide: "top 70%"
+}
+
+:include-cli-command: webtau scenarios/* --env=dev
+
+# Personas and Configuration
+
+:include-file: scenarios/personaDemo.groovy {
+    title: "persona demo", 
+    highlight: ["John {", "Bob {"],
+    stickySlide: "left",
+    excludeRegexp: "// do-something" 
+}
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
+   startLine: "personas config", endLine: "personas config-end", excludeStartEnd: true,
+   highlight: ["John", "Bob"]
+}
+
+```columns
+left:
+:include-file: scenarios/personaDemo.groovy {title: "persona context", 
+   startLine: "do-something-start", endLine: "do-something-end", excludeStartEnd: true
+}
+
+right:
+:include-file: ue2e/persona-output.txt {title: "example output"}
+```
+
+:include-file: personas/Personas.groovy {
+    title: "define all personas in one place",
+    stickySlide: "top"
+}
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy {
+    title: "single include",
+    includeRegexp: "import static personas"
+}
+
+# HTTP Authentication
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+  title: "auth required end-point", 
+  startLine: "without-auth", endLine: "without-auth-end", excludeStartEnd: true,
+  highlight: ["403"]
+}
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+  title: "explicit auth", 
+  startLine: "with-explicit-auth", endLine: "with-explicit-auth-end", excludeStartEnd: true,
+  highlight: ["generateToken", "http.header"]
+}
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+  title: "Persona auth PUT", 
+  startLine: "with-personas-put", endLine: "with-personas-put-end", excludeStartEnd: true,
+  highlight: ["John", "Bob"]
+}
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+  title: "Persona auth GET", 
+  startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true
+}
+
+:include-file: scenarios/gamestore/userPreferencesApi.groovy { 
+  title: "Persona auth Admin", 
+  startLine: "with-personas-admin-get", endLine: "with-personas-admin-get-end", excludeStartEnd: true,
+  highlight: ["uid-john", "uid-bob"]
+}
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy - header provider", 
+  startLine: "header-provider-start", endLine: "header-provider-end", excludeStartEnd: true,
+  stickySlide: "top 10%"
+}
+
+:include-file: auth/HttpHeaderProvider.groovy {
+  title: "HTTP Header Provider", 
+  highlight: ["cfg.userId", "httpHeaders.with"],
+  stickySlide: "left 60%"
+}
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy - personas setup", 
+   startLine: "personas config", endLine: "personas config-end", excludeStartEnd: true,
+   highlight: ["uid-john", "uid-bob", "uid-admin"]
+}
+
+# GraphQL
+
+:include-file: resources/schema.graphqls {title: "GraphQL schema"} 
+
+:include-file: scenarios/gamestore/graphqlQueries.groovy {title: "query definition", 
+   startLine: "query-definition-start", endLine: "query-definition-end", excludeStartEnd: true,
+   stickySlide: "top"
+}
+
+:include-file: scenarios/gamestore/graphqlQueries.groovy {title: "GraphQL query", 
+   startLine: "query-game-start", endLine: "query-game-end", excludeStartEnd: true,
+   highlight: "title",
+   stickySlide: "left",
+   excludeRegexp: "http.doc"
+}
+
+:include-json: game-store-graphql-game/response.json { 
+   title: "response",
+   pathsFile: "game-store-graphql-game/paths.json"
+} 
+
+:include-file: scenarios/gamestore/graphqlQueries.groovy {title: "params query definition", 
+   startLine: "query-params-definition-start", endLine: "query-params-definition-end", excludeStartEnd: true,
+   stickySlide: "top"
+}
+
+
+:include-file: scenarios/gamestore/graphqlQueries.groovy {title: "query parameters", 
+   startLine: "query-game-param-start", endLine: "query-game-param-end", excludeStartEnd: true,
+   highlight: "id:",
+   excludeRegexp: "http.doc"
+}
+
+# GraphQL Persona Auth
+
+> TODO
+
+
 # CLI Command
 
 Let's start with a run of `ls -l` command 
@@ -176,7 +313,60 @@ let's move page elements definitions to page objects
     excludeRegexp: ["hide", "browser.doc"]
 }
 
-# Persona 
+# Browser Auth
+
+:include-image: user-preferences-screen.png { caption: "user preferences", fit: true }
+
+:include-image: login-screen.png { caption: "login is required", fit: true }
+
+
+:include-file: scenarios/gamestore/userPreferencesUi.groovy {
+    title: "Explicit Login",
+    startLine: "explicit-login-start", endLine: "explicit-login-end", excludeStartEnd: true,
+    commentsType: "inline",
+    excludeRegexp: "browser.doc",
+    stickySlide: "left"
+}
+
+:include-file: pages/UserPreferencesPage.groovy {
+    title: "user preferences page object",
+    stickySlide: "top"
+}
+
+:include-file: pages/LoginPage.groovy {
+    title: "login page object"
+}
+
+:include-file: scenarios/gamestore/userPreferencesUi.groovy {
+    title: "Persona Login",
+    startLine: "persona-login-start", endLine: "persona-login-end", excludeStartEnd: true,
+    highlight: "put",
+    excludeRegexp: "browser.doc"
+}
+
+:include-file: scenarios/gamestore/userPreferencesUi.groovy {
+    title: "Update Through UI",
+    startLine: "change-through-ui-start", endLine: "change-through-ui-end", excludeStartEnd: true,
+    highlight: ["Saved", "Bob"]
+}
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy - browser navigation handler", 
+  startLine: "browser-navigation-handler-start", endLine: "browser-navigation-handler-end", excludeStartEnd: true,
+  stickySlide: "top 10%"
+}
+
+:include-file: auth/BrowserNavigationHandler.groovy {
+  title: "Browser Navigation Handler", 
+  commentsType: "inline",
+  stickySlide: "left 60%"
+}
+
+:include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy - personas setup", 
+   startLine: "personas config", endLine: "personas config-end", excludeStartEnd: true,
+   highlight: ["uid-john", "uid-bob", "uid-admin"]
+}
+
+# Browser WebSocket
 
 double browsers persona demo
 

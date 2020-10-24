@@ -1,6 +1,6 @@
 package personas
 
-import static org.testingisdocumenting.webtau.WebTauCore.persona
+import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class Personas {
     public static final def Admin = persona('Admin')

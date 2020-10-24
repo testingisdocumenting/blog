@@ -4,18 +4,22 @@ import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 import static pages.Pages.*
 import static personas.Personas.*
 
+// explicit-login-start
 scenario('user preferences redirects to login') {
-    userPreferences.open()
+    userPreferences.open() // open user preferences page
 
     login.name.waitTo beVisible
-    browser.url.ref.should == '/login'
+    browser.url.ref.should == '/login' // but landed on login page
+    browser.doc.capture('login-screen')
 
-    login.login('uid-test', 'dummy-password')
+    login.login('uid-test', 'dummy-password') // explicitly enter user name and password
 
-    userPreferences.userId.waitTo == 'uid-test'
+    userPreferences.userId.waitTo == 'uid-test' // after redirect we can see user preferences
     userPreferences.favoriteGenre.should == ''
 }
+// explicit-login-end
 
+// persona-login-start
 scenario('implicit login with persona') {
     John {
         http.put('/api/user-preferences', [favoriteGenre: 'RPG'])
@@ -24,9 +28,12 @@ scenario('implicit login with persona') {
 
         userPreferences.userId.waitTo == 'uid-john'
         userPreferences.favoriteGenre.should == 'RPG'
+        browser.doc.capture('user-preferences-screen')
     }
 }
+// persona-login-end
 
+// change-through-ui-start
 scenario('change preferences through UI') {
     John {
         userPreferences.open()
@@ -50,3 +57,4 @@ scenario('change preferences through UI') {
         }
     }
 }
+// change-through-ui-end

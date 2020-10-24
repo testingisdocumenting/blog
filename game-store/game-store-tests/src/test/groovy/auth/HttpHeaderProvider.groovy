@@ -5,7 +5,9 @@ import org.testingisdocumenting.webtau.http.HttpHeader
 import static org.testingisdocumenting.webtau.cfg.WebTauConfig.getCfg
 
 class HttpHeaderProvider {
-    static provide(String fullUrl, String url, HttpHeader httpHeaders) {
+    static provide(String fullUrl,
+                   String url,
+                   HttpHeader httpHeaders) {
         def userId = cfg.userId
         if (!userId) {
             return httpHeaders
