@@ -1,9 +1,9 @@
 package scenarios.gamestore
 
-import utils.TestUtils
-
+import utils.TestUtils // hide
+// hide
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
-import static pages.Pages.*
+import static pages.Pages.* // import all the pages into test scope
 
 scenario('setup up') { // hide
     TestUtils.resetData() // hide
@@ -11,14 +11,14 @@ scenario('setup up') { // hide
 // hide
 scenario('filter by text') {
     landing.reopen()
-    landing.filterText.setValue("last")
+    landing.filterText.setValue("last") // set value using input defined in the page object
 
     landing.titles.waitTo == ['Last Of Us 2']
 }
 
 scenario('filter by price') {
     landing.reopen()
-    landing.filterBelow60.setValue(true)
+    landing.filterBelow60.setValue(true) // set checkbox value using input defined in the page object
 
     landing.titles.waitTo == ['Assassin Creed Odyssey', 'Division 2',
                               'Hearthstone', 'Inside', 'Slay The Spire']

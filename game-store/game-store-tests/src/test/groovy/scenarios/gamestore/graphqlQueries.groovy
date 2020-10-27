@@ -37,8 +37,8 @@ query {
 // query-game-start
 scenario('query game') {
     graphql.execute(query) {
-        game.title.should == "Slay The Spire"
-        title.should == "Slay The Spire"
+        game.title.should == "Slay The Spire" // explicit access through query name
+        title.should == "Slay The Spire" // implicit access in case of the single query
     }
     http.doc.capture("game-store-graphql-game")
 }
