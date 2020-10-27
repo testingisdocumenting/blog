@@ -1,19 +1,9 @@
-@GrabConfig(systemClassLoader=true)
-@Grab(group='com.h2database', module='h2', version='1.4.199')
-
+import groovy.grape.Grape
 import auth.HttpHeaderProvider
-import auth.BrowserNavigationHandler
-import listeners.E2eTestListener
+import auth.BrowserOpenHandler
 
-testListeners = [E2eTestListener]
-
-// header-provider-start
-httpHeaderProvider = HttpHeaderProvider.&provide
-// header-provider-end
-
-// browser-navigation-handler-start
-browserPageNavigationHandler = BrowserNavigationHandler.&handlePageOpen
-// browser-navigation-handler-end
+Grape.grab(group:'com.h2database', module: 'h2', version: '1.4.200',
+        classLoader: ClassLoader.getSystemClassLoader())
 
 url = "http://localhost:8080" // base url for all http requests
 browserUrl = "http://localhost:3000"
@@ -29,35 +19,17 @@ dbDriverClassName = "org.h2.Driver"
 dbUserName = "sa"
 dbPassword = "password"
 
-// personas config
+// personas-auth-config
+httpHeaderProvider = HttpHeaderProvider.&provide // implicit header provider
+browserPageNavigationHandler = BrowserOpenHandler.&handleOpen // implicit page open handler
+
 personas {
     John {
-        myCustomValue = "JCV"
-        userId = 'uid-john'
+        userId = 'uid-john' // custom config value to hold system specific user id
     }
 
     Bob {
-        myCustomValue = "BCV"
-        userId = 'uid-bob'
-    }
-
-    Admin {
-        myCustomValue = "ACV"
-        userId = 'uid-admin'
+        userId = 'uid-bob' // custom config value to hold system specific user id
     }
 }
-// personas config-end
-
-// environments config
-environments {
-    dev {
-        url = "http://dev-server:8080"
-        myCustomValue = "dev custom value"
-    }
-
-    cloud {
-        url = "http://cloud.google.com/my-instance"
-        myCustomValue = "cloud custom value"
-    }
-}
-// environments config-end
+// personas-auth-config-end

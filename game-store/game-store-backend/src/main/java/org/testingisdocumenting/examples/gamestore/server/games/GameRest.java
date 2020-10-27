@@ -26,9 +26,16 @@ public class GameRest {
 
     @PostMapping("/game")
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
+        setIdIfRequired(game);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(repository.save(game));
+    }
+
+    private void setIdIfRequired(Game game) {
+        if (game.getId() == null) {
+            game.setId(java.util.UUID.randomUUID().toString());
+        }
     }
 
     @PutMapping("/game/{id}")

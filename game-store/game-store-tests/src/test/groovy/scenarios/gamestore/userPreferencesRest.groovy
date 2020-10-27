@@ -6,17 +6,17 @@ import static personas.Personas.*
 // without-auth
 scenario('save preferences without auth') {
     http.put('/api/user-preferences', [favoriteGenre: 'RPG']) {
-        statusCode.should == 403
+        statusCode.should == 403 // forbidden, as this end-point requires authentication
     }
 }
 // without-auth-end
 
 // with-explicit-auth
 scenario('save preferences with explicit auth') {
-    def token = generateToken('user-a')
+    def token = generateToken('user-a') // generates token using our system underlying auth system
 
     http.put('/api/user-preferences',
-            http.header([Authorization: "Bearer ${token}"]),
+            http.header([Authorization: "Bearer ${token}"]), // explicitly pass Bearer token
             [favoriteGenre: 'RPG']) {
         userId.should == 'user-a'
     }
@@ -25,16 +25,16 @@ scenario('save preferences with explicit auth') {
 
 // with-personas-put
 scenario('save preferences with personas auth') {
-    John {
+    John { // John's context
         http.put('/api/user-preferences', [favoriteGenre: 'RPG']) {
-            userId.should == 'uid-john'
+            userId.should == 'uid-john' // validating that we updated the right user
             favoriteGenre.should == 'RPG'
         }
     }
 
-    Bob {
+    Bob { // Bob's context
         http.put('/api/user-preferences', [favoriteGenre: 'Strategy']) {
-            userId.should == 'uid-bob'
+            userId.should == 'uid-bob' // validating that we updated the right user
             favoriteGenre.should == 'Strategy'
         }
     }
@@ -50,7 +50,7 @@ scenario('read preferences with personas auth') {
     }
 
     Bob {
-        http.get('/api/user-preferences', [favoriteGenre: 'Strategy']) {
+        http.get('/api/user-preferences') {
             favoriteGenre.should == 'Strategy'
         }
     }
