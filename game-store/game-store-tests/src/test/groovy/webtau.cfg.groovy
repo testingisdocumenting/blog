@@ -8,6 +8,8 @@ Grape.grab(group:'com.h2database', module: 'h2', version: '1.4.200',
 url = "http://localhost:8080" // base url for all http requests
 browserUrl = "http://localhost:3000"
 
+openApiSpecUrl = "http://localhost:8080/v3/api-docs"
+
 myCustomValue = "for my test purposes" // custom config value
 
 waitTimeout = 10000

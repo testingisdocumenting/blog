@@ -57,20 +57,6 @@ scenario('read preferences with personas auth') {
 }
 // with-personas-get-end
 
-// with-personas-admin-get
-scenario('admin read preferences') {
-    Admin {
-        http.get('/api/user-preferences/uid-john') {
-            favoriteGenre.should == 'RPG'
-        }
-
-        http.get('/api/user-preferences/uid-bob') {
-            favoriteGenre.should == 'Strategy'
-        }
-    }
-}
-// with-personas-admin-get-end
-
 static def generateToken(String userId) {
     return userId.bytes.encodeBase64().toString()
 }

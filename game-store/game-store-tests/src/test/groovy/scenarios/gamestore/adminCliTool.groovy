@@ -9,7 +9,7 @@ scenario('clean up') { // hide
 // hide
 scenario('list games using CLI') {
     adminTool.run { // run our command line
-        output.should contain("List of my games") // expect a title to be present
+        output.should contain("List of games") // expect a title to be present
     }
 
     http.post("/api/game", [id: "g1", title: "Slay The Spire", type: "card rpg", priceUsd: 20]) // pre-create data we need for the test

@@ -3,6 +3,7 @@ package org.testingisdocumenting.examples.gamestore.cli;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Game {
@@ -10,6 +11,13 @@ public class Game {
     private String title;
     private String type;
     private BigDecimal priceUsd;
+
+    public Game(Map<String, Object> payload) {
+        id = payload.get("id").toString();
+        title = payload.get("title").toString();
+        type = payload.get("type").toString();
+        priceUsd = BigDecimal.valueOf((double)payload.get("priceUsd"));
+    }
 
     public String getId() {
         return id;

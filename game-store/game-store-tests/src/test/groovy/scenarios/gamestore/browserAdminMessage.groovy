@@ -17,9 +17,9 @@ scenario('sending admin message') {
     def message = 'Shop is going to be closed for maintenance'
 
     Admin {
-        admin.reopen() // open admin page in Admin's browser
-        admin.message.setValue(message)
-        admin.sendMessage.click() // send notification message
+        maintenance.reopen() // open maintenance page in Admin's browser
+        maintenance.message.setValue(message)
+        maintenance.sendMessage.click() // send notification message
         browser.doc.capture('admin-send-message')
     }
 
