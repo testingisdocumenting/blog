@@ -1,0 +1,1 @@
+webtau scenarios/webtauReport.groovy --config=webtau.reports.cfg.groovy --reportPath=webtau-reports.report.html

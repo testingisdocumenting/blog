@@ -526,13 +526,19 @@ and JUnit5 table usage
 
 # Reporting 
 
-:include-image: game-store-report-summary.png {fit: true}
+:include-image: game-store-report-summary.png {annotationsPath: "game-store-report-summary.json"}
 
-:include-image: game-store-report-http-call.png {fit: true}
+:include-image: game-store-skipped-operations.png {annotationsPath: "game-store-skipped-operations.json"}
 
-:include-image: game-store-report-cli-call.png {fit: true}
+:include-image: game-store-overall-http-performance.png {annotationsPath: "game-store-overall-http-performance.json"}
 
-:include-image: game-store-report-steps.png {fit: true}
+:include-image: game-store-operations-http-performance.png {annotationsPath: "game-store-operations-http-performance.json"}
+
+:include-image: game-store-report-http-call.png {annotationsPath: "game-store-report-http-call.json"} 
+
+:include-image: game-store-report-cli-call.png {annotationsPath: "game-store-report-cli-call.json"}
+
+:include-image: game-store-report-steps.png {annotationsPath: "game-store-report-steps.json"}
 
 # REPL
 
