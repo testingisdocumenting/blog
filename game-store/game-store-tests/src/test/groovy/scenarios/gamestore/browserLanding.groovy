@@ -7,7 +7,7 @@ scenario('setup up') { // hide
 } // hide
 // hide
 // hide
-scenario('admin browser test') {
+scenario('landing page') {
     http.post("/api/game", [id: "g1", title: "Slay The Spire", type: "card rpg", priceUsd: 20]) // pre-create test data using HTTP
     http.post("/api/game", [id: "g2", title: "Civilization 6", type: "strategy", priceUsd: 60])
     http.post("/api/game", [id: "g3", title: "Doom", type: "fps", priceUsd: 40])

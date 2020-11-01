@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +26,7 @@ public class GameRest {
     }
 
     @PostMapping("/game")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
         setIdIfRequired(game);
         return ResponseEntity
@@ -51,14 +53,14 @@ public class GameRest {
         return ResponseEntity.status(HttpStatus.OK).body(game);
     }
 
-    @DeleteMapping("/game/{id}")
-    public ResponseEntity<Object> deleteGame(@PathVariable String id) {
+    @DeleteMapping(value = "/game/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGame(@PathVariable String id) {
         repository.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/game")
-    public Iterable<Game> listAllGames(@RequestParam(value = "sortBy", required = false) String sortBy) {
+    public List<Game> listAllGames(@RequestParam(value = "sortBy", required = false) String sortBy) {
         if (sortBy != null) {
             return repository.findAll(Sort.by(sortBy));
         } else {

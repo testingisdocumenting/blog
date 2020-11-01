@@ -1,5 +1,9 @@
 package org.testingisdocumenting.examples.gamestore.server.user;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +30,14 @@ public class UserPreferencesRest {
     }
 
     @PutMapping("/user-preferences")
+    @Operation(
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Success",
+                            content = @Content(schema = @Schema(implementation = UserPreferences.class))),
+                    @ApiResponse(responseCode = "403", description = "Forbidden",
+                            content = @Content(schema = @Schema()))
+            }
+    )
     public ResponseEntity<UserPreferences> createPreferences(@RequestHeader HttpHeaders header,
                                                              @RequestBody UserPreferences userPreferences) {
         String userId = authorizationService.userId(header);
