@@ -12,6 +12,8 @@ import org.testingisdocumenting.examples.gamestore.server.auth.AuthorizationServ
 
 import java.util.Optional;
 
+import static org.testingisdocumenting.examples.gamestore.server.ArtificialDelay.artificialDelay;
+
 @RestController
 @RequestMapping("/api")
 public class UserPreferencesRest {
@@ -25,6 +27,8 @@ public class UserPreferencesRest {
 
     @GetMapping("/user-preferences")
     public ResponseEntity<UserPreferences> myPreferences(@RequestHeader HttpHeaders header) {
+        artificialDelay(50, 100);
+
         String userId = authorizationService.userId(header);
         return userPreferencesById(userId);
     }
@@ -40,6 +44,8 @@ public class UserPreferencesRest {
     )
     public ResponseEntity<UserPreferences> createPreferences(@RequestHeader HttpHeaders header,
                                                              @RequestBody UserPreferences userPreferences) {
+        artificialDelay(100, 150);
+
         String userId = authorizationService.userId(header);
         if (userId.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -55,6 +61,7 @@ public class UserPreferencesRest {
     @GetMapping("/user-preferences/{id}")
     public ResponseEntity<UserPreferences> findPreferences(@RequestHeader HttpHeaders header,
                                                            @PathVariable String id) {
+        artificialDelay(50, 70);
         String userId = authorizationService.userId(header);
         return userId.equals(id) || authorizationService.isAdmin(userId) ?
                 userPreferencesById(id) :
@@ -65,6 +72,7 @@ public class UserPreferencesRest {
     public ResponseEntity<UserPreferences> updatePreferences(@RequestHeader HttpHeaders header,
                                                              @RequestBody UserPreferences userPreferences,
                                                              @PathVariable String id) {
+        artificialDelay(50, 70);
         String userId = authorizationService.userId(header);
         if (!authorizationService.isAdmin(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -79,6 +87,7 @@ public class UserPreferencesRest {
     @DeleteMapping("/user-preferences/{id}")
     public ResponseEntity<Object> deletePreferences(@RequestHeader HttpHeaders header,
                                                     @PathVariable String id) {
+        artificialDelay(50, 70);
         String userId = authorizationService.userId(header);
         if (!authorizationService.isAdmin(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

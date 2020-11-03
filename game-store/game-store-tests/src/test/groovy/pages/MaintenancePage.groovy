@@ -2,7 +2,7 @@ package pages
 
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
-class AdminPage {
+class MaintenancePage {
     def message = $('#message')
     def sendMessage = $('button').get('send message')
 

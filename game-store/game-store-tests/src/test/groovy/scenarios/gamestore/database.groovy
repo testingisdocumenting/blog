@@ -23,13 +23,15 @@ scenario('db write and http list games') {
     db.update("delete from Game")
 
     def GAME = db.table("GAME")
-    GAME << ["ID" | "TITLE"           | "TYPE"     | "PRICE_USD"] { // populate GAME table with two rows
+    // populate GAME table with two rows
+    GAME << ["ID" | "TITLE"           | "TYPE"     | "PRICE_USD"] {
              ____________________________________________________
              "g1" | "Slay The Spire"  | "card rpg" | 20
              "g2" | "Civilization 6"  | "strategy" | 60  }
 
     http.get("/api/game") {
-        body.should == [ "*id" | "title" ] { // expect body to contain a list of two games
+        // expect body to contain a list of two games
+        body.should == [ "*id" | "title" ] {
                        ___________________________
                           "g2" | "Civilization 6"
                           "g1" | "Slay The Spire" }

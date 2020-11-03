@@ -44,39 +44,47 @@ scenario('operations http performance') {
             .capture('game-store-operations-http-performance')
 }
 
-scenario('http call') {
+scenario('test summary tab') {
     report.selectTestsSelection()
     def testName = 'db write and http list games'
     report.selectTest(testName)
-    report.selectHttpCalls()
-    report.expandHttpCall(1)
+    report.selectTestSummary()
 
     browser.doc.withAnnotations(
             browser.doc.badge(report.testsSelection).toTheLeft(),
             browser.doc.badge(report.navigationEntries.get(testName)).toTheRight(),
-            browser.doc.badge(report.httpCallsTab).below(),
+            browser.doc.badge(report.summaryTabs).below())
+            .capture('game-store-report-test-summary')
+}
+
+scenario('test http calls tab') {
+    report.selectTestHttpCalls()
+    report.expandHttpCall(1)
+
+    browser.doc.withAnnotations(
+            browser.doc.badge(report.testHttpCallsTab).below(),
             browser.doc.badge(report.jsonHighlight.get(2)).toTheRight(),
             browser.doc.badge(report.jsonHighlight.get(4)).toTheRight())
             .capture('game-store-report-http-call')
 }
 
-scenario('cli') {
+scenario('test cli tab') {
     report.selectTest('list games using CLI')
-    report.selectCliCalls()
+    report.selectTestCliCalls()
     report.expandCliCall(1)
 
     browser.doc.withAnnotations(
-            browser.doc.badge(report.cliCallsTab).below(),
+            browser.doc.badge(report.testCliCallsTab).below(),
             browser.doc.badge(report.cliOutputHighlight.get(1)).toTheLeft())
             .capture('game-store-report-cli-call')
 }
 
-scenario('steps') {
+scenario('test steps tab') {
     report.selectTest('change preferences through UI')
-    report.selectSteps()
+    report.selectTestSteps()
 
     browser.doc.withAnnotations(
-            browser.doc.badge(report.stepsTab).below(),
+            browser.doc.badge(report.testStepsTab).below(),
             browser.doc.badge(report.steps.get(1)).toTheLeft(),
             browser.doc.badge(report.steps.get(6)).toTheLeft())
             .capture('game-store-report-steps')
