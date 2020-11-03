@@ -21,12 +21,12 @@ scenario('user preferences redirects to login') {
 
 // persona-login-start
 scenario('implicit login with persona') {
-    John { // In the John's context
+    Alice { // In the Alice's context
         http.put('/api/user-preferences', [favoriteGenre: 'RPG']) // prepare data to assert on - another example of http/browser test combination
 
         userPreferences.open() // open user preferences
 
-        userPreferences.userId.waitTo == 'uid-john' // we expect user preferences screen, not the login screen
+        userPreferences.userId.waitTo == 'uid-alice' // we expect user preferences screen, not the login screen
         userPreferences.favoriteGenre.should == 'RPG' // our assertion matches what we set using REST API
         browser.doc.capture('user-preferences-screen')
     }
@@ -35,7 +35,9 @@ scenario('implicit login with persona') {
 
 // change-through-ui-start
 scenario('change preferences through UI') {
-    John {
+    Bob { http.put('/api/user-preferences', [favoriteGenre: 'Sim']) } // Set Bob's preference via HTTP
+
+    Alice {
         userPreferences.open()
 
         userPreferences.favoriteGenre.waitTo beVisible() // wait for UI to load data from REST endpoint
@@ -47,11 +49,11 @@ scenario('change preferences through UI') {
 
     Bob { // In Bob's context
         http.get('/api/user-preferences') {
-            favoriteGenre.should != 'CRPG' // Genre is NOT the same as was set by John
+            favoriteGenre.should == 'Sim' // Bob's preferences were not affected by UI
         }
     }
 
-    John { // In John's context
+    Alice { // In Alice's context
         http.get('/api/user-preferences') {
             favoriteGenre.should == 'CRPG' // Genre is the one we set
         }

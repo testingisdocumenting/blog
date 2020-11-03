@@ -12,11 +12,41 @@
 
     <artifactId>game-store-tests</artifactId>
 
+    <properties>
+        <junit5.version>5.7.0-M1</junit5.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.testingisdocumenting.webtau</groupId>
             <artifactId>webtau-groovy</artifactId>
             <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-junit5</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-junit5-groovy</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.7.0-M1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

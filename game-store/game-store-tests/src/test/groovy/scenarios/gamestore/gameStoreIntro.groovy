@@ -10,7 +10,7 @@ scenario('prepare data for capture') {
     browser.reopen("/")
 
     def titles = $('[class*="GamesList_title"]')
-    titles.count.waitToBe >= 0
+    titles.count.waitToBe > 0
 
     browser.doc.capture("game-store-main-page")
 

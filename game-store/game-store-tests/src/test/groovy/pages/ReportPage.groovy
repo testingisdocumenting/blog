@@ -20,9 +20,10 @@ class ReportPage {
     def skippedOperations = $("div").get("Skipped operations")
     def summaryTabs = $(".tab-name")
     def testTabs = $(".tab-selection .tab-name")
-    def httpCallsTab = testTabs.get('HTTP calls')
-    def stepsTab = testTabs.get('Steps')
-    def cliCallsTab = testTabs.get('CLI calls')
+    def testSummaryTab = testTabs.get('Summary')
+    def testHttpCallsTab = testTabs.get('HTTP calls')
+    def testStepsTab = testTabs.get('Steps')
+    def testCliCallsTab = testTabs.get('CLI calls')
 
     def testsSelection = $(".entry-type-tests")
 
@@ -48,16 +49,20 @@ class ReportPage {
         navEntry.click()
     }
 
-    def selectHttpCalls() {
-        httpCallsTab.click()
+    def selectTestSummary() {
+        testSummaryTab.click()
     }
 
-    def selectSteps() {
-        stepsTab.click()
+    def selectTestHttpCalls() {
+        testHttpCallsTab.click()
     }
 
-    def selectCliCalls() {
-        cliCallsTab.click()
+    def selectTestCliCalls() {
+        testCliCallsTab.click()
+    }
+
+    def selectTestSteps() {
+        testStepsTab.click()
     }
 
     def expandHttpCall(number) {

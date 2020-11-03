@@ -20,7 +20,7 @@ public class GamesPrinter {
     }
 
     public void print() {
-        Ansi.print(Color.CYAN, "List of games\n");
+        Ansi.print(Color.CYAN, "List of games");
         games.forEach(this::print);
     }
 

@@ -36,9 +36,9 @@ scenario('save preferences with explicit auth') {
 
 // with-personas-put
 scenario('save preferences with personas auth') {
-    John { // Personas we defined and used for HTTP REST API
+    Alice { // Personas we defined and used for HTTP REST API
         graphql.execute(mutation, [favoriteGenre: 'RPG']) {
-            userId.should == 'uid-john' // make sure system picked the right user
+            userId.should == 'uid-alice' // make sure system picked the right user
             favoriteGenre.should == 'RPG'
         }
     }
@@ -65,7 +65,7 @@ query {
 
 // with-personas-get
 scenario('read preferences with personas auth') {
-    John {
+    Alice {
         graphql.execute(query) {
             favoriteGenre.should == 'RPG' // making sure correct data is returned back
         }

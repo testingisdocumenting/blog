@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static org.testingisdocumenting.examples.gamestore.server.ArtificialDelay.artificialDelay;
+
 @RestController
 @RequestMapping("/api")
 public class GameRest {
@@ -19,6 +21,8 @@ public class GameRest {
 
     @GetMapping("/game/{id}")
     public ResponseEntity<Game> findGame(@PathVariable String id) {
+        artificialDelay(50, 100);
+
         Optional<Game> game = repository.findById(id);
         return game
                 .map(value -> ResponseEntity.status(HttpStatus.OK).body(value))
@@ -28,6 +32,8 @@ public class GameRest {
     @PostMapping("/game")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
+        artificialDelay(100, 150);
+
         setIdIfRequired(game);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -56,11 +62,14 @@ public class GameRest {
     @DeleteMapping(value = "/game/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGame(@PathVariable String id) {
+        artificialDelay(100, 200);
         repository.deleteById(id);
     }
 
     @GetMapping("/game")
     public List<Game> listAllGames(@RequestParam(value = "sortBy", required = false) String sortBy) {
+        artificialDelay(200, 250);
+
         if (sortBy != null) {
             return repository.findAll(Sort.by(sortBy));
         } else {

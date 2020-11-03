@@ -25,9 +25,11 @@ dbPassword = "password"
 httpHeaderProvider = HttpHeaderProvider.&provide // implicit header provider
 browserPageNavigationHandler = BrowserOpenHandler.&handleOpen // implicit page open handler
 
+userId = '' // for clarity purposes, we explicitly set it to be an empty string
+
 personas {
-    John {
-        userId = 'uid-john' // custom config value to hold system specific user id
+    Alice {
+        userId = 'uid-alice' // custom config value to hold system specific user id
     }
 
     Bob {

@@ -4,8 +4,16 @@ import static clicommands.WebTauCommand.webtauCli
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 def repl = createLazyResource("repl") {
-    def process = webtauCli.runInBackground("repl", cli.env([WEBTAU_CP: 'h2-1.4.199.jar']))
-    process.output.waitTo contain(':help')
+    def listOfScenarios = [
+            "adminCliTool.groovy",
+            "userPreferencesRest.groovy",
+            "userPreferencesGraphQL.groovy",
+            "userPreferencesUi.groovy"].collect { "scenarios/gamestore/$it" }
+
+    def process = webtauCli.runInBackground(listOfScenarios.join(" ") + " repl", cli.env([WEBTAU_CP: 'h2-1.4.199.jar']))
+
+    process.output.waitTo contain("userPreferencesUi.groovy")
+    process.clearOutput()
 
     return process
 }
@@ -119,6 +127,38 @@ scenario('browser interaction') {
     }
 
     cli.doc.capture('browser-basic-repl')
+}
+
+sscenario('run scenario by selection') {
+    repl.with {
+        clearOutput() // we print the ls list at the repl start, so we wait for it, clear all, and do an explicit ls
+        send('ls\n')
+        output.waitTo contain("userPreferencesRest.groovy")
+    }
+    cli.doc.capture('test-files-list-repl')
+
+    repl.with {
+        clearOutput()
+        send('s "userPreferencesRest"\n')
+        output.waitTo contain("save preferences with personas auth")
+    }
+    cli.doc.capture('scenarios-list-repl')
+
+    repl.with {
+        clearOutput()
+        send('r "save preferences with personas auth"\n')
+
+        sleep 1000 // TODO we need a way to compare ansi output with non ansi text
+    }
+    cli.doc.capture('http-persona-auth-ran-with-repl')
+
+    repl.with {
+        clearOutput()
+        send('db.query("select * from user_preferences")\n')
+
+        output.waitTo contain("Strategy")
+    }
+    cli.doc.capture('db-query-after-http-repl')
 }
 
 scenario('clear db after') {

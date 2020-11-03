@@ -69,6 +69,7 @@ summary: End to end of REST API, Command Line Interface, Web User Interface and 
 :include-file: basicScenarios/webtau.cfg.groovy {
   title: "webtau.cfg.groovy", 
   commentsType: "inline",
+  excludeRegexp: "package",
   stickySlide: "left"
 }
 
@@ -87,17 +88,28 @@ summary: End to end of REST API, Command Line Interface, Web User Interface and 
 
 Let's combine `http.get` and `http.post` together into a full test
 
+:include-file: game-store-rest-post-game/request.fullurl.txt {
+    title: "Target API",
+    stickySlide: "top 20%"
+}
+
+:include-json: game-store-rest-get-game/response.json { 
+  title: "Game POST Request",
+  stickySlide: "left 30%"
+}
+
 :include-file: scenarios/gamestore/postGet.groovy {
     title: "POST and GET",
     startLine: "register-new-game", endLine: "scenario-end", excludeStartEnd: true,
     excludeRegexp: "http.doc",
     revealLineStop: ["priceUsd"],
     commentsType: "inline",
-    stickySlide: "left"}
+    stickySlide: "left"
+}
 
-:include-json: game-store-rest-new-game/response.json { 
-    title: "Single Game Response",
-    pathsFile: "game-store-rest-new-game/paths.json"
+:include-json: game-store-rest-get-game/response.json { 
+  title: "Game POST Response",
+  pathsFile: "game-store-rest-get-game/paths.json"
 }
 
 :include-file: scenarios/gamestore/postGetStreamlined.groovy {
@@ -107,28 +119,7 @@ Let's combine `http.get` and `http.post` together into a full test
     commentsType: "inline"
 }
 
-# Personas
-
-:include-file: basicScenarios/webtau.persona.cfg.groovy {
-  title: "webtau.cfg.groovy",
-  commentsType: "inline",
-  stickySlide: "left 33%"
-}
-
-:include-file: basicScenarios/personaDemo.groovy {
-    title: "personaDemo.groovy",
-    startLine: "persona-demo", endLine: "persona-demo-end", excludeStartEnd: true, 
-    commentsType: "inline",
-    stickySlide: "left" 
-}
-
-:include-cli-output: webtau-persona-basics/out.txt { 
-  title: "output",
-  startLine: "persona demo", endLine: "B-CV",
-  revealLineStop: [0, 1, 2]    
-}
-
-# HTTP Authentication
+# HTTP Explicit Authentication
 
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "auth required end-point", 
@@ -142,15 +133,46 @@ Let's combine `http.get` and `http.post` together into a full test
   commentsType: "inline"
 }
 
+# Personas
+
+:include-file: basicScenarios/webtau.persona.cfg.groovy {
+  title: "webtau.cfg.groovy",
+  excludeRegexp: "package",
+  commentsType: "inline",
+  stickySlide: "left 33%"
+}
+
+:include-file: basicScenarios/personaDemo.groovy {
+    title: "personaDemo.groovy",
+    startLine: "persona-demo", endLine: "persona-demo-end", excludeStartEnd: true, 
+    commentsType: "inline",
+    stickySlide: "left" 
+}
+
+:include-cli-output: webtau-persona-basics/out.txt { 
+  title: "output",
+  startLine: "persona demo", endLine: "uid-bob",
+  revealLineStop: [0, 1, 2]    
+}
+
+# HTTP Implicit Authentication
+
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth PUT", 
   startLine: "with-personas-put", endLine: "with-personas-put-end", excludeStartEnd: true,
   commentsType: "inline"
 }
 
+:include-cli-output: http-persona-auth-ran-with-repl/out.txt {
+  title: "webtau output",
+  startLine: "running:", endLine: "Bob",
+  highlight: ["Alice", "__\"uid", "__\"RPG", "Bob"]
+}
+
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth GET", 
-  startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true
+  startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true,
+  commentsType: "inline"
 }
 
 :include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
@@ -251,7 +273,7 @@ Let's combine `http.get` and `http.post` together into a full test
 
 :include-file: basicScenarios/personaDemo.groovy {
   title: "in place defined personas",
-  excludeRegexp: "// persona-demo",
+  excludeRegexp: ["// persona-demo", "package"],
   commentsType: "inline"
 }
 
@@ -296,7 +318,7 @@ Let's test landing web page
 
 :include-file: scenarios/gamestore/browserLanding.groovy {
   title: "Browser Landing test", 
-  excludeRegexp: ["browser.doc", "hide"],
+  excludeRegexp: ["browser.doc", "hide", ".capture"],
   commentsType: "inline"
 }
 
@@ -336,7 +358,7 @@ let's move page elements definitions to page objects
 :include-file: scenarios/gamestore/browserLandingFilter.groovy { 
   title: "filtering games",
   commentsType: "inline",
-  excludeRegexp: ["hide", "browser.doc"]
+  excludeRegexp: ["browser.doc", "hide", ".capture"]
 }
 
 # WaitTo
@@ -356,14 +378,16 @@ and a result that becomes available over time.
 Are our users going to see the result right away? Is database going to have the result right away? Is command line going 
 to print that line right away? 
 
+:include-meta: {stickySlide: "left"}
+
 :include-file: basicScenarios/waitToDemo.groovy {
   title: "waitTo is NOT browser specific",
   startLine: "wait-to-demo", endLine: "wait-to-demo-end", excludeStartEnd: true, 
   commentsType: "inline"
 }
 
-:include-meta: {stickySlide: "clear", presentationParagraph: ""}
- 
+:include-meta: {presentationParagraph: ""}
+
 > Testing Is Documenting
 
 # Browser Auth
@@ -426,7 +450,7 @@ Question: How do we maintain different localStorage for different Personas?
 :include-meta: {presentationParagraph: "clear"}
  
 * Default browser  
-* John's browser
+* Alice's browser
 
 :include-meta: {presentationParagraph: "", stickySlide: "clear"}
 
@@ -439,7 +463,7 @@ double browsers persona demo
 
 :include-image: landing-received-message.png { fit: true }
 
-:include-file: pages/AdminPage.groovy {
+:include-file: pages/MaintenancePage.groovy {
     title: "page object"
 }
 
@@ -447,35 +471,6 @@ double browsers persona demo
   title: "Leveraging  multiple browsers", 
   excludeRegexp: ["browser.doc", "hide"],
   commentsType: "inline"
-}
-
-# CLI Command
-
-Let's start with a run of `ls -l` command 
-
-:include-file: scenarios/cliBasics.groovy {
-    title: "example of command line run",
-    startLine: "cli-basics", endLine: "cli-basics-end", excludeStartEnd: true,
-    highlight: "should",
-    stickySlide: "left"
-}
-
-:include-cli-output: cli-basics-ls/out.txt {highlightPath: "cli-basics-ls/out.matched.txt"}
-
-If you have a command line tool you plan on running multiple times, we can extract its definition.
-
-:include-cli-output: list-games-cli/out.txt {title: "Admin tool output"} 
-
-:include-file: clicommands/CliCommands.groovy {
-    title: "Extracted CLI command definition", 
-    excludeRegexp: ["Server", "backend"],
-    commentsType: "inline"
-}
-
-:include-file: scenarios/gamestore/adminCliTool.groovy {
-    title: "Admin CLI tool test",
-    commentsType: "inline",
-    excludeRegexp: ["cli.doc", "hide", "stop line"]
 }
 
 # Database
@@ -506,6 +501,35 @@ Not all the operations can be done through REST or UI. For those cases using DB 
     collapsedPaths: ["root._links", "root.page"]
 } 
 
+# CLI Command
+
+Let's start with a run of `ls -l` command 
+
+:include-file: scenarios/cliBasics.groovy {
+    title: "example of command line run",
+    startLine: "cli-basics", endLine: "cli-basics-end", excludeStartEnd: true,
+    highlight: "should",
+    stickySlide: "left"
+}
+
+:include-cli-output: cli-basics-ls/out.txt {highlightPath: "cli-basics-ls/out.matched.txt"}
+
+If you have a command line tool you plan on running multiple times, we can extract its definition.
+
+:include-cli-output: list-games-cli/out.txt {title: "Admin tool output"} 
+
+:include-file: clicommands/CliCommands.groovy {
+    title: "Extracted CLI command definition", 
+    excludeRegexp: ["Server", "backend"],
+    commentsType: "inline"
+}
+
+:include-file: scenarios/gamestore/adminCliTool.groovy {
+    title: "Admin CLI tool test",
+    commentsType: "inline",
+    excludeRegexp: ["cli.doc", "hide", "stop line"]
+}
+
 # TableData
 
 a bit about table data,
@@ -518,11 +542,32 @@ a bit about table data,
 
 :include-cli-output: webtau-table-basics/out.txt {
   title: "Webtau Output",
-  startLine: "table data permutation", endLine: "PO, AC"
+  startLine: "table data demo", endLine: "100, 100"
 }
 
+# Can I Use TableData With JUnit?
 
-and JUnit5 table usage
+:include-file: com/example/junit5/DynamicTestsGroovyTest.groovy {
+  title: "Table Data as Test Factory (Groovy)",
+  commentsType: "inline"
+}
+
+:include-file: com/example/junit5/DynamicTestsJavaTest.java {
+  title: "Table Data as Test Factory (Java)",
+  commentsType: "inline"
+}
+
+# Can I Use The Rest With JUnit? 
+
+:include-file: com/example/junit5/PostGetJavaTest.java {
+  title: "HTTP Post Get (Java)",
+  commentsType: "inline",
+  stickySlide: "left 70%"
+}
+
+:include-file: src/test/resources/webtau.properties {
+  title: "src/test/resources/webtau.properties"
+}
 
 # Reporting 
 
@@ -534,6 +579,8 @@ and JUnit5 table usage
 
 :include-image: game-store-operations-http-performance.png {annotationsPath: "game-store-operations-http-performance.json"}
 
+:include-image: game-store-report-test-summary.png {annotationsPath: "game-store-report-test-summary.json"} 
+
 :include-image: game-store-report-http-call.png {annotationsPath: "game-store-report-http-call.json"} 
 
 :include-image: game-store-report-cli-call.png {annotationsPath: "game-store-report-cli-call.json"}
@@ -542,7 +589,7 @@ and JUnit5 table usage
 
 # REPL
 
-REPL stands for read-eval-print-loop. It is an interactive computer programming environment that helps with 
+> REPL stands for read-eval-print-loop. It is an interactive computer programming environment that helps with 
 prototyping.
 
 You may have already used REPL if you used
@@ -551,55 +598,57 @@ You may have already used REPL if you used
 * R
 * MatLab  
 
-:include-cli-output: game-store-repl-basic/out.txt {revealLineStop: [0, 1, 2, 3, 4], stickySlide: "top"}
+:include-cli-output: game-store-repl-basic/out.txt {revealLineStop: [0, 1, 2, 3, 4], stickySlide: "left 30%"}
+
+:include-meta: {stickySlide: "top 30%"}
 
 Question: Why are we talking about REPL in the context of end to end testing?
 
 We want to have a fast feedback loop. 
- * Browser, Servers, DB setup takes time
- * Preserving context
- * Interactive test development      
+* Browser, Servers, DB setup takes time
+* Preserving context
+* End to end tests - slow feedback
+* REPL - speedup feedback loop
+* The faster feedback the happier you are      
+
+# REPL Browser
+
+:include-cli-output: browser-basic-repl/out.txt {
+  revealLineStop: [0, 3, 4, 7, 8, 14, 15, 18, 19, 23, 24]
+}
 
 # REPL DB
 
 :include-cli-output: game-store-db-query/out.txt {title: "DB REPL", revealLineStop: [0]}
 
-# REPL Browser
+# REPL Test Selection  
 
-probably should not use all the different headers and instead combine
+:include-cli-command: {
+    commandFile: "test-files-list-repl/command.txt", 
+    stickySlide: "top 30%"
+}
 
-# REPL Test Runs  
+:include-cli-output: test-files-list-repl/out.txt {
+    title: "Test files listing", revealLineStop: [0],
+    stickySlide: "left"
+}
 
+:include-cli-output: scenarios-list-repl/out.txt {
+    title: "Test file selection", 
+    revealLineStop: [0]
+}
 
-# HTTP GET
+:include-cli-output: http-persona-auth-ran-with-repl/out.txt {
+  title: "Test ran, context is preserved",
+  revealLineStop: [0],
+  endLine: "Bob",
+  excludeRegexp: ["before first test"]
+}
 
-Let's start with `http.get` command to query out server health
-
-:include-cli-output: repl-actuator-health/out.txt {revealLineStop: [0]}
-
-Setting base url config `cfg.url`
-
-:include-cli-output: repl-base-url-actuator-health/out.txt {revealLineStop: [0, 1, 2]}
-
-We will list games now by accessing api end-point our game store has exposed.
-
-:include-cli-output: game-store-repl-list-empty-games/out.txt {revealLineStop: [0, 6]}
-
-We going to assert totalElements value by using `body.should`
-
-:include-cli-output: game-store-repl-list-check-total/out.txt {revealLineStop: [0]}
-
-Response tracks asserted values and shows them in the report
-
-:include-cli-output: game-store-repl-list-body-after-check/out.txt {revealLineStop: [0], highlight: "totalElements"}
-
-# HTTP POST
-
-Let's add a new game to game store
-
-:include-cli-output: game-store-repl-post-new-game/out.txt {revealLineStop: [0, 1, "}", "expected"]}
-
-
+:include-cli-output: db-query-after-http-repl/out.txt {
+  title: "Experiments after a test run",
+  revealLineStop: [0]
+}
 
 # Testing is Documenting
 
@@ -608,14 +657,34 @@ When we test things, we follow happy paths and edge cases.
 
 Happy path tests often cover what our users will do. Happy path tests also often match the things we document.  
 
+:include-meta: {presentationBulletListType: "HorizontalStripes", presentationParagraph: "default", stickySlide: "top 50%"}
+
+Documentation is hard:
+
+:include-meta: {presentationParagraph: ""}
+
+* `:icon: pen-tool` Mostly manual labor
+* `:icon: archive` Often becomes outdated  
+
+:include-meta: {presentationBulletListType: "HorizontalStripes", stickySlide: "clear top 30%"}
+
+Question: How do we make documentation easier to write and maintain?
+
+:include-meta: {presentationParagraph: "", stickySlide: "top 40%"}
+  
+> Artifacts capture
+
 :include-meta: {presentationBulletListType: "RevealBoxes"}
 
 * Example snippets
+* OpenAPI / GraphQL definitions
 * CLI Outputs
-* REST responses
+* HTTP responses
 * Screenshots 
 
-> In fact tests generated the majority of this content
+:include-meta: {stickySlide: "clear"}
+
+> The major part of the presented content was generated by running tests 
 
 # Capturing Test Artifacts
 
@@ -626,11 +695,58 @@ Happy path tests often cover what our users will do. Happy path tests also often
     excludeRegexp: ["//"]
 }
 
+:include-image: img/ue2e-ide-doc-artifacts.png {
+  scaleRatio: 0.5,     
+  stickySlide: "left 40%"
+}
+
+:include-file: game-store-list-after-db/request.url.txt {
+  title: "game-store-list-after-db/request.url.txt",
+  stickySlide: "top 20%"
+}
+
+:include-file: game-store-list-after-db/response.json {
+  title: "game-store-list-after-db/response.json",
+  stickySlide: "top 70%"
+}
+
+:include-file: game-store-list-after-db/paths.json {
+  title: "game-store-list-after-db/paths.json"
+}
+
 :include-file: scenarios/gamestore/browserLandingFilter.groovy { 
-    title: "UI doc capture",
-    startLine: "filter by price",
-    highlight: ["browser.doc"], 
-    excludeRegexp: ["hide"]
+  title: "UI doc capture",
+  startLine: "filter by price",
+  highlight: ["browser.doc"], 
+  excludeRegexp: ["hide", "//"],
+  stickySlide: "left 50%"
+}
+
+:include-image: admin-ui-filter.png {
+  annotationsPath: "admin-ui-filter.json",
+  title: "admin-ui-filter.json",
+  caption: "admin-ui-filter.png",
+  stickySlide: "top 40%"
+}
+
+:include-file: admin-ui-filter.json {
+  title: "admin-ui-filter.json"
+}
+
+:include-file: scenarios/gamestore/adminCliTool.groovy {
+  title: "CLI doc capture",
+  excludeRegexp: ["//"],
+  highlight: ["cli.doc"], 
+  stickySlide: "left 40%"
+}
+
+:include-file: list-games-cli/command.txt {
+  title: "list-games-cli/command.txt",
+  stickySlide: "top"
+}
+
+:include-cli-output: list-games-cli/out.txt {
+  title: "list-games-cli/out.txt"
 }
 
 # Example of Generated Documentation

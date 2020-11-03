@@ -25,9 +25,9 @@ scenario('save preferences with explicit auth') {
 
 // with-personas-put
 scenario('save preferences with personas auth') {
-    John { // John's context
+    Alice { // Alice's context
         http.put('/api/user-preferences', [favoriteGenre: 'RPG']) {
-            userId.should == 'uid-john' // validating that we updated the right user
+            userId.should == 'uid-alice' // validating that we updated the right user
             favoriteGenre.should == 'RPG'
         }
     }
@@ -43,15 +43,15 @@ scenario('save preferences with personas auth') {
 
 // with-personas-get
 scenario('read preferences with personas auth') {
-    John {
+    Alice { // Alice's context
         http.get('/api/user-preferences') {
-            favoriteGenre.should == 'RPG'
+            favoriteGenre.should == 'RPG' // we get back the value we put recently
         }
     }
 
-    Bob {
+    Bob { // Bob's context
         http.get('/api/user-preferences') {
-            favoriteGenre.should == 'Strategy'
+            favoriteGenre.should == 'Strategy' // we get back the value we put recently
         }
     }
 }
