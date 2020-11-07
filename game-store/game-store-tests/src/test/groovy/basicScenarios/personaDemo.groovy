@@ -14,7 +14,7 @@ scenario('persona demo') {
     }
 
     Bob {
-        println cfg.userId
+        println cfg.userId // custom value from config in Bob's context
     }
 }
 // persona-demo-end

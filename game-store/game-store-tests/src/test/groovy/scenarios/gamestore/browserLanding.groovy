@@ -13,11 +13,10 @@ scenario('landing page') {
     http.post("/api/game", [id: "g3", title: "Doom", type: "fps", priceUsd: 40])
 
     browser.open("/") // open landing page, relying on url and/or browserUrl
-    browser.doc.capture("landing-page")
-
     def titles = $('[class*="GamesList_title"]')
 
     titles.waitTo == ['Civilization 6', 'Doom', 'Slay The Spire'] // wait for games titles to show up and match our expectations
+    browser.doc.capture("landing-page")
 
     http.delete("/api/game/g3") // delete a single game using HTTP
 

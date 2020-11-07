@@ -1,4 +1,6 @@
-management
-    support
-    admin
+games
+    web-UI
     rest-API
+admin
+    list-games
+    broadcast-message

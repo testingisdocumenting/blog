@@ -47,6 +47,7 @@ scenario('read preferences with personas auth') {
         http.get('/api/user-preferences') {
             favoriteGenre.should == 'RPG' // we get back the value we put recently
         }
+        http.doc.capture('game-store-get-user-preferences')
     }
 
     Bob { // Bob's context

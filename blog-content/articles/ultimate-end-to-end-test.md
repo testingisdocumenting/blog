@@ -119,7 +119,7 @@ Let's combine `http.get` and `http.post` together into a full test
     commentsType: "inline"
 }
 
-# HTTP Explicit Authentication
+# HTTP Explicit Auth
 
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "auth required end-point", 
@@ -155,7 +155,7 @@ Let's combine `http.get` and `http.post` together into a full test
   revealLineStop: [0, 1, 2]    
 }
 
-# HTTP Implicit Authentication
+# HTTP Implicit Auth
 
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth PUT", 
@@ -172,6 +172,7 @@ Let's combine `http.get` and `http.post` together into a full test
 :include-file: scenarios/gamestore/userPreferencesRest.groovy { 
   title: "Persona auth GET", 
   startLine: "with-personas-get", endLine: "with-personas-get-end", excludeStartEnd: true,
+  excludeRegexp: "http.doc",
   commentsType: "inline"
 }
 
@@ -750,3 +751,23 @@ Question: How do we make documentation easier to write and maintain?
 }
 
 # Example of Generated Documentation
+
+:include-image: game-store-docs-web-ui.png {scaleRatio: 0.5, border: true}
+
+:include-image: game-store-docs-rest-api.png {scaleRatio: 0.5, border: true}
+
+:include-image: game-store-docs-cli.png {scaleRatio: 0.5, border: true}
+
+# To Get Started
+
+:include-meta: {presentationParagraph: "default", stickySlide: "top 30%"}
+
+[WebTau - https://github.com/testingisdocumenting/webtau](https://github.com/testingisdocumenting/webtau)
+
+:include-meta: {presentationParagraph: "", stickySlide: "top 60%"}
+
+> GitHub `:icon:star {fill: "yellow", stroke: "yellow"}`
+
+:include-meta: {presentationParagraph: "default"}
+
+[Znai - https://github.com/testingisdocumenting/znai](https://github.com/testingisdocumenting/znai)

@@ -17,9 +17,9 @@ class DynamicTestsJavaTest {
     @TestFactory
     public Stream<DynamicTest> testFactoryExample() {
         return DynamicTests.fromTable(useCases, r -> { // generate DynamicTest per row
-            long price = r.get("price");
-            long quantity = r.get("quantity");
-            long outcome = r.get("outcome");
+            int price = r.get("price");
+            int quantity = r.get("quantity");
+            int outcome = r.get("outcome");
 
             actual(PriceCalculator.calculate(price, quantity)).should(equal(outcome));
         });
