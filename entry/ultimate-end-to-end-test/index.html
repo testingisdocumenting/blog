@@ -99,7 +99,7 @@
 </article>
 
 <article>
-<header><h1>Game Store</h1></header>
+<header><h1>Testing Game Store</h1></header>
 <p>We are going to test Game Store product. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the product. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: &quot;g1&quot;) { title type } } ''' Game Store product puts all the data into a database. Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</p>
 </article>
 
@@ -209,8 +209,8 @@
 </article>
 
 <article>
-<header><h1>Can I Use The Rest With JUnit?</h1></header>
-<p>Since we are talking about JUnit and Java, let me show you how to write a REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object&gt; payload = aMapOf( // define payload as a map &quot;id&quot;, &quot;g1&quot;, &quot;title&quot;, &quot;Slay The Spire&quot;, &quot;type&quot;, &quot;card rpg&quot;, &quot;priceUsd&quot;, 20); http.post(&quot;/api/game&quot;, payload); // same post as in Groovy http.get(&quot;/api/game/g1&quot;, (header, body) -&gt; { body.get(&quot;title&quot;).should(equal(&quot;Slay The Spire&quot;)); // validating title field in the response }); } } In case of JUnit runner, webtau reads config values from webtau.properties resource file: url=http://localhost:8080</p>
+<header><h1>Can I Use WebTau With JUnit?</h1></header>
+<p>Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object&gt; payload = aMapOf( // define payload as a map &quot;id&quot;, &quot;g1&quot;, &quot;title&quot;, &quot;Slay The Spire&quot;, &quot;type&quot;, &quot;card rpg&quot;, &quot;priceUsd&quot;, 20); http.post(&quot;/api/game&quot;, payload); // same post as in Groovy http.get(&quot;/api/game/g1&quot;, (header, body) -&gt; { body.get(&quot;title&quot;).should(equal(&quot;Slay The Spire&quot;)); // validating title field in the response }); } } In case of JUnit runner, webtau reads config values from webtau.properties resource file: url=http://localhost:8080</p>
 </article>
 
 <article>
@@ -371,8 +371,8 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     }, {
-      "title" : "Game Store",
-      "id" : "game-store",
+      "title" : "Testing Game Store",
+      "id" : "testing-game-store",
       "type" : "Section",
       "content" : [ {
         "type" : "Paragraph",
@@ -2392,13 +2392,13 @@ ReactDOM.render(React.createElement(Documentation, {
         "type" : "Snippet"
       } ]
     }, {
-      "title" : "Can I Use The Rest With JUnit?",
-      "id" : "can-i-use-the-rest-with-junit",
+      "title" : "Can I Use WebTau With JUnit?",
+      "id" : "can-i-use-webtau-with-junit",
       "type" : "Section",
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Since we are talking about JUnit and Java, let me show you how to write a REST API test using JUnit5 and Java syntax:",
+          "text" : "Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -3906,7 +3906,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1605075467286,
+    "lastModifiedTime" : 1605119499502,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Ultimate End To End Test",
@@ -3921,8 +3921,8 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "WebTau",
         "id" : "webtau"
       }, {
-        "title" : "Game Store",
-        "id" : "game-store"
+        "title" : "Testing Game Store",
+        "id" : "testing-game-store"
       }, {
         "title" : "WebTau Introduction",
         "id" : "webtau-introduction"
@@ -3987,8 +3987,8 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "Can I Use TableData With JUnit?",
         "id" : "can-i-use-tabledata-with-junit"
       }, {
-        "title" : "Can I Use The Rest With JUnit?",
-        "id" : "can-i-use-the-rest-with-junit"
+        "title" : "Can I Use WebTau With JUnit?",
+        "id" : "can-i-use-webtau-with-junit"
       }, {
         "title" : "Reporting",
         "id" : "reporting"

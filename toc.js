@@ -82,8 +82,8 @@ toc = [ {
       "title" : "WebTau",
       "id" : "webtau"
     }, {
-      "title" : "Game Store",
-      "id" : "game-store"
+      "title" : "Testing Game Store",
+      "id" : "testing-game-store"
     }, {
       "title" : "WebTau Introduction",
       "id" : "webtau-introduction"
@@ -148,8 +148,8 @@ toc = [ {
       "title" : "Can I Use TableData With JUnit?",
       "id" : "can-i-use-tabledata-with-junit"
     }, {
-      "title" : "Can I Use The Rest With JUnit?",
-      "id" : "can-i-use-the-rest-with-junit"
+      "title" : "Can I Use WebTau With JUnit?",
+      "id" : "can-i-use-webtau-with-junit"
     }, {
       "title" : "Reporting",
       "id" : "reporting"

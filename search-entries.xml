@@ -96,8 +96,8 @@
     </text>
   </entry>
   <entry>
-    <url>/blog/entry/ultimate-end-to-end-test#game-store</url>
-    <fullTitle>Testing Is Documenting: Ultimate End To End Test, Game Store [Entry]</fullTitle>
+    <url>/blog/entry/ultimate-end-to-end-test#testing-game-store</url>
+    <fullTitle>Testing Is Documenting: Ultimate End To End Test, Testing Game Store [Entry]</fullTitle>
     <text>
       <text>We are going to test Game Store product. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the product. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: "g1") { title type } } ''' Game Store product puts all the data into a database. Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</text>
       <score>STANDARD</score>
@@ -272,10 +272,10 @@
     </text>
   </entry>
   <entry>
-    <url>/blog/entry/ultimate-end-to-end-test#can-i-use-the-rest-with-junit</url>
-    <fullTitle>Testing Is Documenting: Ultimate End To End Test, Can I Use The Rest With JUnit? [Entry]</fullTitle>
+    <url>/blog/entry/ultimate-end-to-end-test#can-i-use-webtau-with-junit</url>
+    <fullTitle>Testing Is Documenting: Ultimate End To End Test, Can I Use WebTau With JUnit? [Entry]</fullTitle>
     <text>
-      <text>Since we are talking about JUnit and Java, let me show you how to write a REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object> payload = aMapOf( // define payload as a map "id", "g1", "title", "Slay The Spire", "type", "card rpg", "priceUsd", 20); http.post("/api/game", payload); // same post as in Groovy http.get("/api/game/g1", (header, body) -> { body.get("title").should(equal("Slay The Spire")); // validating title field in the response }); } } In case of JUnit runner, webtau reads config values from webtau.properties resource file: url=http://localhost:8080</text>
+      <text>Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object> payload = aMapOf( // define payload as a map "id", "g1", "title", "Slay The Spire", "type", "card rpg", "priceUsd", 20); http.post("/api/game", payload); // same post as in Groovy http.get("/api/game/g1", (header, body) -> { body.get("title").should(equal("Slay The Spire")); // validating title field in the response }); } } In case of JUnit runner, webtau reads config values from webtau.properties resource file: url=http://localhost:8080</text>
       <score>STANDARD</score>
     </text>
   </entry>
