@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8" /> 
-<title>Testing Is Documenting: Protect Your Future Self By Encapsulating Test Input Preparation</title><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Testing Is Documenting: Protect Your Future Self By Encapsulating Test Input Preparation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -11,48 +13,114 @@
 
     ga('create', 'UA-153393045-1', 'auto');
     ga('send', 'pageview');
-</script><link rel="stylesheet" type="text/css" href="/blog/static/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/main.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
 <link rel="stylesheet" type="text/css" href="/blog/style.css">
 </head>
 <link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
-<body>
+<body class="theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
 <div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
     <div></div>
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
 <article>
 <header><h1>Tests Brittleness and Verbosity slows you down</h1></header>
-<p>In entry/testing-makes-you-faster-day-one Testing Makes You Faster Day one article I claimed that writing tests makes you faster. However, there are test patterns that most likely will slow you down and you need to be ready to handle them.Writing tests for a simple logic with a simple input is a breeze. Take for example a test for a simple calculator class. Two numeric inputs and we are done: package com.example.portfolio; import org.junit.Assert; import org.junit.Test; public class SimpleCalculatorTest { @Test public void zeroMultiply() { SimpleCalculator simpleCalculator = new SimpleCalculator(); Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0); Assert.assertEquals(0, simpleCalculator.multiply(-100.0, 0.0), 0.0); } } However real apps require real domain, and real domain is rarely represented by a couple of numbers. Let's take Finance as an example. It is full of types with multiple fields such as Transaction , and it has a lot of business logic.One example of such business logic is ProfitCalculator . Its job is to calculate profit based on the executed Transactions .After consulting with the business people, we are ready to give our implementation a shot. Transaction is a data class with a few fields (number of fields is reduced for simplicity). package com.example.portfolio; import javax.persistence.Entity; import javax.persistence.Id; @Entity public class Transaction { private String id; private double lot; private double price; private String symbol; @Id public String getId() { return id; } public void setId(String id) { this.id = id; } public double getLot() { return lot; } public void setLot(double lot) { this.lot = lot; } public double getPrice() { return price; } public void setPrice(double price) { this.price = price; } public String getSymbol() { return symbol; } public void setSymbol(String symbol) { this.symbol = symbol; } } Here is our first ProfitCalculator implementation, ready to be tested. package com.example.portfolio; import java.util.List; public class ProfitCalculator { public ProfitCalculator() { } public double calculate(List&lt;Transaction&gt; transactions) { return 0; } } And here is the first version of our test. package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithoutEncapsulationTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = new Transaction(); t1.setId(&quot;T1&quot;); t1.setSymbol(&quot;SYM.B&quot;); t1.setLot(0); t1.setPrice(8); Transaction t2 = new Transaction(); t1.setId(&quot;T2&quot;); t1.setSymbol(&quot;SYM.C&quot;); t1.setLot(0); t1.setPrice(19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } This test is already on the verbose side. As requirements for the ProfitCalculator evolve, the number of setters we need to validate new business logic will grow, as will grow the number of instances that we may need to create.Question: But why verbose test can be bad? A verbose test can be bad, because the boilerplate code used to setup the test makes it harder to read intent behind the test.Additionally it may discourage you to write separate test scenario and instead you may want to clump test scenarios together and re-use the test data setup.Test data re-use can lead to a random test being broken as you setup data for an unrelated scenario. Verbosity is not the only potential problem here. The way Transaction instance is being constructed for testing purposes can lead to a maintenance burden.The First iteration of Transaction class uses setters to set the data. A future iteration may switch to using fluent API instead of setters . transaction(&quot;T1&quot;) .symbol(&quot;SYM.B&quot;) .lot(0) .price(0); From the ProfitCalculator 's perspective the way Transaction instances are created is irrelevant as it doesn't affect the calculation logic. But refactoring Transaction will break ProfitCalculatorTest . Transaction is going to be used in other tests. As the number of tests that use Transaction instances increases you will be more and more reluctant to do refactoring. All your tests that create Transaction instances are brittle tests now. They are brittle because they won't survive Transaction refactoring.If you ever want to refactor Transaction class you will have two choices:Refactor and waste time fixing tests.Convince yourself that Transaction is good as it is.Neither is a good choice.I want you to have a way to protect your future self by encapsulating test input preparation</p>
+<p>In entry/testing-makes-you-faster-day-one Testing Makes You Faster Day one article I claimed that writing tests makes you faster. However, there are test patterns that most likely will slow you down and you need to be ready to handle them.Writing tests for a simple logic with a simple input is a breeze. Take for example a test for a simple calculator class. Two numeric inputs and we are done: package com.example.portfolio; import org.junit.Assert; import org.junit.Test; public class SimpleCalculatorTest { @Test public void zeroMultiply() { SimpleCalculator simpleCalculator = new SimpleCalculator(); Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0); Assert.assertEquals(0, simpleCalculator.multiply(-100.0, 0.0), 0.0); } } However real apps require real domain, and real domain is rarely represented by a couple of numbers. Let's take Finance as an example. It is full of types with multiple fields such as Transaction , and it has a lot of business logic.One example of such business logic is ProfitCalculator . Its job is to calculate profit based on the executed Transactions .After consulting with the business people, we are ready to give our implementation a shot. Transaction is a data class with a few fields (number of fields is reduced for simplicity). package com.example.portfolio; import javax.persistence.Entity; import javax.persistence.Id; @Entity public class Transaction { private String id; private double lot; private double price; private String symbol; @Id public String getId() { return id; } public void setId(String id) { this.id = id; } public double getLot() { return lot; } public void setLot(double lot) { this.lot = lot; } public double getPrice() { return price; } public void setPrice(double price) { this.price = price; } public String getSymbol() { return symbol; } public void setSymbol(String symbol) { this.symbol = symbol; } } Here is our first ProfitCalculator implementation, ready to be tested. package com.example.portfolio; import java.util.List; public class ProfitCalculator { public ProfitCalculator() { } public double calculate(List&lt;Transaction&gt; transactions) { return 0; } } And here is the first version of our test. package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithoutEncapsulationTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = new Transaction(); t1.setId(&quot;T1&quot;); t1.setSymbol(&quot;SYM.B&quot;); t1.setLot(0); t1.setPrice(8); Transaction t2 = new Transaction(); t1.setId(&quot;T2&quot;); t1.setSymbol(&quot;SYM.C&quot;); t1.setLot(0); t1.setPrice(19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } This test is already on the verbose side. As requirements for the ProfitCalculator evolve, the number of setters we need to validate new business logic will grow, as will grow the number of instances that we may need to create.Question: But why verbose test can be bad? A verbose test can be bad, because the boilerplate code used to setup the test makes it harder to read intent behind the test. Additionally it may discourage you to write separate test scenario and instead you may want to clump test scenarios together and re-use the test data setup. Test data re-use can lead to a random test being broken as you setup data for an unrelated scenario. Verbosity is not the only potential problem here. The way Transaction instance is being constructed for testing purposes can lead to a maintenance burden.The First iteration of Transaction class uses setters to set the data. A future iteration may switch to using fluent API instead of setters . transaction(&quot;T1&quot;) .symbol(&quot;SYM.B&quot;) .lot(0) .price(0); From the ProfitCalculator 's perspective the way Transaction instances are created is irrelevant as it doesn't affect the calculation logic. But refactoring Transaction will break ProfitCalculatorTest . Transaction is going to be used in other tests. As the number of tests that use Transaction instances increases you will be more and more reluctant to do refactoring. All your tests that create Transaction instances are brittle tests now. They are brittle because they won't survive Transaction refactoring.If you ever want to refactor Transaction class you will have two choices:Refactor and waste time fixing tests. Convince yourself that Transaction is good as it is. Neither is a good choice.I want you to have a way to protect your future self by encapsulating test input preparation</p>
 </article>
 
 <article>
 <header><h1>Test Input Initial Encapsulation</h1></header>
-<p>Let's extract Transaction creation code into TestTransactions package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static com.example.portfolio.TestTransactions.createTransaction; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithBasicEncapsulationTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = createTransaction(&quot;t1&quot;, &quot;SYM.B&quot;, 0, 8); Transaction t2 = createTransaction(&quot;t2&quot;, &quot;SYM.C&quot;, 0, 19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } public static Transaction createTransaction(String id, String symbol, double lot, double price) { Transaction transaction = new Transaction(); transaction.setId(id); transaction.setSymbol(symbol); transaction.setLot(lot); transaction.setPrice(price); return transaction; } Less verbosity. A good start.Question: Can you still spot the problem? As we add more properties to Transaction class, some of the tests may need to set extra transaction properties.Additionally some of the properties will be completely irrelevant to the business logic under a test, yet you will be forced to set them anyway.</p>
+<p>Let's extract Transaction creation code into TestTransactions package com.example.portfolio; import org.junit.Test; import java.util.Arrays; import static com.example.portfolio.TestTransactions.createTransaction; import static org.junit.Assert.assertEquals; public class ProfitCalculatorWithBasicEncapsulationTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { Transaction t1 = createTransaction(&quot;t1&quot;, &quot;SYM.B&quot;, 0, 8); Transaction t2 = createTransaction(&quot;t2&quot;, &quot;SYM.C&quot;, 0, 19); assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0); } } public static Transaction createTransaction(String id, String symbol, double lot, double price) { Transaction transaction = new Transaction(); transaction.setId(id); transaction.setSymbol(symbol); transaction.setLot(lot); transaction.setPrice(price); return transaction; } Less verbosity. A good start.Question: Can you still spot the problem? As we add more properties to Transaction class, some of the tests may need to set extra transaction properties. Additionally some of the properties will be completely irrelevant to the business logic under a test, yet you will be forced to set them anyway.</p>
 </article>
 
 <article>
 <header><h1>Test Input Encapsulation With Webtau Table Data</h1></header>
-<p>I was dealing with test problems like above for years and eventually came up with a solution that fits my needs. I hope it will fit your needs as well. The solution is to use flexible data structure like https://testingisdocumenting.org/webtau/reference/table-data Webtau TableData package com.example.portfolio; import org.junit.Test; import org.testingisdocumenting.webtau.data.table.TableData; import static com.example.portfolio.TestTransactions.createTransactions; import static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore public class ProfitCalculatorWithTableDataTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table( &quot;id&quot;, &quot;symbol&quot;, &quot;lot&quot;, &quot;price&quot;, // webtau TableData definition ________________________________, // header and values separator &quot;t1&quot;, &quot;SYM.B&quot; , 0.0 , 8.0, &quot;t2&quot;, &quot;SYM.C&quot; , 0.0 , 19.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } } Note: https://github.com/testingisdocumenting/webtau Webtau is open source project that I started as my answer to common testing problems I encountered. public static List&lt;Transaction&gt; createTransactions(TableData tableData) { return tableData.rowsStream() .map(row -&gt; { Transaction transaction = new Transaction(); transaction.setId(row.get(&quot;id&quot;, genTransactionId())); // default value is auto generated transaction.setSymbol(row.get(&quot;symbol&quot;)); transaction.setLot(row.get(&quot;lot&quot;, 0.0)); // default value is hardcoded transaction.setPrice(row.get(&quot;price&quot;, 0.0)); return transaction; }) .collect(toList()); } private static String genTransactionId() { return &quot;t-id-&quot; + idCount.incrementAndGet(); } Notice how createTransactions defaults values when they are not present? As a result of this, tests that don't need, say, id or lot are free to ignore them. @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table(&quot;symbol&quot;, &quot;lot&quot;, ________________, &quot;SYM.B&quot; , 0.0, &quot;SYM.C&quot; , 0.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } If later a new required property will be added to Transaction , you won't have to change all your existing tests. Instead you will update createTransaction with a new default value. The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.Essentially your test will use as little data to prove logic works as possible.Question: Why it is important to minimize the data in your test? Test is crucial to understanding complex business logicThe more data the harder it to comprehend the logicWe want business people to look at our data sets (stay tuned to see a good way to expose test data to business)</p>
+<p>I was dealing with test problems like above for years and eventually came up with a solution that fits my needs. I hope it will fit your needs as well. The solution is to use flexible data structure like https://testingisdocumenting.org/webtau/reference/table-data Webtau TableData package com.example.portfolio; import org.junit.Test; import org.testingisdocumenting.webtau.data.table.TableData; import static com.example.portfolio.TestTransactions.createTransactions; import static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore public class ProfitCalculatorWithTableDataTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table( &quot;id&quot;, &quot;symbol&quot;, &quot;lot&quot;, &quot;price&quot;, // webtau TableData definition ________________________________, // header and values separator &quot;t1&quot;, &quot;SYM.B&quot; , 0.0 , 8.0, &quot;t2&quot;, &quot;SYM.C&quot; , 0.0 , 19.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } } Note: https://github.com/testingisdocumenting/webtau Webtau is open source project that I started as my answer to common testing problems I encountered. public static List&lt;Transaction&gt; createTransactions(TableData tableData) { return tableData.rowsStream() .map(row -&gt; { Transaction transaction = new Transaction(); transaction.setId(row.get(&quot;id&quot;, genTransactionId())); // default value is auto generated transaction.setSymbol(row.get(&quot;symbol&quot;)); transaction.setLot(row.get(&quot;lot&quot;, 0.0)); // default value is hardcoded transaction.setPrice(row.get(&quot;price&quot;, 0.0)); return transaction; }) .collect(toList()); } private static String genTransactionId() { return &quot;t-id-&quot; + idCount.incrementAndGet(); } Notice how createTransactions defaults values when they are not present? As a result of this, tests that don't need, say, id or lot are free to ignore them. @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table(&quot;symbol&quot;, &quot;lot&quot;, ________________, &quot;SYM.B&quot; , 0.0, &quot;SYM.C&quot; , 0.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } If later a new required property will be added to Transaction , you won't have to change all your existing tests. Instead you will update createTransaction with a new default value. The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.Essentially your test will use as little data to prove logic works as possible.Question: Why it is important to minimize the data in your test? Test is crucial to understanding complex business logic The more data the harder it to comprehend the logic We want business people to look at our data sets (stay tuned to see a good way to expose test data to business)</p>
 </article>
 
 <article>
 <header><h1>Try it out</h1></header>
-<p>&lt;dependency&gt; &lt;groupId&gt;org.testingisdocumenting.webtau&lt;/groupId&gt; &lt;artifactId&gt;webtau-core&lt;/artifactId&gt; &lt;version&gt;1.21.1&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; https://testingisdocumenting.org/webtau Webtau user guide https://github.com/testingisdocumenting/webtau Webtau github</p>
+<p>&lt;dependency&gt; &lt;groupId&gt;org.testingisdocumenting.webtau&lt;/groupId&gt; &lt;artifactId&gt;webtau-core&lt;/artifactId&gt; &lt;version&gt;1.25-SNAPSHOT&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; https://testingisdocumenting.org/webtau Webtau user guide https://github.com/testingisdocumenting/webtau Webtau github</p>
 </article>
 
 <article>
 <header><h1>Summary</h1></header>
-<p>Tests input preparation can be verbose and brittle.Identify core domain objects and provide a convenient way to create them.Use as little data as necessary to prove logic correctness. Default the rest.</p>
+<p>Tests input preparation can be verbose and brittle. Identify core domain objects and provide a convenient way to create them. Use as little data as necessary to prove logic correctness. Default the rest.</p>
 </article>
 </section>
 </div>
 <script type="text/javascript" src="/blog/toc.js"></script>
 <script type="text/javascript" src="/blog/assets.js"></script>
-<script type="text/javascript" src="/blog/static/react.min.js"></script>
-<script type="text/javascript" src="/blog/static/react-dom.min.js"></script>
 <script type="text/javascript" src="/blog/static/main.js"></script>
 <script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
 <script type="text/javascript" src="/blog/tracking.js"></script>
@@ -755,7 +823,7 @@ ReactDOM.render(React.createElement(Documentation, {
       "type" : "Section",
       "content" : [ {
         "lang" : "xml",
-        "snippet" : "<dependency>\n    <groupId>org.testingisdocumenting.webtau</groupId>\n    <artifactId>webtau-core</artifactId>\n    <version>1.21.1</version>\n    <scope>test</scope>\n</dependency>",
+        "snippet" : "<dependency>\n    <groupId>org.testingisdocumenting.webtau</groupId>\n    <artifactId>webtau-core</artifactId>\n    <version>1.25-SNAPSHOT</version>\n    <scope>test</scope>\n</dependency>",
         "title" : "Maven dependency",
         "type" : "Snippet"
       }, {
@@ -830,7 +898,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1589041766000,
+    "lastModifiedTime" : 1590789750897,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",

@@ -1,0 +1,10 @@
+{
+  "viewOn" : {
+    "title" : "Edit on GitHub",
+    "link" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
+  },
+  "id" : "blog",
+  "title" : "Testing Is Documenting",
+  "type" : "Blog",
+  "previewEnabled" : false
+}

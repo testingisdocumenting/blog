@@ -2,7 +2,9 @@
 <html>
 <head>
 <meta charset="utf-8" /> 
-<title>Testing Is Documenting: Testing Makes You Faster Day One</title><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Testing Is Documenting: Testing Makes You Faster Day One</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -11,15 +13,83 @@
 
     ga('create', 'UA-153393045-1', 'auto');
     ga('send', 'pageview');
-</script><link rel="stylesheet" type="text/css" href="/blog/static/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/main.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
 <link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
 <link rel="stylesheet" type="text/css" href="/blog/style.css">
 </head>
 <link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
-<body>
+<body class="theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
 <div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
     <div></div>
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
@@ -50,14 +120,12 @@
 
 <article>
 <header><h1>Summary</h1></header>
-<p>Having a tight feedback loop is important for being efficient engineer.Tests are your teleports into any part of your application.Tests make you fast.</p>
+<p>Having a tight feedback loop is important for being efficient engineer. Tests are your teleports into any part of your application. Tests make you fast.</p>
 </article>
 </section>
 </div>
 <script type="text/javascript" src="/blog/toc.js"></script>
 <script type="text/javascript" src="/blog/assets.js"></script>
-<script type="text/javascript" src="/blog/static/react.min.js"></script>
-<script type="text/javascript" src="/blog/static/react-dom.min.js"></script>
 <script type="text/javascript" src="/blog/static/main.js"></script>
 <script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
 <script type="text/javascript" src="/blog/tracking.js"></script>
@@ -164,7 +232,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -181,7 +249,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -203,7 +271,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -230,7 +298,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three", "smartLock" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -273,7 +341,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three", "smartLock", "four", "scissors" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -309,7 +377,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three", "smartLock", "four", "scissorsLeft" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -331,7 +399,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -369,7 +437,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameTwo" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -448,7 +516,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "t3", "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameOne" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -476,7 +544,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "type" : "SimpleText"
         } ]
       }, {
-        "svgSrc" : "/blog/assets/castle.svg?timestamp=1576557518000",
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1590789750897",
         "idsToReveal" : [ "t1", "t2", "t3", "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameOne" ],
         "actualSize" : true,
         "type" : "Svg"
@@ -801,7 +869,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1578441844000,
+    "lastModifiedTime" : 1590789750897,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Testing Makes You Faster Day One",
