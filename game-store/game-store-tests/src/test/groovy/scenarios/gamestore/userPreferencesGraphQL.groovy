@@ -38,14 +38,14 @@ scenario('save preferences with explicit auth') {
 scenario('save preferences with personas auth') {
     Alice { // Personas we defined and used for HTTP REST API
         graphql.execute(mutation, [favoriteGenre: 'RPG']) {
-            userId.should == 'uid-alice' // make sure system picked the right user
+            userId.should == 'uid-alice' // make sure system picked Alice as a user
             favoriteGenre.should == 'RPG'
         }
     }
 
     Bob {
         graphql.execute(mutation, [favoriteGenre: 'Strategy']) {
-            userId.should == 'uid-bob' // make sure system picked the right user
+            userId.should == 'uid-bob' // make sure system picked Bob as a user
             favoriteGenre.should == 'Strategy'
         }
     }

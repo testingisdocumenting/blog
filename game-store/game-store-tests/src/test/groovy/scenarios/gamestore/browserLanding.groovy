@@ -13,7 +13,7 @@ scenario('landing page') {
     http.post("/api/game", [id: "g3", title: "Doom", type: "fps", priceUsd: 40])
 
     browser.open("/") // open landing page, relying on url and/or browserUrl
-    def titles = $('[class*="GamesList_title"]')
+    def titles = $('[class*="GamesList_title"]') // define titles as page element selected by css
 
     titles.waitTo == ['Civilization 6', 'Doom', 'Slay The Spire'] // wait for games titles to show up and match our expectations
     browser.doc.capture("landing-page")

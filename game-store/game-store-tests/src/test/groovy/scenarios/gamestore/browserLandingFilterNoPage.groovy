@@ -1,24 +1,26 @@
 package scenarios.gamestore
 
-import utils.TestUtils
-
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
-scenario('setup up') { // hide
-    TestUtils.resetData() // hide
-} // hide
-// hide
+scenario('setup up') {
+    db.update("delete from GAME")
+    http.post("/api/game", [id: "g1", title: "Slay The Spire", type: "card rpg", priceUsd: 20])
+    http.post("/api/game", [id: "g2", title: "Civilization 6", type: "strategy", priceUsd: 60])
+    http.post("/api/game", [id: "g3", title: "Doom", type: "fps", priceUsd: 40])
+}
+
+// filter-start
 scenario('filter by text') {
     browser.reopen("/")
 
-    $("#filter").setValue("last") // use setValue abstraction to set value inside input box
-    $('[class*="GamesList_title"]').waitTo == ['Last Of Us 2'] // wait for changes to be reflected
+    $("#filter").setValue("civ") // use setValue abstraction to set value inside input box
+    $('[class*="GamesList_title"]').waitTo == ['Civilization 6'] // wait for changes to be reflected
 }
 
 scenario('filter by price') {
     browser.reopen("/")
 
     $("#below60").setValue(true) // use setValue abstraction to set value for a checkbox
-    $('[class*="GamesList_title"]').waitTo == ['Assassin Creed Odyssey', 'Division 2', // wait for changes to be reflected
-                                               'Hearthstone', 'Inside', 'Slay The Spire']
+    $('[class*="GamesList_title"]').waitTo == ['Doom', 'Slay The Spire'] // wait for changes to be reflected
 }
+// filter-end
