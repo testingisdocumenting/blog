@@ -4,11 +4,11 @@ import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 // register-new-game
 scenario('register new game') {
-    def payload = [id: "g1", // define payload as a map
-                   title: "Slay The Spire",
-                   type: "card rpg",
-                   priceUsd: 20]
-    http.post("/api/game", payload) // use payload as body in POST
+    http.post("/api/game", [
+            id: "g1", // define payload as a map
+            title: "Slay The Spire",
+            type: "card rpg",
+            priceUsd: 20])
     http.doc.capture("game-store-rest-post-game")
 
     http.get("/api/game/g1") { // request newly created game as GET

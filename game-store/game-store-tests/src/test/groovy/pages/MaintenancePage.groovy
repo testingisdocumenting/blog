@@ -3,7 +3,7 @@ package pages
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 class MaintenancePage {
-    def message = $('#mess2age')
+    def message = $('#message')
     def sendMessage = $('button').get('send message')
 
     def reopen() {

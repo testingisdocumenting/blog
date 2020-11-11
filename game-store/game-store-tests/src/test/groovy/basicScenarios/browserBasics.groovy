@@ -17,7 +17,7 @@ scenario('basic browser interaction') {
 
 scenario('implementation details') {
     // impl-details
-    $("#filter").setValue("last") // exposing css selector to the test is going to haunt you later
-    $('[class*="GamesList_title"]').waitTo == ['Last Of Us 2'] // class based selection is more likely to become out of sync
+    $("#filter").setValue("civ") // exposing css selector to the test is going to haunt you later
+    $('[class*="GamesList_title"]').waitTo == ['Civilization 6'] // class based selection is more likely to become out of sync
     // impl-details-end
 }

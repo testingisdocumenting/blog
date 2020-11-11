@@ -18,8 +18,9 @@ scenario('save preferences with explicit auth') {
     http.put('/api/user-preferences',
             http.header([Authorization: "Bearer ${token}"]), // explicitly pass Bearer token
             [favoriteGenre: 'RPG']) {
-        userId.should == 'user-a'
+        userId.should == 'user-a' // make sure server recognized token and properly authenticated user
     }
+    http.doc.capture('game-store-put-user-preferences')
 }
 // with-explicit-auth-end
 
@@ -45,14 +46,14 @@ scenario('save preferences with personas auth') {
 scenario('read preferences with personas auth') {
     Alice { // Alice's context
         http.get('/api/user-preferences') {
-            favoriteGenre.should == 'RPG' // we get back the value we put recently
+            favoriteGenre.should == 'RPG' // we get back the Alice's favorite genre
         }
         http.doc.capture('game-store-get-user-preferences')
     }
 
     Bob { // Bob's context
         http.get('/api/user-preferences') {
-            favoriteGenre.should == 'Strategy' // we get back the value we put recently
+            favoriteGenre.should == 'Strategy' // we get back the Bob's favorite genre
         }
     }
 }

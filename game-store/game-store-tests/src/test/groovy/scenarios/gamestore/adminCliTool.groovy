@@ -1,6 +1,6 @@
 package scenarios.gamestore
 
-import static clicommands.CliCommands.* // convenient access to all declared command lines
+import static clicommands.CliCommands.* // convenient access to all declared command line tools
 import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 
 scenario('list games using CLI') {
@@ -14,11 +14,11 @@ scenario('list games using CLI') {
         output.numberOfLines.should == 1
     }
 
-    http.post("/api/game", [title: "Slay The Spire", type: "card rpg", priceUsd: 20]) // pre-create data we need for the test
+    http.post("/api/game", [title: "Slay The Spire", type: "card rpg", priceUsd: 20]) // pre-create data we need for the test using http layer
     http.post("/api/game", [title: "Civilization 6", type: "strategy", priceUsd: 60])
 
     adminTool.run {
-        output.should contain("Slay The Spire")
+        output.should contain("Slay The Spire") // make sure output contains games we created
         output.should contain("Civilization 6")
     }
     cli.doc.capture("list-games-cli")

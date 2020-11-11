@@ -5,9 +5,9 @@ import static org.testingisdocumenting.webtau.WebTauGroovyDsl.*
 class BrowserOpenHandler {
     private static STORAGE_KEY = 'authToken'
 
-    static void handleOpen(passedUrl, fullUrl, currentUrl) {
+    static void handleOpen(passedUrl, fullUrl, currentUrl) { // will be called for every page open
         def userId = cfg.userId // take user from config based on current persona
-        if (!userId || browser.localStorage.getItem(STORAGE_KEY)) { // if no user or token is inside storage, we are good to go
+        if (!userId || browser.localStorage.getItem(STORAGE_KEY)) { // if no user or token is inside storage, we don't need to do anything
             return
         }
 

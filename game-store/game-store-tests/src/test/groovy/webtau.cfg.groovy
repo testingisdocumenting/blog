@@ -21,19 +21,21 @@ dbDriverClassName = "org.h2.Driver"
 dbUserName = "sa"
 dbPassword = "password"
 
+windowHeight = 600
+
 // personas-auth-config
 httpHeaderProvider = HttpHeaderProvider.&provide // implicit header provider
 browserPageNavigationHandler = BrowserOpenHandler.&handleOpen // implicit page open handler
 
-userId = '' // for clarity purposes, we explicitly set it to be an empty string
+userId = '' // explicitly set default userId to be an empty string
 
 personas {
     Alice {
-        userId = 'uid-alice' // custom config value to hold system specific user id
+        userId = 'uid-alice' // Alice's system specific user id
     }
 
     Bob {
-        userId = 'uid-bob' // custom config value to hold system specific user id
+        userId = 'uid-bob' // Bob's system specific user id
     }
 }
 // personas-auth-config-end
