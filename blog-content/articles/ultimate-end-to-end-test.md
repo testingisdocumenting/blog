@@ -1,6 +1,7 @@
 ---
-date: 2020-06-07
-summary: End to end of REST API, Command Line Interface, Web User Interface and Database
+date: 2020-10-30
+summary: Test across multiple layers like REST/GraphQL API, Web UI, CLI, Database. Use REPL to tighten feedback loop. 
+Capture test artifacts to help with documentation.
 ---
 
 # WebTau
@@ -21,7 +22,7 @@ When I write end-to-end tests I test on one layer, and validate on the other.
 I write a test for a command line tool and validate that CLI updates REST resource.
 I write a test for Web UI and use GraphQL API to set up the initial data. 
 
-# Game Store
+# Testing Game Store 
 
 We are going to test Game Store product. It has Web UI where you can see what games are available.
 
@@ -745,9 +746,9 @@ Moreover, `TableData` is not specific to Groovy and you can use Java syntax to d
   commentsType: "inline"
 }
 
-# Can I Use The Rest With JUnit? 
+# Can I Use WebTau With JUnit? 
 
-Since we are talking about JUnit and Java, let me show you how to write a REST API test using JUnit5 and Java syntax:
+Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax:
 
 :include-file: com/example/junit5/PostGetJavaTest.java {
   title: "HTTP Post Get (Java)",

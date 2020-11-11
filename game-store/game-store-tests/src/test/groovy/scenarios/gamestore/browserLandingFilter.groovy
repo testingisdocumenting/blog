@@ -12,9 +12,9 @@ scenario('setup up') { // hide
 scenario('filter by text') {
     landing.reopen()
     // set value using input defined in the page object
-    landing.filterText.setValue("last")
+    landing.filterText.("civ")
 
-    landing.titles.waitTo == ['Last Of Us 2']
+    landing.titles.waitTo == ['Civilization 6']
 }
 
 scenario('filter by price') {
@@ -22,8 +22,7 @@ scenario('filter by price') {
     // set checkbox value using input defined in the page object
     landing.filterBelow60.setValue(true)
 
-    landing.titles.waitTo == ['Assassin Creed Odyssey', 'Division 2',
-                              'Hearthstone', 'Inside', 'Slay The Spire']
+    landing.titles.waitTo == ['Doom', 'Slay The Spire']
     browser.doc.withAnnotations(
             browser.doc.badge(landing.filterText).toTheRight(),
             browser.doc.badge(landing.labelBelow60).toTheRight())
