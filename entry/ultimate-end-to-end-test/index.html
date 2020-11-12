@@ -95,27 +95,27 @@
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
 <article>
 <header><h1>WebTau</h1></header>
-<p>WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to simplify testing on multiple levels.What do I mean by multiple levels? Apps I develop often have these layers:REST/GraphQL API Web UI Command Line Database When I write end-to-end tests I test on one layer, and validate on the other. I write a test for a command line tool and validate that CLI updates REST resource. I write a test for Web UI and use GraphQL API to set up the initial data.</p>
+<p>WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to simplify testing on multiple levels.What do I mean by multiple levels? Apps I develop often have these layers:REST/GraphQL API Web UI Command Line Database When I write end-to-end tests I test on one layer, and validate the outcome using another. I write a test for a command line tool and validate that CLI updates a REST resource. I write a test for Web UI and use GraphQL API to set up the initial data.</p>
 </article>
 
 <article>
 <header><h1>Testing Game Store</h1></header>
-<p>We are going to test Game Store product. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the product. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: &quot;g1&quot;) { title type } } ''' Game Store product puts all the data into a database. Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</p>
+<p>We are going to test Game Store product. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the list of games. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: &quot;g1&quot;) { title type } } ''' And it has a database to manage all the data.Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</p>
 </article>
 
 <article>
 <header><h1>WebTau Introduction</h1></header>
-<p>Before writing a test for Game Store, we are going to use https://jsonplaceholder.typicode.com/ JSON Placeholder website to demo basic webtau parts.Our goal is to get and validate a response from this end point: https://jsonplaceholder.typicode.com/todos/1 In webtau use scenario to define a test. Let's create a file and define our first scenario: scenario('basic http invocation') { http.get('https://jsonplaceholder.typicode.com/todos/1') { body.title.should == 'delectus aut autem' // automatic mapping of a field name to a JSON response completed.should == false // specifying body is optional } } Note: Most of the time we are going to use webtau as both API and command line runner. You can use webtau with JUnit5 and JUnit4 and pure Java if you prefer.To run a test, assuming webtau is in PATH : webtau httpBasics.groovy basic http invocation (httpBasics.groovy) &gt; executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals &quot;delectus aut autem&quot; matches: body.title: actual: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; expected: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; (36ms) . body.completed equals false matches: body.completed: actual: false &lt;java.lang.Boolean&gt; expected: false &lt;java.lang.Boolean&gt; (2ms) . header.statusCode equals 200 matches: header.statusCode: actual: 200 &lt;java.lang.Integer&gt; expected: 200 &lt;java.lang.Integer&gt; (0ms) response (application/json; charset=utf-8): { &quot;userId&quot;: 1, &quot;id&quot;: 1, &quot;title&quot;: __&quot;delectus aut autem&quot;__, &quot;completed&quot;: __false__ } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (317ms) Webtau captures everything that happens in a test:commands there were ran assertions that were made (both passed and failed) values that were checked ( __ in the console output) All the captured data is available after test run inside a rich html report that we are going to look at later.</p>
+<p>Before writing a test for Game Store, we are going to use https://jsonplaceholder.typicode.com/ JSON Placeholder website to demo basic webtau parts.Our goal is to get and validate a response from this end point: https://jsonplaceholder.typicode.com/todos/1 To declare a test in webtau we need to create a file and use scenario keyword to define test logic: scenario('basic http invocation') { http.get('https://jsonplaceholder.typicode.com/todos/1') { body.title.should == 'delectus aut autem' // automatic mapping of a field name to a JSON response completed.should == false // specifying body is optional } } Note: Most of the time we are going to use webtau as both API and command line runner. You can use webtau with JUnit5 and JUnit4 and pure Java if you prefer.To run a test, assuming webtau is in PATH use: webtau httpBasics.groovy basic http invocation (httpBasics.groovy) &gt; executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals &quot;delectus aut autem&quot; matches: body.title: actual: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; expected: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; (36ms) . body.completed equals false matches: body.completed: actual: false &lt;java.lang.Boolean&gt; expected: false &lt;java.lang.Boolean&gt; (2ms) . header.statusCode equals 200 matches: header.statusCode: actual: 200 &lt;java.lang.Integer&gt; expected: 200 &lt;java.lang.Integer&gt; (0ms) response (application/json; charset=utf-8): { &quot;userId&quot;: 1, &quot;id&quot;: 1, &quot;title&quot;: __&quot;delectus aut autem&quot;__, &quot;completed&quot;: __false__ } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (317ms) Webtau captures everything that happens in a test:commands there were ran assertions that were made (both passed and failed) values that were checked ( __ in the console output) After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later.</p>
 </article>
 
 <article>
 <header><h1>Basic Configuration</h1></header>
-<p>To avoid writing full url in our tests let's define a base url for our service, UI and define an additional environment: url = &quot;http://localhost:8080&quot; // base url for all http and browser requests browserUrl = &quot;http://localhost:3000&quot; // base url for browser open commands. Overrides url above if both are present browserId = &quot;firefox&quot; // specifying browser to use for browser based operations environments { dev { // optional overrides for the configs for dev environment url = &quot;http://dev-server:8080&quot; browserUrl = &quot;http://dev-server:8080&quot; } } scenario('implicit config usage') { http.post(&quot;/relative-url&quot;) // implicit usage of core url config value browser.open(&quot;/test&quot;) // implicit usage of browser url and browser id } You can override config values using CLI params. Use --env=&lt;value&gt; to select an environment, i.e. a different set of config values: webtau scenarios/* --env=dev --url=http://override-value --browserId=chrome</p>
+<p>To avoid writing full url in our tests let's define a base url for our service. We are also going to define a base url UI. And we are going to define a separate dev environment: url = &quot;http://localhost:8080&quot; // base url for all http and browser requests browserUrl = &quot;http://localhost:3000&quot; // base url for browser open commands. Overrides url above if both are present browserId = &quot;firefox&quot; // specifying browser to use for browser based operations environments { dev { // optional overrides for the configs for dev environment url = &quot;http://dev-server:8080&quot; browserUrl = &quot;http://dev-server:8080&quot; } } scenario('implicit config usage') { http.post(&quot;/relative-url&quot;) // implicit usage of core url config value browser.open(&quot;/test&quot;) // implicit usage of browser url and browser id } You can override config values using CLI params. Use --env=&lt;value&gt; to select an environment, i.e. a different set of config values: webtau scenarios/* --env=dev --url=http://override-value --browserId=chrome</p>
 </article>
 
 <article>
 <header><h1>Game Store REST API</h1></header>
-<p>Let's test Game Store API to register and check a game by id. http://localhost:8080/api/game scenario('register new game') { http.post(&quot;/api/game&quot;, [ id: &quot;g1&quot;, // define payload as a map title: &quot;Slay The Spire&quot;, type: &quot;card rpg&quot;, priceUsd: 20]) http.get(&quot;/api/game/g1&quot;) { // request newly created game as GET id.should == &quot;g1&quot; title.should == &quot;Slay The Spire&quot; // direct access to response JSON title property type.should == &quot;card rpg&quot; priceUsd.should == 20 } } Did you notice that request to POST and response from GET looks the same? Let's extract payload into a variable and re-use it for both request payload and response validation. This time we also not going to pass id to the request and instead rely on the server to generate a new ID. package scenarios.gamestore // optional package declaration for IDE happiness import static org.testingisdocumenting.webtau.WebTauGroovyDsl.* // optional single import for IDE autocomplete scenario('register new game') { def payload = [title: &quot;Slay The Spire&quot;, // no ID specified this time type: &quot;card rpg&quot;, priceUsd: 20] def id = http.post(&quot;/api/game&quot;, payload) { return id // we grab id from response, return keyword is optional } http.get(&quot;/api/game/${id}&quot;) { // using id for subsequent request body.should == payload // re-using POST payload to assert GET response. Only values in payload will be validated } }</p>
+<p>Let's test Game Store API to register and check a game by its id. http://localhost:8080/api/game scenario('register new game') { http.post(&quot;/api/game&quot;, [ id: &quot;g1&quot;, // define payload as a map title: &quot;Slay The Spire&quot;, type: &quot;card rpg&quot;, priceUsd: 20]) http.get(&quot;/api/game/g1&quot;) { // request newly created game as GET id.should == &quot;g1&quot; title.should == &quot;Slay The Spire&quot; // direct access to response JSON title property type.should == &quot;card rpg&quot; priceUsd.should == 20 } } Did you notice that request to POST and response from GET looks the same? Let's extract payload into a variable and re-use it for both request payload and response validation. This time we are not going to pass id to the request and instead will rely on the server to generate a new ID. package scenarios.gamestore // optional package declaration for IDE happiness import static org.testingisdocumenting.webtau.WebTauGroovyDsl.* // optional single import for IDE autocomplete scenario('register new game') { def payload = [title: &quot;Slay The Spire&quot;, // no ID specified this time type: &quot;card rpg&quot;, priceUsd: 20] def id = http.post(&quot;/api/game&quot;, payload) { return id // we grab id from response, return keyword is optional } http.get(&quot;/api/game/${id}&quot;) { // using id for subsequent request body.should == payload // re-using POST payload to assert GET response. Only values in payload will be validated } }</p>
 </article>
 
 <article>
@@ -356,12 +356,12 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "When I write end-to-end tests I test on one layer, and validate on the other.",
+          "text" : "When I write end-to-end tests I test on one layer, and validate the outcome using another.",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "I write a test for a command line tool and validate that CLI updates REST resource.",
+          "text" : "I write a test for a command line tool and validate that CLI updates a REST resource.",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
@@ -391,7 +391,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "It has CLI tool to help admins to manage the product.",
+          "text" : "It has CLI tool to help admins to manage the list of games.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -437,12 +437,19 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Game Store product puts all the data into a database.",
+          "text" : "And it has a database to manage all the data.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Below we are going to see how ",
           "type" : "SimpleText"
         }, {
-          "type" : "SoftLineBreak"
+          "code" : "webtau",
+          "type" : "InlinedCode"
         }, {
-          "text" : "Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.",
+          "text" : " lets you seamlessly test on different layers and use other layers to help with data validation.",
           "type" : "SimpleText"
         } ]
       } ]
@@ -506,13 +513,19 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "In webtau use ",
+          "text" : "To declare a test in ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "webtau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " we need to create a file and use ",
           "type" : "SimpleText"
         }, {
           "code" : "scenario",
           "type" : "InlinedCode"
         }, {
-          "text" : " to define a test. Let's create a file and define our first scenario:",
+          "text" : " keyword to define test logic:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -566,7 +579,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "code" : "PATH",
           "type" : "InlinedCode"
         }, {
-          "text" : ":",
+          "text" : " use:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -630,7 +643,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "All the captured data is available after test run inside a rich html report that we are going to look at later.",
+          "text" : "After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later.",
           "type" : "SimpleText"
         } ]
       } ]
@@ -641,7 +654,18 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "To avoid writing full url in our tests let's define a base url for our service, UI and define an additional environment:",
+          "text" : "To avoid writing full url in our tests let's define a base url for our service. We are also going to define a base url UI.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "And we are going to define a separate ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "dev",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " environment:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -687,7 +711,7 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Let's test Game Store API to register and check a game by id.",
+          "text" : "Let's test Game Store API to register and check a game by its id.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -739,7 +763,19 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Did you notice that request to POST and response from GET looks the same? Let's extract payload into a variable and",
+          "text" : "Did you notice that request to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "POST",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " and response from ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "GET",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " looks the same? Let's extract payload into a variable and",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
@@ -749,13 +785,13 @@ ReactDOM.render(React.createElement(Documentation, {
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "This time we also not going to pass ",
+          "text" : "This time we are not going to pass ",
           "type" : "SimpleText"
         }, {
           "code" : "id",
           "type" : "InlinedCode"
         }, {
-          "text" : " to the request and instead rely on the server to generate a new ID.",
+          "text" : " to the request and instead will rely on the server to generate a new ID.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -3906,7 +3942,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1605119499502,
+    "lastModifiedTime" : 1605150342805,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Ultimate End To End Test",
