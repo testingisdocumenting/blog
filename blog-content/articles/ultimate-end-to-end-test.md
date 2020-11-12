@@ -18,8 +18,8 @@ What do I mean by multiple levels? Apps I develop often have these layers:
 * Command Line 
 * Database 
 
-When I write end-to-end tests I test on one layer, and validate on the other. 
-I write a test for a command line tool and validate that CLI updates REST resource.
+When I write end-to-end tests I test on one layer, and validate the outcome using another. 
+I write a test for a command line tool and validate that CLI updates a REST resource.
 I write a test for Web UI and use GraphQL API to set up the initial data. 
 
 # Testing Game Store 
@@ -28,7 +28,7 @@ We are going to test Game Store product. It has Web UI where you can see what ga
 
 :include-image: game-store-main-page.png {fit: true}
 
-It has CLI tool to help admins to manage the product. 
+It has CLI tool to help admins to manage the list of games. 
 
 :include-cli-command: gs-admin list {stickySlide: "top 20%"}
 
@@ -45,8 +45,9 @@ It has GraphQL and REST API to manage data.
    title: "response"
 }
 
-Game Store product puts all the data into a database.
-Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.
+And it has a database to manage all the data.
+
+Below we are going to see how `webtau` lets you seamlessly test on different layers and use other layers to help with data validation.
 
 # WebTau Introduction
 
@@ -65,7 +66,7 @@ Our goal is to get and validate a response from this end point:
     stickySlide: "left"
 }
 
-In webtau use `scenario` to define a test. Let's create a file and define our first scenario: 
+To declare a test in `webtau` we need to create a file and use `scenario` keyword to define test logic: 
 
 :include-file: basicScenarios/httpBasics.groovy {
     title: "httpBasics.groovy",
@@ -79,7 +80,7 @@ In webtau use `scenario` to define a test. Let's create a file and define our fi
 Note: Most of the time we are going to use webtau as both API and command line runner. You can use `webtau` with 
 `JUnit5` and `JUnit4` and pure Java if you prefer. 
 
-To run a test, assuming `webtau` is in `PATH`:
+To run a test, assuming `webtau` is in `PATH` use:
 
 :include-cli-command: webtau httpBasics.groovy {stickySlide: "top 15%"}
 
@@ -95,11 +96,12 @@ Webtau captures everything that happens in a test:
 * assertions that were made (both passed and failed)
 * values that were checked (`__` in the console output)
 
-All the captured data is available after test run inside a rich html report that we are going to look at later. 
+After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later. 
 
 # Basic Configuration
 
-To avoid writing full url in our tests let's define a base url for our service, UI and define an additional environment:
+To avoid writing full url in our tests let's define a base url for our service. We are also going to define a base url UI.
+And we are going to define a separate `dev` environment: 
 
 :include-file: basicScenarios/webtau.cfg.groovy {
   title: "webtau.cfg.groovy", 
@@ -122,7 +124,7 @@ You can override config values using CLI params. Use `--env=<value>` to select a
 
 # Game Store REST API
 
-Let's test Game Store API to register and check a game by id.
+Let's test Game Store API to register and check a game by its id.
 
 :include-file: game-store-rest-post-game/request.fullurl.txt {
     title: "End-point to create a game",
@@ -148,9 +150,9 @@ Let's test Game Store API to register and check a game by id.
   pathsFile: "game-store-rest-get-game/paths.json"
 }
 
-Did you notice that request to POST and response from GET looks the same? Let's extract payload into a variable and 
+Did you notice that request to `POST` and response from `GET` looks the same? Let's extract payload into a variable and 
 re-use it for both request payload and response validation. 
-This time we also not going to pass `id` to the request and instead rely on the server to generate a new ID.
+This time we are not going to pass `id` to the request and instead will rely on the server to generate a new ID.
 
 :include-file: scenarios/gamestore/postGetStreamlined.groovy {
     title: "Re-use payload data",
