@@ -95,17 +95,22 @@
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
 <article>
 <header><h1>WebTau</h1></header>
-<p>WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to simplify testing on multiple levels.What do I mean by multiple levels? Apps I develop often have these layers:REST/GraphQL API Web UI Command Line Database When I write end-to-end tests I test on one layer, and validate the outcome using another. I write a test for a command line tool and validate that CLI updates a REST resource. I write a test for Web UI and use GraphQL API to set up the initial data.</p>
+<p>In this article I will show you how to use https://github.com/testingisdocumenting/webtau webtau tool to write and run end-to-end tests for a Web App that has REST API, GraphQL API, Web UI and CLI.I will show you how to use REPL mode to speed up test development and tighten feedback loop.And I will show you how to use end-to-end testing to help you with documentation writing.WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to simplify testing on multiple levels.What do I mean by multiple levels? Apps I develop often have these layers:REST/GraphQL API Web UI Command Line Database When I write end-to-end tests I test on one layer, and validate the outcome using another. I write a test for a command line tool and validate that CLI updates a REST resource. I write a test for Web UI and use GraphQL API to set up the initial data.Webtau lets you manipulate and validate various layers using consistent API and analyze your test results using rich reporting that captures everything you do.</p>
+</article>
+
+<article>
+<header><h1>Disclaimer</h1></header>
+<p>Article is quite large, and it may take you 15+ minutes to finish.I am new to writing articles and English is my second language. If you have suggestions, it would be awesome if you create a https://github.com/testingisdocumenting/blog/issues GitHub Issue with a grammar/content suggestion or even create a https://github.com/testingisdocumenting/blog/blob/master/blog-content/articles/ultimate-end-to-end-test.md PR.I am for https://mobile.twitter.com/search?q=https%3A%2F%2Ftestingisdocumenting.org%2Fblog%2Fentry%2Fultimate-end-to-end-test Discussion on twitter if you have ideas/opinions you would like to share.Tool that is being discussed here is also on https://github.com/testingisdocumenting/webtau GitHub. It is in active development and is being used for testing production systems. It covers use-cases that I and other tool contributors are facing daily and we are always looking for new challenges to tackle. Issues, PRs, and Stars are welcome!</p>
 </article>
 
 <article>
 <header><h1>Testing Game Store</h1></header>
-<p>We are going to test Game Store product. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the list of games. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: &quot;g1&quot;) { title type } } ''' And it has a database to manage all the data.Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</p>
+<p>We are going to test Game Store site. It has Web UI where you can see what games are available.It has CLI tool to help admins to manage the list of games. gs-admin list List of games g1 Slay The Spire card rpg 20.0 g2 Civilization 6 strategy 60.0 g3 Doom fps 60.0 g4 Last Of Us 2 adventure drama 60.0 g5 Inside adventure 10.0 g6 Hearthstone card 0.0 g7 Division 2 shooter rpg 30.0 g8 Assassin Creed Odyssey rpg 40.0 It has GraphQL and REST API to manage data. def query = ''' query { game(id: &quot;g1&quot;) { title type } } ''' And it has a database to manage all the data.Below we are going to see how webtau lets you seamlessly test on different layers and use other layers to help with data validation.</p>
 </article>
 
 <article>
 <header><h1>WebTau Introduction</h1></header>
-<p>Before writing a test for Game Store, we are going to use https://jsonplaceholder.typicode.com/ JSON Placeholder website to demo basic webtau parts.Our goal is to get and validate a response from this end point: https://jsonplaceholder.typicode.com/todos/1 To declare a test in webtau we need to create a file and use scenario keyword to define test logic: scenario('basic http invocation') { http.get('https://jsonplaceholder.typicode.com/todos/1') { body.title.should == 'delectus aut autem' // automatic mapping of a field name to a JSON response completed.should == false // specifying body is optional } } Note: Most of the time we are going to use webtau as both API and command line runner. You can use webtau with JUnit5 and JUnit4 and pure Java if you prefer.To run a test, assuming webtau is in PATH use: webtau httpBasics.groovy basic http invocation (httpBasics.groovy) &gt; executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals &quot;delectus aut autem&quot; matches: body.title: actual: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; expected: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; (36ms) . body.completed equals false matches: body.completed: actual: false &lt;java.lang.Boolean&gt; expected: false &lt;java.lang.Boolean&gt; (2ms) . header.statusCode equals 200 matches: header.statusCode: actual: 200 &lt;java.lang.Integer&gt; expected: 200 &lt;java.lang.Integer&gt; (0ms) response (application/json; charset=utf-8): { &quot;userId&quot;: 1, &quot;id&quot;: 1, &quot;title&quot;: __&quot;delectus aut autem&quot;__, &quot;completed&quot;: __false__ } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (317ms) Webtau captures everything that happens in a test:commands there were ran assertions that were made (both passed and failed) values that were checked ( __ in the console output) After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later.</p>
+<p>Before writing a test for Game Store, we are going to use https://jsonplaceholder.typicode.com/ JSON Placeholder website to demo basic webtau parts.Our goal is to get and validate a response from this end point: https://jsonplaceholder.typicode.com/todos/1 To declare a test in webtau we need to create a file and use scenario keyword to define test logic: scenario('basic http invocation') { http.get('https://jsonplaceholder.typicode.com/todos/1') { body.title.should == 'delectus aut autem' // automatic mapping of a field name to a JSON response completed.should == false // specifying body is optional } } Note: Most of the time we are going to use webtau as both API and command line runner. You can use webtau with JUnit5 and JUnit4 and pure Java if you prefer.To run a test, assuming webtau is in PATH use: webtau httpBasics.groovy basic http invocation (httpBasics.groovy) &gt; executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals &quot;delectus aut autem&quot; matches: body.title: actual: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; expected: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; (36ms) . body.completed equals false matches: body.completed: actual: false &lt;java.lang.Boolean&gt; expected: false &lt;java.lang.Boolean&gt; (2ms) . header.statusCode equals 200 matches: header.statusCode: actual: 200 &lt;java.lang.Integer&gt; expected: 200 &lt;java.lang.Integer&gt; (0ms) response (application/json; charset=utf-8): { &quot;userId&quot;: 1, &quot;id&quot;: 1, &quot;title&quot;: __&quot;delectus aut autem&quot;__, &quot;completed&quot;: __false__ } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (317ms) Webtau captures everything that happens in a test:commands there were ran assertions that were made (both passed and failed) values that were checked ( __ in the console output) After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports in details later, for now here is a screenshot of a report of the tests we are going to write below.</p>
 </article>
 
 <article>
@@ -286,6 +291,40 @@ ReactDOM.render(React.createElement(Documentation, {
   "page" : {
     "type" : "Page",
     "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "In this article I will show you how to use ",
+        "type" : "SimpleText"
+      }, {
+        "url" : "https://github.com/testingisdocumenting/webtau",
+        "isFile" : false,
+        "type" : "Link",
+        "content" : [ {
+          "text" : "webtau",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "text" : " tool to write and run end-to-end tests for a Web App that has REST API,",
+        "type" : "SimpleText"
+      }, {
+        "type" : "SoftLineBreak"
+      }, {
+        "text" : "GraphQL API, Web UI and CLI.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "I will show you how to use REPL mode to speed up test development and tighten feedback loop.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "And I will show you how to use end-to-end testing to help you with documentation writing.",
+        "type" : "SimpleText"
+      } ]
+    }, {
       "title" : "WebTau",
       "id" : "webtau",
       "type" : "Section",
@@ -369,6 +408,115 @@ ReactDOM.render(React.createElement(Documentation, {
           "text" : "I write a test for Web UI and use GraphQL API to set up the initial data.",
           "type" : "SimpleText"
         } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Webtau lets you manipulate and validate various layers using consistent API and analyze your test results using",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "rich reporting that captures everything you do.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "title" : "Disclaimer",
+      "id" : "disclaimer",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Article is quite large, and it may take you 15+ minutes to finish.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "I am new to writing articles and English is my second language. If you have suggestions, it would be awesome if you create",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "a ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/testingisdocumenting/blog/issues",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "GitHub Issue",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " with a grammar/content suggestion or even create",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "a ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content/articles/ultimate-end-to-end-test.md",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "PR",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "I am for ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://mobile.twitter.com/search?q=https%3A%2F%2Ftestingisdocumenting.org%2Fblog%2Fentry%2Fultimate-end-to-end-test",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Discussion on twitter",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " if you have",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "ideas/opinions you would like to share.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Tool that is being discussed here is also on ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://github.com/testingisdocumenting/webtau",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "GitHub",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : ". It is in active development and is being used",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "for testing production systems. It covers use-cases that I and other tool contributors are facing daily and we are always looking for new challenges to tackle.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Issues, PRs, and Stars are welcome!",
+          "type" : "SimpleText"
+        } ]
       } ]
     }, {
       "title" : "Testing Game Store",
@@ -377,7 +525,7 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "We are going to test Game Store product. It has Web UI where you can see what games are available.",
+          "text" : "We are going to test Game Store site. It has Web UI where you can see what games are available.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -643,9 +791,22 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later.",
+          "text" : "After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports in details later, for now here is",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "a screenshot of a report of the tests we are going to write below.",
           "type" : "SimpleText"
         } ]
+      }, {
+        "scaleRatio" : 0.5,
+        "imageSrc" : "/blog/game-store-report-http-call.png",
+        "timestamp" : 1604379679911,
+        "shapes" : [ ],
+        "width" : 1200.0,
+        "height" : 877.0,
+        "type" : "AnnotatedImage"
       } ]
     }, {
       "title" : "Basic Configuration",
@@ -3942,7 +4103,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1605150342805,
+    "lastModifiedTime" : 1606181991205,
     "tocItem" : {
       "sectionTitle" : "Entry",
       "pageTitle" : "Ultimate End To End Test",
@@ -3956,6 +4117,9 @@ ReactDOM.render(React.createElement(Documentation, {
       "pageSectionIdTitles" : [ {
         "title" : "WebTau",
         "id" : "webtau"
+      }, {
+        "title" : "Disclaimer",
+        "id" : "disclaimer"
       }, {
         "title" : "Testing Game Store",
         "id" : "testing-game-store"

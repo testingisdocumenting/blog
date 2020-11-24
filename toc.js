@@ -82,6 +82,9 @@ toc = [ {
       "title" : "WebTau",
       "id" : "webtau"
     }, {
+      "title" : "Disclaimer",
+      "id" : "disclaimer"
+    }, {
       "title" : "Testing Game Store",
       "id" : "testing-game-store"
     }, {
