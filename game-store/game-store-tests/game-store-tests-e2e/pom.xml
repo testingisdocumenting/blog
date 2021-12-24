@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.testingisdocumenting.blog</groupId>
+        <artifactId>game-store-tests</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>game-store-tests-e2e</artifactId>
+
+    <properties>
+        <junit5.version>5.7.0-M1</junit5.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-groovy</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-junit5</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testingisdocumenting.webtau</groupId>
+            <artifactId>webtau-junit5-groovy</artifactId>
+            <version>${webtau.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.testingisdocumenting.webtau</groupId>
+                <artifactId>webtau-maven-plugin</artifactId>
+                <version>${webtau.version}</version>
+                <executions>
+                    <execution>
+                        <id>webtau-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
+                            <tests>
+                                <directory>${project.basedir}/src/test/groovy</directory>
+                                <includes>
+                                    <include>scenarios/replDemo.groovy</include>
+                                    <include>scenarios/basicScenariosRunner.groovy</include>
+                                    <include>scenarios/gamestore/adminCliTool.groovy</include>
+                                    <include>scenarios/gamestore/*.groovy</include>
+                                </includes>
+                            </tests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>webtau-report-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
+                            <tests>
+                                <directory>${project.basedir}/src/test/groovy</directory>
+                                <includes>
+                                    <include>scenarios/webtauReport.groovy</include>
+                                </includes>
+                            </tests>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.200</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>addTestSources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
