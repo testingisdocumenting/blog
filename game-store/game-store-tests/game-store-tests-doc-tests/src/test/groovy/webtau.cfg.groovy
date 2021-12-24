@@ -1,0 +1,1 @@
+docPath = "../../../target/doc-artifacts/"

@@ -12,104 +12,11 @@
 
     <artifactId>game-store-tests</artifactId>
 
-    <properties>
-        <junit5.version>5.7.0-M1</junit5.version>
-    </properties>
+    <packaging>pom</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.testingisdocumenting.webtau</groupId>
-            <artifactId>webtau-groovy</artifactId>
-            <version>${webtau.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testingisdocumenting.webtau</groupId>
-            <artifactId>webtau-junit5</artifactId>
-            <version>${webtau.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.testingisdocumenting.webtau</groupId>
-            <artifactId>webtau-junit5-groovy</artifactId>
-            <version>${webtau.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit5.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.7.0-M1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.testingisdocumenting.webtau</groupId>
-                <artifactId>webtau-maven-plugin</artifactId>
-                <version>${webtau.version}</version>
-                <executions>
-                    <execution>
-                        <id>webtau-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
-                            <tests>
-                                <directory>${project.basedir}/src/test/groovy</directory>
-                                <includes>
-                                    <include>scenarios/replDemo.groovy</include>
-                                    <include>scenarios/postGet.groovy</include>
-                                    <include>scenarios/postGetStreamlined.groovy</include>
-                                    <include>scenarios/cliBasics.groovy</include>
-                                    <include>scenarios/adminCliTool.groovy</include>
-                                    <include>scenarios/browserBasics.groovy</include>
-                                    <include>scenarios/browserLanding.groovy</include>
-                                    <include>scenarios/database.groovy</include>
-                                </includes>
-                            </tests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>webtau-report-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <workingDir>${project.basedir}/src/test/groovy</workingDir>
-                            <tests>
-                                <directory>${project.basedir}/src/test/groovy</directory>
-                                <includes>
-                                    <include>scenarios/webtauReport.groovy</include>
-                                </includes>
-                            </tests>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>addTestSources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <modules>
+        <module>game-store-tests-e2e</module>
+        <module>game-store-tests-doc-gen</module>
+        <module>game-store-tests-doc-tests</module>
+    </modules>
 </project>

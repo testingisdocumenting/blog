@@ -4,6 +4,13 @@ summary: Test across multiple layers like REST/GraphQL API, Web UI, CLI, Databas
 Capture test artifacts to help with documentation.
 ---
 
+In this article I will show you how to use [webtau](https://github.com/testingisdocumenting/webtau) tool to write and run end-to-end tests for a Web App that has REST API,
+GraphQL API, Web UI and CLI.
+
+I will show you how to use REPL mode to speed up test development and tighten feedback loop.
+
+And I will show you how to use end-to-end testing to help you with documentation writing.
+
 # WebTau
 
 > WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to
@@ -20,11 +27,30 @@ What do I mean by multiple levels? Apps I develop often have these layers:
 
 When I write end-to-end tests I test on one layer, and validate the outcome using another. 
 I write a test for a command line tool and validate that CLI updates a REST resource.
-I write a test for Web UI and use GraphQL API to set up the initial data. 
+I write a test for Web UI and use GraphQL API to set up the initial data.
+
+Webtau lets you manipulate and validate various layers using consistent API and analyze your test results using 
+rich reporting that captures everything you do.  
+
+# Disclaimer
+
+Article is quite large, and it may take you 15+ minutes to finish.
+
+I am new to writing articles and English is my second language. If you have suggestions, it would be awesome if you create
+a [GitHub Issue](https://github.com/testingisdocumenting/blog/issues) with a grammar/content suggestion or even create 
+a [PR](https://github.com/testingisdocumenting/blog/blob/master/blog-content/articles/ultimate-end-to-end-test.md).
+ 
+I am for [Discussion on twitter](https://mobile.twitter.com/search?q=https%3A%2F%2Ftestingisdocumenting.org%2Fblog%2Fentry%2Fultimate-end-to-end-test) if you have
+ideas/opinions you would like to share.
+
+Tool that is being discussed here is also on [GitHub](https://github.com/testingisdocumenting/webtau). It is in active development and is being used 
+for testing production systems. It covers use-cases that I and other tool contributors are facing daily and we are always looking for new challenges to tackle. 
+Issues, PRs, and Stars are welcome!
+   
 
 # Testing Game Store 
 
-We are going to test Game Store product. It has Web UI where you can see what games are available.
+We are going to test Game Store site. It has Web UI where you can see what games are available.
 
 :include-image: game-store-main-page.png {fit: true}
 
@@ -96,7 +122,10 @@ Webtau captures everything that happens in a test:
 * assertions that were made (both passed and failed)
 * values that were checked (`__` in the console output)
 
-After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports later. 
+After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports in details later, for now here is 
+a screenshot of a report of the tests we are going to write below. 
+
+:include-image: game-store-report-http-call.png {scaleRatio: 0.5}
 
 # Basic Configuration
 
@@ -106,7 +135,7 @@ And we are going to define a separate `dev` environment:
 :include-file: basicScenarios/webtau.cfg.groovy {
   title: "webtau.cfg.groovy", 
   commentsType: "inline",
-  excludeRegexp: "package",
+  excludeRegexp: ["package", "// hide"],
   stickySlide: "left"
 }
 
@@ -389,7 +418,6 @@ To use defined personas we leverage Java/Groovy static import:
 
 :include-file: basicScenarios/personaReUseDemo.groovy {
   title: "Persona re-use demo",
-  excludeRegexp: "// persona-demo",
   commentsType: "inline"
 }
 
@@ -445,7 +473,6 @@ Let's test the filters:
 :include-file: scenarios/gamestore/browserLandingFilterNoPage.groovy { 
   title: "filtering games",
   startLine: "filter-start", endLine: "filter-end", excludeStartEnd: true,
-  excludeRegexp: ["hide", "browser.doc"],
   commentsType: "inline"
 }
 
@@ -462,7 +489,7 @@ Any time we change id element or class names, we risk breaking our tests.
 
 Warning: Tests should not be broken if only implementation details has changed.
 
-:include-file: basicScenarios/browserBasics.groovy {
+:include-file: scenarios/gamestore/browserLandingFilterNoPage.groovy {
   title: "exposed page details",
   startLine: "impl-details", endLine: "impl-details-end", excludeStartEnd: true,
   commentsType: "inline"
@@ -678,7 +705,7 @@ However, it can be useful to validate that REST POST method did modify data in t
 Command line interface is our final layer to test.
 Before we test admin app, let's see how `cli.` works on a simple command: 
 
-:include-file: scenarios/cliBasics.groovy {
+:include-file: basicScenarios/cliBasics.groovy {
     title: "example of command line run",
     startLine: "cli-basics", endLine: "cli-basics-end", excludeStartEnd: true,
     highlight: "should",
