@@ -4,7 +4,7 @@ summary: Test across multiple layers like REST/GraphQL API, Web UI, CLI, Databas
 Capture test artifacts to help with documentation.
 ---
 
-In this article I will show you how to use [webtau](https://github.com/testingisdocumenting/webtau) tool to write and run end-to-end tests for a Web App that has REST API,
+In this article I will show you how to use [WebTau](https://github.com/testingisdocumenting/webtau) tool to write and run end-to-end tests for a Web App that has REST API,
 GraphQL API, Web UI and CLI.
 
 I will show you how to use REPL mode to speed up test development and tighten feedback loop.
@@ -29,7 +29,7 @@ When I write end-to-end tests I test on one layer, and validate the outcome usin
 I write a test for a command line tool and validate that CLI updates a REST resource.
 I write a test for Web UI and use GraphQL API to set up the initial data.
 
-Webtau lets you manipulate and validate various layers using consistent API and analyze your test results using 
+WebTau lets you manipulate and validate various layers using consistent API and analyze your test results using 
 rich reporting that captures everything you do.  
 
 # Disclaimer
@@ -73,12 +73,12 @@ It has GraphQL and REST API to manage data.
 
 And it has a database to manage all the data.
 
-Below we are going to see how `webtau` lets you seamlessly test on different layers and use other layers to help with data validation.
+Below we are going to see how WebTau lets you seamlessly test on different layers and use other layers to help with data validation.
 
 # WebTau Introduction
 
 Before writing a test for Game Store, we are going to use [JSON Placeholder](https://jsonplaceholder.typicode.com/)
-website to demo basic `webtau` parts.  
+website to demo basic WebTau parts.  
 
 Our goal is to get and validate a response from this end point:
 :include-file: basic-http-invocation/request.fullurl.txt {
@@ -92,7 +92,7 @@ Our goal is to get and validate a response from this end point:
     stickySlide: "left"
 }
 
-To declare a test in `webtau` we need to create a file and use `scenario` keyword to define test logic: 
+To declare a test in WebTau we need to create a file and use `scenario` keyword to define test logic: 
 
 :include-file: basicScenarios/httpBasics.groovy {
     title: "httpBasics.groovy",
@@ -103,7 +103,7 @@ To declare a test in `webtau` we need to create a file and use `scenario` keywor
     commentsType: "inline"
 }
 
-Note: Most of the time we are going to use webtau as both API and command line runner. You can use `webtau` with 
+Note: Most of the time we are going to use WebTau as both API and command line runner. You can use WebTau with 
 `JUnit5` and `JUnit4` and pure Java if you prefer. 
 
 To run a test, assuming `webtau` is in `PATH` use:
@@ -117,13 +117,13 @@ To run a test, assuming `webtau` is in `PATH` use:
     highlight: ["equals \"delectus", "equals 200", "__\"delectus"]
 } 
 
-Webtau captures everything that happens in a test:
+WebTau captures everything that happens in a test:
 * commands there were ran
 * assertions that were made (both passed and failed)
 * values that were checked (`__` in the console output)
 
-After tests run, webtau generates rich HTML report with all the captured data. We are going to look at the reports in details later, for now here is 
-a screenshot of a report of the tests we are going to write below. 
+WebTau generates rich HTML report with all the captured data at the end tests run. We are going to look at the report in details later, for now here is 
+a screenshot of a generated report based on the tests below. 
 
 :include-image: game-store-report-http-call.png {scaleRatio: 0.5}
 
@@ -218,7 +218,7 @@ via `header` parameter.
 
 # Personas
 
-Webtau provides a way to implement implicit authentication for your requests. 
+WebTau provides a way to implement implicit authentication for your requests. 
 Before we get there, we need to cover `Persona` concept. 
 
 `Persona` sets the context for config values and code execution.
@@ -256,7 +256,7 @@ Instead of explicitly passing `header` to each `http` call we will execute calls
 Console output (and report that we are going to look at later) captures what steps were executed in what context.
  
 :include-cli-output: http-persona-auth-ran-with-repl/out.txt {
-  title: "webtau output",
+  title: "WebTau output",
   startLine: "running:", endLine: "Bob",
   highlight: ["Alice", "__\"uid", "__\"RPG", "Bob"]
 }
@@ -270,7 +270,7 @@ To make sure our `PUT` worked as intended we are going to `GET` user preferences
   commentsType: "inline"
 }
 
-How does it work behind the covers? `Webtau` allows you to define an implicit `HTTP Header Provider` that
+How does it work behind the covers? `WebTau` allows you to define an implicit `HTTP Header Provider` that
 can inject header values into each request.  
 
 :include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
@@ -325,7 +325,7 @@ GraphQL allows to define a query with parameters:
    stickySlide: "top"
 }
 
-Webtau provides a way to pass parameter values as a `Map`:
+WebTau provides a way to pass parameter values as a `Map`:
 
 :include-file: scenarios/gamestore/graphqlQueries.groovy {title: "query parameters", 
    startLine: "query-game-param-start", endLine: "query-game-param-end", excludeStartEnd: true,
@@ -426,7 +426,7 @@ To use defined personas we leverage Java/Groovy static import:
 We looked at how to test REST and GraphQL based APIs. Now let's move on to testing Web UI.
 Before we jump into testing Game Store UI, we will do a classic test of Google Page.
 
-:include-image: browser-basic.png
+:include-image: browser-basic.png { fit: true }
 
 Our test will enter "test" value into the search box and, wait for the results to show up and pick a result based on 
 a regular expression:
@@ -439,7 +439,7 @@ a regular expression:
   stickySlide: "left 40%"
 }
 
-As with REST and GraphQL, webtau console output captures all the actions that happen, and how much time each
+As with REST and GraphQL, WebTau console output captures all the actions that happen, and how much time each
 action took:
 
 :include-cli-output: webtau-browser-basics/out.txt {
@@ -476,7 +476,7 @@ Let's test the filters:
   commentsType: "inline"
 }
 
-Note: `setValue` is used for both text input box and check box. Webtau will figure out what actions to perform based on the
+Note: `setValue` is used for both text input box and check box. WebTau will figure out what actions to perform based on the
 underlying form element.
 
 # UI Page Object
@@ -495,7 +495,7 @@ Warning: Tests should not be broken if only implementation details has changed.
   commentsType: "inline"
 }
 
-To implement page object in Webtau we will use a regular Java/Groovy/Kotlin class:
+To implement page object in WebTau we will use a regular Java/Groovy/Kotlin class:
 
 :include-file: pages/LandingPage.groovy {
   title: "page object",
@@ -638,7 +638,7 @@ Question: How do we maintain different localStorage for different Personas?
 
 :include-meta: {presentationParagraph: "default", presentationBulletListType: "RevealBoxes"}
 
-`Webtau` maintains a browser per `persona`. In the examples above we have a total of two browsers during test run:
+`WebTau` maintains a browser per `persona`. In the examples above we have a total of two browsers during test run:
 
 :include-meta: {presentationParagraph: "clear"}
  
@@ -741,7 +741,7 @@ Similar to UI Page Object idea, we declare CLI tools our tests need access to in
 We have seen `TableData` usage when we worked with Database and when we validated complex REST API output.
 Let's take a closer look at it.
 
-`TableData` is a core webtau data type. Think of it as a list of maps with extra functionality.
+`TableData` is a core WebTau data type. Think of it as a list of maps with extra functionality.
 You can assign `TableData` to a variable, pass it around, return from functions and use for assertions. 
 Data is available at runtime, and it is not a compile-time construct.  
 
@@ -754,7 +754,7 @@ Here is an example of usage of extra `TableData` features to generate test data:
 }
 
 :include-cli-output: webtau-table-basics/out.txt {
-  title: "Webtau Output",
+  title: "WebTau Output",
   startLine: "table data demo", endLine: "100, 100"
 }
 
@@ -785,7 +785,7 @@ Since we are talking about JUnit and Java, let me show you an example of REST AP
   stickySlide: "left 70%"
 }
 
-In case of JUnit runner, webtau reads config values from `webtau.properties` resource file:
+In case of JUnit runner, WebTau reads config values from `webtau.properties` resource file:
  
 :include-file: src/test/resources/webtau.properties {
   title: "src/test/resources/webtau.properties"
@@ -793,7 +793,7 @@ In case of JUnit runner, webtau reads config values from `webtau.properties` res
 
 # Reporting 
 
-As I mentioned at the beginning, webtau captures a lot of information. Information is printed to the console, but 
+As I mentioned at the beginning, WebTau captures a lot of information. Information is printed to the console, but 
 also stored in a rich HTML report.
 
 Generated report is a self-contained HTML file that can be emailed, slacked or copied to a network drive. You don't need
@@ -804,7 +804,7 @@ to have a server to look at the report. Open it in a browser, and you will get a
 Report Summary page consist of 
 1. **Tests Runtime** - shows overall time spend
 2. **Tests success ratio** - how many failed vs passed
-3. **HTTP Coverage** - how many REST API operations are covered (webtau uses optional Open API spec url to discover all the operations)
+3. **HTTP Coverage** - how many REST API operations are covered (WebTau uses optional Open API spec url to discover all the operations)
 4. **Tests run Ratio** - how many skipped vs ran
 5. **HTTP calls time** - high level stats on HTTP based APIs
 
@@ -895,8 +895,8 @@ Or it can be used to quickly wipe or setup the data. I personally use it during 
 
 # REPL Test Selection  
 
-The true power of webtau REPL mode comes from combining Test runs and experimentation in one go.
-We can run webtau in repl mode and at the same time pass the test files we want to work with: 
+One of WebTau superpowers is REPL mode. It allows you to combine test run and test experimentation.
+Run `webtau` in repl mode with existing test files you want to play with:
 
 :include-cli-command: {
     commandFile: "test-files-list-repl/command.txt", 
@@ -925,7 +925,7 @@ After test file selection, you can run one or more scenarios on demand.
 }
 
 When I write tests, I keep re-running (`r`) a current test under development, then experiment with a few lines in REPL mode,
-do some checks, update the test file and re-run it (`r`). Webtau will reload test file and pickup your changes.
+do some checks, update the test file and re-run it (`r`). WebTau will reload test file and pickup your changes.
 
 After each test run, context is preserved, browser is open in the last location, DB is up to date, and REST/GraphQL APIs are primed.  
 
@@ -975,8 +975,8 @@ By writing happy path tests we can add a few more to the list:
 
 > The major part of this content was generated by running tests
 
-Webtau console outputs your saw, the REST/GraphQL API response, Game Store and Webtau Report screenshots, all of it was
-automatially generated by running tests.  
+WebTau console outputs your saw, the REST/GraphQL API response, Game Store and Webtau Report screenshots, all of it was
+automatically generated by running tests.  
 
 # Capturing Test Artifacts
 
@@ -1011,7 +1011,7 @@ Let's take a look.
   title: "game-store-list-after-db/paths.json"
 }
 
-To capture screenshots webtau has `browser.doc.capture`
+WebTau provides `browser.doc.capture` to capture screenshots for documentation purposes. 
 
 :include-file: scenarios/gamestore/browserLandingFilter.groovy { 
   title: "UI doc capture",
@@ -1028,7 +1028,7 @@ To capture screenshots webtau has `browser.doc.capture`
   stickySlide: "top 40%"
 }
 
-In addition to the screenshot `.png` file webtau also captures annotations placement and type:
+In addition to the screenshot `.png` file WebTau also captures annotations placement and annotations types:
 
 :include-file: admin-ui-filter.json {
   title: "admin-ui-filter.json"
@@ -1069,7 +1069,7 @@ Here is an example of Game Store manual created with captured artifacts and [Zna
 
 * We tested Game Store on multiple layers, using one layer to set-up and re-inforce tests on the other layers.
 * We used consistent matchers and concepts like `should`, `waitTo`, `Persona` across layers.  
-* We saw how each step and assertions is captured by webtau and written to console and rich HTML report.
+* We saw how each step and assertions is captured by WebTau and written to console and rich HTML report.
 * We saw how REPL can improve feedback loop and make you write tests faster.
 * We saw how writing tests can generate artifacts to help you with writing User facing documentation.
 
