@@ -50,7 +50,7 @@ Issues, PRs, and Stars are welcome!
 
 # Testing Game Store 
 
-We are going to test Game Store site. It has Web UI where you can see what games are available.
+We are going to test Game Store product. It has Web UI where you can see what games are available.
 
 :include-image: game-store-main-page.png {fit: true}
 
@@ -270,7 +270,7 @@ To make sure our `PUT` worked as intended we are going to `GET` user preferences
   commentsType: "inline"
 }
 
-How does it work behind the covers? `WebTau` allows you to define an implicit `HTTP Header Provider` that
+How does it work behind the covers? WebTau allows you to define an implicit `HTTP Header Provider` that
 can inject header values into each request.  
 
 :include-file: webtau.cfg.groovy {title: "webtau.cfg.groovy", 
@@ -638,7 +638,7 @@ Question: How do we maintain different localStorage for different Personas?
 
 :include-meta: {presentationParagraph: "default", presentationBulletListType: "RevealBoxes"}
 
-`WebTau` maintains a browser per `persona`. In the examples above we have a total of two browsers during test run:
+WebTau maintains a browser per `persona`. In the examples above we have a total of two browsers during test run:
 
 :include-meta: {presentationParagraph: "clear"}
  
