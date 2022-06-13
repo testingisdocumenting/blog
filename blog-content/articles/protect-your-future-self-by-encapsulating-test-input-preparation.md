@@ -83,14 +83,14 @@ Question: Can you still spot the problem?
 * Additionally some of the properties will be completely *irrelevant to the business logic* under a test, yet you will be forced to set them anyway.
 ```
 
-# Test Input Encapsulation With Webtau Table Data   
+# Test Input Encapsulation With WebTau Table Data   
 
 I was dealing with test problems like above for years and eventually came up with a solution that fits my needs.
-I hope it will fit your needs as well. The solution is to use flexible data structure like [Webtau TableData](https://testingisdocumenting.org/webtau/reference/table-data)
+I hope it will fit your needs as well. The solution is to use flexible data structure like [WebTau TableData](https://testingisdocumenting.org/webtau/reference/table-data)
 
 :include-file: com/example/portfolio/ProfitCalculatorWithTableDataTest.java {title: "ProfitCalculatorTest.java with TableData encapsulation", commentsType: "inline"}
 
-Note: [Webtau](https://github.com/testingisdocumenting/webtau) is open source project that I started as my answer to common testing problems I encountered. 
+Note: [WebTau](https://github.com/testingisdocumenting/webtau) is open source project that I started as my answer to common testing problems I encountered. 
 
 :include-java: com/example/portfolio/TestTransactions.java {title: "TestTransactions.createTransactions", commentsType: "inline", entries: ["createTransactions", "genTransactionId"]}
 
@@ -117,8 +117,8 @@ Question: Why it is important to minimize the data in your test?
 
 :include-file: webtau-core-java-dep.xml {title: "Maven dependency"}
 
-* [Webtau user guide](https://testingisdocumenting.org/webtau)
-* [Webtau github](https://github.com/testingisdocumenting/webtau)
+* [WebTau user guide](https://testingisdocumenting.org/webtau)
+* [WebTau github](https://github.com/testingisdocumenting/webtau)
 
 # Summary
 

@@ -25,7 +25,8 @@ dbDriverClassName = "org.h2.Driver"
 dbUserName = "sa"
 dbPassword = "password"
 
-windowHeight = 600
+browserWidth = 900
+browserHeight = 600
 
 // personas-auth-config
 httpHeaderProvider = HttpHeaderProvider.&provide // implicit header provider

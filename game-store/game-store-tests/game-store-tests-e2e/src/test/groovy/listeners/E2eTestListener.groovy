@@ -22,6 +22,6 @@ class E2eTestListener implements TestListener {
 
     def startServer() {
         server = CliCommands.gameStoreServer.runInBackground()
-        server.output.waitTo(contain("Tomcat initialized"), 30_000)
+        server.output.waitTo(contain("Started GameStoreApp"), 30_000)
     }
 }

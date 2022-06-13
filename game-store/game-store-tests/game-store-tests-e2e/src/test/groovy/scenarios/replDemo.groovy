@@ -80,7 +80,9 @@ scenario('db interaction') {
         clearOutput()
         send('http.post("/api/game", [id: "g2", title: "Doom",\n' +
                 'type: "fps", priceUsd: "40"])\n')
-        output.waitTo contain('executed HTTP')
+        output.waitTo contain('fps')
+
+        // need smarter contains, like multiple in a row
 
         clearOutput()
         send('db.query("select * from Game")\n')

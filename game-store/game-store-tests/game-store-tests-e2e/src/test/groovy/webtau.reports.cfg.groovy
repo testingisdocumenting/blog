@@ -1,3 +1,3 @@
 docPath = "../../../target/doc-artifacts/"
-windowHeight = 1000
-windowWidth = 1200
+browserWidth = 1200
+browserHeight = 1000
