@@ -92,7 +92,7 @@ I hope it will fit your needs as well. The solution is to use flexible data stru
 
 Note: [WebTau](https://github.com/testingisdocumenting/webtau) is open source project that I started as my answer to common testing problems I encountered. 
 
-:include-java: com/example/portfolio/TestTransactions.java {title: "TestTransactions.createTransactions", commentsType: "inline", entries: ["createTransactions", "genTransactionId"]}
+:include-java: com/example/portfolio/TestTransactions.java {title: "TestTransactions.createTransactions", commentsType: "inline", entry: ["createTransactions", "genTransactionId"]}
 
 Notice how `createTransactions` defaults values when they are not present?
 As a result of this, tests that don't need, say, `id` or `lot` are free to ignore them.

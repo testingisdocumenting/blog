@@ -84,6 +84,7 @@
                         </goals>
                         <configuration>
                             <workingDir>${project.basedir}/src/test/groovy</workingDir>
+                            <config>webtau.reports.cfg.groovy</config>
                             <tests>
                                 <directory>${project.basedir}/src/test/groovy</directory>
                                 <includes>
