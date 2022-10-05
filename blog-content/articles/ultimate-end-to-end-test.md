@@ -696,8 +696,7 @@ However, it can be useful to validate that REST POST method did modify data in t
 
 :include-json: game-store-list-after-db/response.json { 
     title: "Games list JSON response", 
-    pathsFile: "game-store-list-after-db/paths.json",
-    collapsedPaths: ["root._links", "root.page"]
+    pathsFile: "game-store-list-after-db/paths.json"
 } 
 
 # CLI Command
