@@ -1,6 +1,7 @@
 ---
 date: 2020-01-07
-summary: Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation 
+summary: Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation
+category: testing
 ---
 
 # Tests Brittleness and Verbosity slows you down

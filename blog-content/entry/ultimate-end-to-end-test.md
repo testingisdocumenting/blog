@@ -2,17 +2,21 @@
 date: 2020-10-30
 summary: Test across multiple layers like REST/GraphQL API, Web UI, CLI, Database. Use REPL to tighten feedback loop. 
 Capture test artifacts to help with documentation.
+category: testing
 ---
 
 In this article I will show you how to use [WebTau](https://github.com/testingisdocumenting/webtau) tool to write and run end-to-end tests for a Web App that has REST API,
 GraphQL API, Web UI and CLI.
 
 I will show you how to use REPL mode to speed up test development and tighten feedback loop.
-
 And I will show you how to use end-to-end testing to help you with documentation writing.
 
-# WebTau
+Article is long so here is quick access to different parts you can use later. For now keep reading from the start.
 
+:include-page-toc:
+
+# WebTau
+ 
 > WebTau stands for Web Tests Automation. An open source tool, API, and a framework designed to
 > simplify testing on multiple levels.
 
@@ -52,7 +56,7 @@ Issues, PRs, and Stars are welcome!
 
 We are going to test Game Store product. It has Web UI where you can see what games are available.
 
-:include-image: game-store-main-page.png {fit: true}
+:include-image: game-store-main-page.png {fit: true, border: true}
 
 It has CLI tool to help admins to manage the list of games. 
 
@@ -125,7 +129,7 @@ WebTau captures everything that happens in a test:
 WebTau generates rich HTML report with all the captured data at the end tests run. We are going to look at the report in details later, for now here is 
 a screenshot of a generated report based on the tests below. 
 
-:include-image: game-store-report-http-call.png {scaleRatio: 0.5}
+:include-image: game-store-report-http-call.png {scaleRatio: 0.5, border: true}
 
 # Basic Configuration
 
@@ -426,7 +430,7 @@ To use defined personas we leverage Java/Groovy static import:
 We looked at how to test REST and GraphQL based APIs. Now let's move on to testing Web UI.
 Before we jump into testing Game Store UI, we will do a classic test of Google Page.
 
-:include-image: browser-basic.png { fit: true }
+:include-image: browser-basic.png { fit: true, border: true }
 
 Our test will enter "test" value into the search box and, wait for the results to show up and pick a result based on 
 a regular expression:
@@ -456,7 +460,7 @@ Note: Both passed and failed assertions are captured.
 The first Game Store page we are going to test is a landing page. It shows available games and let you filter 
 based on text or price.
 
-:include-image: landing-page.png { fit: true }
+:include-image: landing-page.png { fit: true, border: true }
 
 We covered how to use `http.` layer to create new games. We can use that to prepare a setup for our UI test:
 
@@ -466,7 +470,7 @@ We covered how to use `http.` layer to create new games. We can use that to prep
   commentsType: "inline"
 }
 
-:include-image: landing-page-reduced.png { fit: true }
+:include-image: landing-page-reduced.png { fit: true, border: true }
 
 Let's test the filters:
 
@@ -654,9 +658,9 @@ we can write a test for the last part of Game Store UI - admin page to send mess
 
 Admin page allows to send a message to all visitors via WebSocket. 
 
-:include-image: admin-send-message.png { fit: true, stickySlide: "left" }
+:include-image: admin-send-message.png { fit: true, stickySlide: "left", border: true }
 
-:include-image: landing-received-message.png { fit: true }
+:include-image: landing-received-message.png { fit: true, border: true }
 
 In order to test this we will need two browsers: one to send a message and another to receive a websocket event. 
 
@@ -798,7 +802,7 @@ also stored in a rich HTML report.
 Generated report is a self-contained HTML file that can be emailed, slacked or copied to a network drive. You don't need
 to have a server to look at the report. Open it in a browser, and you will get an interactive mini app. 
 
-:include-image: game-store-report-summary.png {annotationsPath: "game-store-report-summary.json"}
+:include-image: game-store-report-summary.png {annotationsPath: "game-store-report-summary.json", border: true}
 
 Report Summary page consist of 
 1. **Tests Runtime** - shows overall time spend
@@ -809,7 +813,7 @@ Report Summary page consist of
 
 Let's click on (`6`) to get more details about skipped operations:  
 
-:include-image: game-store-skipped-operations.png {annotationsPath: "game-store-skipped-operations.json"}
+:include-image: game-store-skipped-operations.png {annotationsPath: "game-store-skipped-operations.json", border: true}
 
 Report switched from **Tests** view to **HTTP Calls** view (`1`). 
 You can see the list of operations we yet to test on the left (`2`). 
@@ -820,31 +824,31 @@ Let's navigate from **Summary** tab to **Overal HTTP Performance** tab. The scre
 how performant our server is under test load. While it is not a true performance test, it may give you an initial glance into
 things that may need a closer look.
 
-:include-image: game-store-overall-http-performance.png {annotationsPath: "game-store-overall-http-performance.json"}
+:include-image: game-store-overall-http-performance.png {annotationsPath: "game-store-overall-http-performance.json", border: true}
 
 **HTTP Operations Performance** tab provides a performance information based on Open API defined operations. 
 
-:include-image: game-store-operations-http-performance.png {annotationsPath: "game-store-operations-http-performance.json"}
+:include-image: game-store-operations-http-performance.png {annotationsPath: "game-store-operations-http-performance.json", border: true}
 
 Let's get back to **tests** view (`1`) and select a test (`2`).
 First screen we are going to see is a test **Summary** (`3`) with high level information on time taken. 
 
-:include-image: game-store-report-test-summary.png {annotationsPath: "game-store-report-test-summary.json"} 
+:include-image: game-store-report-test-summary.png {annotationsPath: "game-store-report-test-summary.json", border: true} 
 
-If a test performed any HTTP calls, you going to see the **HTTP Calls** tab (`1`). It contains every HTTP call performed
+If a test performed any HTTP calls, you're going to see the **HTTP Calls** tab (`1`). It contains every HTTP call performed
 with captured request, response and assertions (`2` and `3`) information. 
 
-:include-image: game-store-report-http-call.png {annotationsPath: "game-store-report-http-call.json"} 
+:include-image: game-store-report-http-call.png {annotationsPath: "game-store-report-http-call.json", border: true} 
 
-If a test performed any CLI calls, you going to see the **CLI Calls** tab (`1`). It contains every CLI call performed
+If a test performed any CLI calls, you're going to see the **CLI Calls** tab (`1`). It contains every CLI call performed
 with captured command, output and assertions (`2`) information. 
 
-:include-image: game-store-report-cli-call.png {annotationsPath: "game-store-report-cli-call.json"}
+:include-image: game-store-report-cli-call.png {annotationsPath: "game-store-report-cli-call.json", border: true}
 
 Every test also has **Steps** tab (`1`) that contains every step test performed, time it took, and what Persona if any
 performed the step (`2` and `3`)
 
-:include-image: game-store-report-steps.png {annotationsPath: "game-store-report-steps.json"}
+:include-image: game-store-report-steps.png {annotationsPath: "game-store-report-steps.json", border: true}
 
 # REPL
 
@@ -993,7 +997,8 @@ Let's take a look.
 
 :include-image: img/ue2e-ide-doc-artifacts.png {
   scaleRatio: 0.5,     
-  stickySlide: "left 40%"
+  stickySlide: "left 40%", 
+  border: true
 }
 
 :include-file: game-store-list-after-db/request.url.txt {
@@ -1003,7 +1008,7 @@ Let's take a look.
 
 :include-file: game-store-list-after-db/response.json {
   title: "game-store-list-after-db/response.json",
-  stickySlide: "top 70%"
+  stickySlide: "top 70%" 
 }
 
 :include-file: game-store-list-after-db/paths.json {
@@ -1024,7 +1029,8 @@ WebTau provides `browser.doc.capture` to capture screenshots for documentation p
   annotationsPath: "admin-ui-filter.json",
   title: "admin-ui-filter.json",
   caption: "admin-ui-filter.png",
-  stickySlide: "top 40%"
+  stickySlide: "top 40%",
+  border: true
 }
 
 In addition to the screenshot `.png` file WebTau also captures annotations placement and annotations types:

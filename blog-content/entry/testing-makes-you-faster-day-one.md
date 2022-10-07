@@ -1,6 +1,7 @@
 ---
 date: 2019-12-19
 summary: How testing makes you fast day one and not in some unknown future
+category: testing
 ---
 
 :include-meta: {allAtOnce: true}
