@@ -104,13 +104,13 @@
 </article>
 
 <article>
-<header><h1>Test Input Encapsulation With Webtau Table Data</h1></header>
-<p>I was dealing with test problems like above for years and eventually came up with a solution that fits my needs. I hope it will fit your needs as well. The solution is to use flexible data structure like https://testingisdocumenting.org/webtau/reference/table-data Webtau TableData package com.example.portfolio; import org.junit.Test; import org.testingisdocumenting.webtau.data.table.TableData; import static com.example.portfolio.TestTransactions.createTransactions; import static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore public class ProfitCalculatorWithTableDataTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table( &quot;id&quot;, &quot;symbol&quot;, &quot;lot&quot;, &quot;price&quot;, // webtau TableData definition ________________________________, // header and values separator &quot;t1&quot;, &quot;SYM.B&quot; , 0.0 , 8.0, &quot;t2&quot;, &quot;SYM.C&quot; , 0.0 , 19.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } } Note: https://github.com/testingisdocumenting/webtau Webtau is open source project that I started as my answer to common testing problems I encountered. public static List&lt;Transaction&gt; createTransactions(TableData tableData) { return tableData.rowsStream() .map(row -&gt; { Transaction transaction = new Transaction(); transaction.setId(row.get(&quot;id&quot;, genTransactionId())); // default value is auto generated transaction.setSymbol(row.get(&quot;symbol&quot;)); transaction.setLot(row.get(&quot;lot&quot;, 0.0)); // default value is hardcoded transaction.setPrice(row.get(&quot;price&quot;, 0.0)); return transaction; }) .collect(toList()); } private static String genTransactionId() { return &quot;t-id-&quot; + idCount.incrementAndGet(); } Notice how createTransactions defaults values when they are not present? As a result of this, tests that don't need, say, id or lot are free to ignore them. @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table(&quot;symbol&quot;, &quot;lot&quot;, ________________, &quot;SYM.B&quot; , 0.0, &quot;SYM.C&quot; , 0.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } If later a new required property will be added to Transaction , you won't have to change all your existing tests. Instead you will update createTransaction with a new default value. The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.Essentially your test will use as little data to prove logic works as possible.Question: Why it is important to minimize the data in your test? Test is crucial to understanding complex business logic The more data the harder it to comprehend the logic We want business people to look at our data sets (stay tuned to see a good way to expose test data to business)</p>
+<header><h1>Test Input Encapsulation With WebTau Table Data</h1></header>
+<p>I was dealing with test problems like above for years and eventually came up with a solution that fits my needs. I hope it will fit your needs as well. The solution is to use flexible data structure like https://testingisdocumenting.org/webtau/reference/table-data WebTau TableData package com.example.portfolio; import org.junit.Test; import org.testingisdocumenting.webtau.data.table.TableData; import static com.example.portfolio.TestTransactions.createTransactions; import static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore public class ProfitCalculatorWithTableDataTest { private final ProfitCalculator profitCalculator = new ProfitCalculator(); @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table( &quot;id&quot;, &quot;symbol&quot;, &quot;lot&quot;, &quot;price&quot;, // webtau TableData definition ________________________________, // header and values separator &quot;t1&quot;, &quot;SYM.B&quot; , 0.0 , 8.0, &quot;t2&quot;, &quot;SYM.C&quot; , 0.0 , 19.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } } Note: https://github.com/testingisdocumenting/webtau WebTau is open source project that I started as my answer to common testing problems I encountered. public static List&lt;Transaction&gt; createTransactions(TableData tableData) { return tableData.rowsStream() .map(row -&gt; { Transaction transaction = new Transaction(); transaction.setId(row.get(&quot;id&quot;, genTransactionId())); // default value is auto generated transaction.setSymbol(row.get(&quot;symbol&quot;)); transaction.setLot(row.get(&quot;lot&quot;, 0.0)); // default value is hardcoded transaction.setPrice(row.get(&quot;price&quot;, 0.0)); return transaction; }) .collect(toList()); } private static String genTransactionId() { return &quot;t-id-&quot; + idCount.incrementAndGet(); } Notice how createTransactions defaults values when they are not present? As a result of this, tests that don't need, say, id or lot are free to ignore them. @Test public void profitShouldBeZeroIfNoLotsSet() { TableData transactionsData = table(&quot;symbol&quot;, &quot;lot&quot;, ________________, &quot;SYM.B&quot; , 0.0, &quot;SYM.C&quot; , 0.0); double margin = profitCalculator.calculate(createTransactions(transactionsData)); actual(margin).should(equal(0)); } If later a new required property will be added to Transaction , you won't have to change all your existing tests. Instead you will update createTransaction with a new default value. The only time you will have to change the tests to use the new property is if the new property is affecting the logic under test.Essentially your test will use as little data to prove logic works as possible.Question: Why it is important to minimize the data in your test? Test is crucial to understanding complex business logic The more data the harder it to comprehend the logic We want business people to look at our data sets (stay tuned to see a good way to expose test data to business)</p>
 </article>
 
 <article>
 <header><h1>Try it out</h1></header>
-<p>&lt;dependency&gt; &lt;groupId&gt;org.testingisdocumenting.webtau&lt;/groupId&gt; &lt;artifactId&gt;webtau-core&lt;/artifactId&gt; &lt;version&gt;1.25-SNAPSHOT&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; https://testingisdocumenting.org/webtau Webtau user guide https://github.com/testingisdocumenting/webtau Webtau github</p>
+<p>&lt;dependency&gt; &lt;groupId&gt;org.testingisdocumenting.webtau&lt;/groupId&gt; &lt;artifactId&gt;webtau-core&lt;/artifactId&gt; &lt;version&gt;1.49&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; https://testingisdocumenting.org/webtau WebTau user guide https://github.com/testingisdocumenting/webtau WebTau github</p>
 </article>
 
 <article>
@@ -119,6 +119,7 @@
 </article>
 </section>
 </div>
+<script type="text/javascript" src="/blog/footer.js"></script>
 <script type="text/javascript" src="/blog/toc.js"></script>
 <script type="text/javascript" src="/blog/assets.js"></script>
 <script type="text/javascript" src="/blog/static/main.js"></script>
@@ -127,6 +128,7 @@
 <script type="text/javascript" src="/blog/search-index.js"></script>
 <script>
 document.getElementById('znai').innerHTML = '';
+/*<!--*/
 ReactDOM.render(React.createElement(Documentation, {
   "docMeta" : {
     "viewOn" : {
@@ -141,8 +143,8 @@ ReactDOM.render(React.createElement(Documentation, {
   "page" : {
     "type" : "Page",
     "content" : [ {
-      "title" : "Tests Brittleness and Verbosity slows you down",
       "id" : "tests-brittleness-and-verbosity-slows-you-down",
+      "title" : "Tests Brittleness and Verbosity slows you down",
       "type" : "Section",
       "content" : [ {
         "type" : "Paragraph",
@@ -181,6 +183,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "lang" : "java",
         "snippet" : "package com.example.portfolio;\n\nimport org.junit.Assert;\nimport org.junit.Test;\n\npublic class SimpleCalculatorTest {\n    @Test\n    public void zeroMultiply() {\n        SimpleCalculator simpleCalculator = new SimpleCalculator();\n        Assert.assertEquals(0, simpleCalculator.multiply(100.0, 0.0), 0.0);\n        Assert.assertEquals(0, simpleCalculator.multiply(-100.0, 0.0), 0.0);\n    }\n}",
         "title" : "SimpleCalculatorTest.java",
+        "anchorId" : "tests-brittleness-and-verbosity-slows-you-down-simplecalculatortest-java",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -238,6 +241,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "Transaction.java",
         "readMore" : true,
         "readMoreVisibleLines" : 20,
+        "anchorId" : "tests-brittleness-and-verbosity-slows-you-down-transaction-java",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -255,6 +259,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "lang" : "java",
         "snippet" : "package com.example.portfolio;\n\nimport java.util.List;\n\npublic class ProfitCalculator {\n    public ProfitCalculator() {\n    }\n\n    public double calculate(List<Transaction> transactions) {\n        return 0;\n    }\n}",
         "title" : "ProfitCalculator.java",
+        "anchorId" : "tests-brittleness-and-verbosity-slows-you-down-profitcalculator-java",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -266,6 +271,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "lang" : "java",
         "snippet" : "package com.example.portfolio;\n\nimport org.junit.Test;\n\nimport java.util.Arrays;\n\nimport static org.junit.Assert.assertEquals;\n\npublic class ProfitCalculatorWithoutEncapsulationTest {\n    private final ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        Transaction t1 = new Transaction();\n        t1.setId(\"T1\");\n        t1.setSymbol(\"SYM.B\");\n        t1.setLot(0);\n        t1.setPrice(8);\n\n        Transaction t2 = new Transaction();\n        t1.setId(\"T2\");\n        t1.setSymbol(\"SYM.C\");\n        t1.setLot(0);\n        t1.setPrice(19);\n\n        assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0);\n    }\n}",
         "title" : "ProfitCalculatorTest.java",
+        "anchorId" : "tests-brittleness-and-verbosity-slows-you-down-profitcalculatortest-java",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -403,6 +409,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "entry" : "createTransaction",
         "bodyOnly" : true,
         "removeReturn" : true,
+        "anchorId" : "tests-brittleness-and-verbosity-slows-you-down-fluent-api",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -552,8 +559,8 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     }, {
-      "title" : "Test Input Initial Encapsulation",
       "id" : "test-input-initial-encapsulation",
+      "title" : "Test Input Initial Encapsulation",
       "type" : "Section",
       "content" : [ {
         "type" : "Paragraph",
@@ -574,12 +581,14 @@ ReactDOM.render(React.createElement(Documentation, {
         "lang" : "java",
         "snippet" : "package com.example.portfolio;\n\nimport org.junit.Test;\n\nimport java.util.Arrays;\n\nimport static com.example.portfolio.TestTransactions.createTransaction;\nimport static org.junit.Assert.assertEquals;\n\npublic class ProfitCalculatorWithBasicEncapsulationTest {\n    private final ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        Transaction t1 = createTransaction(\"t1\", \"SYM.B\", 0, 8);\n        Transaction t2 = createTransaction(\"t2\", \"SYM.C\", 0, 19);\n\n        assertEquals(0, profitCalculator.calculate(Arrays.asList(t1, t2)), 0);\n    }\n}",
         "title" : "ProfitCalculatorTest.java with initial encapsulation",
+        "anchorId" : "test-input-initial-encapsulation-profitcalculatortest-java-with-initial-encapsulation",
         "type" : "Snippet"
       }, {
         "lang" : "java",
         "snippet" : "public static Transaction createTransaction(String id, String symbol, double lot, double price) {\n    Transaction transaction = new Transaction();\n    transaction.setId(id);\n    transaction.setSymbol(symbol);\n    transaction.setLot(lot);\n    transaction.setPrice(price);\n\n    return transaction;\n}",
         "title" : "TestTransactions.createTransaction",
         "entry" : "createTransaction",
+        "anchorId" : "test-input-initial-encapsulation-testtransactions-createtransaction",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -646,8 +655,8 @@ ReactDOM.render(React.createElement(Documentation, {
         "type" : "Spoiler"
       } ]
     }, {
-      "title" : "Test Input Encapsulation With Webtau Table Data",
       "id" : "test-input-encapsulation-with-webtau-table-data",
+      "title" : "Test Input Encapsulation With WebTau Table Data",
       "type" : "Section",
       "content" : [ {
         "type" : "Paragraph",
@@ -664,7 +673,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "isFile" : false,
           "type" : "Link",
           "content" : [ {
-            "text" : "Webtau TableData",
+            "text" : "WebTau TableData",
             "type" : "SimpleText"
           } ]
         } ]
@@ -673,6 +682,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "snippet" : "package com.example.portfolio;\n\nimport org.junit.Test;\nimport org.testingisdocumenting.webtau.data.table.TableData;\n\nimport static com.example.portfolio.TestTransactions.createTransactions;\nimport static org.testingisdocumenting.webtau.WebTauCore.*; // table and underscores are defined in WebTauCore\n\npublic class ProfitCalculatorWithTableDataTest {\n    private final ProfitCalculator profitCalculator = new ProfitCalculator();\n\n    @Test\n    public void profitShouldBeZeroIfNoLotsSet() {\n        TableData transactionsData = table( \"id\", \"symbol\", \"lot\", \"price\",  // webtau TableData definition\n                                           ________________________________, // header and values separator\n                                            \"t1\", \"SYM.B\" ,  0.0 ,    8.0,\n                                            \"t2\", \"SYM.C\" ,  0.0 ,    19.0);\n\n        double margin = profitCalculator.calculate(createTransactions(transactionsData));\n        actual(margin).should(equal(0));\n    }\n}",
         "title" : "ProfitCalculatorTest.java with TableData encapsulation",
         "commentsType" : "inline",
+        "anchorId" : "test-input-encapsulation-with-webtau-table-data-profitcalculatortest-java-with-tabledata-encapsulation",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -684,7 +694,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "isFile" : false,
           "type" : "Link",
           "content" : [ {
-            "text" : "Webtau",
+            "text" : "WebTau",
             "type" : "SimpleText"
           } ]
         }, {
@@ -693,10 +703,11 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       }, {
         "lang" : "java",
-        "snippet" : "public static List<Transaction> createTransactions(TableData tableData) {\n    return tableData.rowsStream()\n            .map(row -> {\n                Transaction transaction = new Transaction();\n                transaction.setId(row.get(\"id\", genTransactionId())); // default value is auto generated\n                transaction.setSymbol(row.get(\"symbol\"));\n                transaction.setLot(row.get(\"lot\", 0.0)); // default value is hardcoded\n                transaction.setPrice(row.get(\"price\", 0.0));\n\n                return transaction;\n            })\n            .collect(toList());\n}\n\nprivate static String genTransactionId() {\n    return \"t-id-\" + idCount.incrementAndGet();\n}",
+        "snippet" : "public static List<Transaction> createTransactions(TableData tableData) {\n    return tableData.rowsStream()\n            .map(row -> {\n                Transaction transaction = new Transaction();\n                transaction.setId(row.get(\"id\", genTransactionId())); // default value is auto generated\n                transaction.setSymbol(row.get(\"symbol\"));\n                transaction.setLot(row.get(\"lot\", 0.0)); // default value is hardcoded\n                transaction.setPrice(row.get(\"price\", 0.0));\n\n                return transaction;\n            })\n            .collect(toList());\n}\nprivate static String genTransactionId() {\n    return \"t-id-\" + idCount.incrementAndGet();\n}",
         "title" : "TestTransactions.createTransactions",
         "commentsType" : "inline",
-        "entries" : [ "createTransactions", "genTransactionId" ],
+        "entry" : [ "createTransactions", "genTransactionId" ],
+        "anchorId" : "test-input-encapsulation-with-webtau-table-data-testtransactions-createtransactions",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -733,6 +744,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "ignored id,lot Transaction properties",
         "commentsType" : "inline",
         "entry" : "profitShouldBeZeroIfNoLotsSet",
+        "anchorId" : "test-input-encapsulation-with-webtau-table-data-ignored-idlot-transaction-properties",
         "type" : "Snippet"
       }, {
         "type" : "Paragraph",
@@ -818,13 +830,14 @@ ReactDOM.render(React.createElement(Documentation, {
         "type" : "Spoiler"
       } ]
     }, {
-      "title" : "Try it out",
       "id" : "try-it-out",
+      "title" : "Try it out",
       "type" : "Section",
       "content" : [ {
         "lang" : "xml",
-        "snippet" : "<dependency>\n    <groupId>org.testingisdocumenting.webtau</groupId>\n    <artifactId>webtau-core</artifactId>\n    <version>1.25-SNAPSHOT</version>\n    <scope>test</scope>\n</dependency>",
+        "snippet" : "<dependency>\n    <groupId>org.testingisdocumenting.webtau</groupId>\n    <artifactId>webtau-core</artifactId>\n    <version>1.49</version>\n    <scope>test</scope>\n</dependency>",
         "title" : "Maven dependency",
+        "anchorId" : "try-it-out-maven-dependency",
         "type" : "Snippet"
       }, {
         "bulletMarker" : "*",
@@ -839,7 +852,7 @@ ReactDOM.render(React.createElement(Documentation, {
               "isFile" : false,
               "type" : "Link",
               "content" : [ {
-                "text" : "Webtau user guide",
+                "text" : "WebTau user guide",
                 "type" : "SimpleText"
               } ]
             } ]
@@ -853,7 +866,7 @@ ReactDOM.render(React.createElement(Documentation, {
               "isFile" : false,
               "type" : "Link",
               "content" : [ {
-                "text" : "Webtau github",
+                "text" : "WebTau github",
                 "type" : "SimpleText"
               } ]
             } ]
@@ -861,8 +874,8 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     }, {
-      "title" : "Summary",
       "id" : "summary",
+      "title" : "Summary",
       "type" : "Section",
       "content" : [ {
         "bulletMarker" : "*",
@@ -898,17 +911,18 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1590789750897,
+    "lastModifiedTime" : 1665185652699,
     "tocItem" : {
-      "sectionTitle" : "Entry",
+      "chapterTitle" : "Entry",
       "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",
       "pageMeta" : {
         "date" : [ "2020-01-07" ],
-        "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation " ]
+        "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation" ],
+        "category" : [ "testing" ]
       },
       "dirName" : "entry",
       "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
-      "viewOnRelativePath" : "articles/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+      "viewOnRelativePath" : "entry/protect-your-future-self-by-encapsulating-test-input-preparation.md",
       "pageSectionIdTitles" : [ {
         "title" : "Tests Brittleness and Verbosity slows you down",
         "id" : "tests-brittleness-and-verbosity-slows-you-down"
@@ -916,7 +930,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "Test Input Initial Encapsulation",
         "id" : "test-input-initial-encapsulation"
       }, {
-        "title" : "Test Input Encapsulation With Webtau Table Data",
+        "title" : "Test Input Encapsulation With WebTau Table Data",
         "id" : "test-input-encapsulation-with-webtau-table-data"
       }, {
         "title" : "Try it out",
@@ -926,46 +940,10 @@ ReactDOM.render(React.createElement(Documentation, {
         "id" : "summary"
       } ]
     }
-  },
-  "footer" : {
-    "type" : "Footer",
-    "content" : [ {
-      "columns" : [ {
-        "content" : [ {
-          "type" : "Paragraph",
-          "content" : [ {
-            "text" : "I am very passionate about testing and documentation. I believe they are two major aspects of software engineering that are being neglected by many engineers.",
-            "type" : "SimpleText"
-          } ]
-        }, {
-          "type" : "Paragraph",
-          "content" : [ {
-            "text" : "Testing and documentation are intertwined and I hope to show you how much exactly.",
-            "type" : "SimpleText"
-          } ]
-        } ]
-      }, {
-        "content" : [ {
-          "type" : "Paragraph",
-          "content" : [ {
-            "text" : "I am new at writing, and especially English writing. Please be kind and suggest grammar improvements with ",
-            "type" : "SimpleText"
-          }, {
-            "url" : "https://github.com/testingisdocumenting/blog",
-            "isFile" : false,
-            "type" : "Link",
-            "content" : [ {
-              "text" : "Pull Requests",
-              "type" : "SimpleText"
-            } ]
-          } ]
-        } ]
-      } ],
-      "config" : { },
-      "type" : "Columns"
-    } ]
   }
 }), document.getElementById("znai"));
+/*-->*/
+
 </script>
 
 </body>

@@ -1,9 +1,9 @@
 toc = [ {
-  "sectionTitle" : "",
+  "chapterTitle" : "",
   "dirName" : "",
   "items" : [ {
-    "sectionTitle" : "",
-    "pageTitle" : "Testing Is Documenting",
+    "chapterTitle" : "",
+    "pageTitle" : "",
     "pageMeta" : { },
     "dirName" : "",
     "fileName" : "index",
@@ -11,18 +11,19 @@ toc = [ {
     "pageSectionIdTitles" : [ ]
   } ]
 }, {
-  "sectionTitle" : "Entry",
+  "chapterTitle" : "Entry",
   "dirName" : "entry",
   "items" : [ {
-    "sectionTitle" : "Entry",
+    "chapterTitle" : "Entry",
     "pageTitle" : "Testing Makes You Faster Day One",
     "pageMeta" : {
       "date" : [ "2019-12-19" ],
-      "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
+      "summary" : [ "How testing makes you fast day one and not in some unknown future" ],
+      "category" : [ "testing" ]
     },
     "dirName" : "entry",
     "fileName" : "testing-makes-you-faster-day-one",
-    "viewOnRelativePath" : "articles/testing-makes-you-faster-day-one.md",
+    "viewOnRelativePath" : "entry/testing-makes-you-faster-day-one.md",
     "pageSectionIdTitles" : [ {
       "title" : "Tests Are Here To Speed You Up",
       "id" : "tests-are-here-to-speed-you-up"
@@ -43,15 +44,16 @@ toc = [ {
       "id" : "summary"
     } ]
   }, {
-    "sectionTitle" : "Entry",
+    "chapterTitle" : "Entry",
     "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",
     "pageMeta" : {
       "date" : [ "2020-01-07" ],
-      "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation " ]
+      "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation" ],
+      "category" : [ "testing" ]
     },
     "dirName" : "entry",
     "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
-    "viewOnRelativePath" : "articles/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+    "viewOnRelativePath" : "entry/protect-your-future-self-by-encapsulating-test-input-preparation.md",
     "pageSectionIdTitles" : [ {
       "title" : "Tests Brittleness and Verbosity slows you down",
       "id" : "tests-brittleness-and-verbosity-slows-you-down"
@@ -59,7 +61,7 @@ toc = [ {
       "title" : "Test Input Initial Encapsulation",
       "id" : "test-input-initial-encapsulation"
     }, {
-      "title" : "Test Input Encapsulation With Webtau Table Data",
+      "title" : "Test Input Encapsulation With WebTau Table Data",
       "id" : "test-input-encapsulation-with-webtau-table-data"
     }, {
       "title" : "Try it out",
@@ -69,15 +71,16 @@ toc = [ {
       "id" : "summary"
     } ]
   }, {
-    "sectionTitle" : "Entry",
+    "chapterTitle" : "Entry",
     "pageTitle" : "Ultimate End To End Test",
     "pageMeta" : {
       "date" : [ "2020-10-30" ],
-      "summary" : [ "Test across multiple layers like REST/GraphQL API, Web UI, CLI, Database. Use REPL to tighten feedback loop. " ]
+      "summary" : [ "Test across multiple layers like REST/GraphQL API, Web UI, CLI, Database. Use REPL to tighten feedback loop. " ],
+      "category" : [ "testing" ]
     },
     "dirName" : "entry",
     "fileName" : "ultimate-end-to-end-test",
-    "viewOnRelativePath" : "articles/ultimate-end-to-end-test.md",
+    "viewOnRelativePath" : "entry/ultimate-end-to-end-test.md",
     "pageSectionIdTitles" : [ {
       "title" : "WebTau",
       "id" : "webtau"
