@@ -26,8 +26,10 @@ html, body {
 
     padding-left: 0;
     padding-right: 0;
+}
 
-    overflow: hidden;
+.znai-diff-highlight {
+    height: 100%;
 }
 
 .blog-header {
@@ -204,31 +206,5 @@ html, body {
     --znaiblog-article-title-color: #fafafa;
     --znaiblog-entries-category-color: #eee;
     --znaiblog-header-color: #afafaf;
-}
-
-@media only screen and (max-width: 940px) {
-    :root {
-        --znai-single-column-full-width: auto;
-    }
-
-    svg {
-        max-width: 100%;
-    }
-
-    .snippet-container {
-        margin-left: calc(-1 *var(--znai-single-side-horizontal-min-spacing));
-        margin-right: calc(-1 *var(--znai-single-side-horizontal-min-spacing));
-    }
-
-    .snippet-container .title-container .title,
-    .snippet-container .snippet {
-        border: none;
-    }
-
-    .snippet-container pre {
-        white-space: nowrap;
-        word-wrap: normal;
-        overflow-x: auto;
-    }
 }
 
