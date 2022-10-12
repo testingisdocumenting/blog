@@ -21,11 +21,9 @@ html, body {
     -webkit-box-direction: normal;
             flex-direction: column;
 
-    min-height: 100vh;
-    max-height: none;
-
     padding-left: 0;
     padding-right: 0;
+    overflow: auto
 }
 
 .znai-diff-highlight {
@@ -37,7 +35,7 @@ html, body {
     display: flex;
     -webkit-box-align: center;
             align-items: center;
-    height: 32px;
+    min-height: 32px;
 
     background: var(--znaiblog-header-background);
     padding-left: calc(1 * var(--znai-single-side-horizontal-min-spacing));
@@ -55,6 +53,8 @@ html, body {
             align-items: center;
     -webkit-box-pack: justify;
             justify-content: space-between;
+
+    height: 100%;
 
     width: var(--znai-single-column-full-width);
     font-size: 16px;
@@ -91,11 +91,6 @@ html, body {
 .blog-discuss-content {
     display: -webkit-box;
     display: flex;
-
-    max-width: var(--znai-single-column-full-width);
-
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .blog-discuss-twitter {
@@ -106,13 +101,10 @@ html, body {
     margin-left: 0;
     margin-right: 0;
 }
-.list-all-categories {
-    width: var(--znai-single-column-full-width);
-    margin-left: auto;
-    margin-right: auto;
+.znaiblog-list-all-categories {
 }
 
-.list-of-blog-entries-category {
+.znaiblog-list-of-blog-entries-category {
     font-size: 32px;
     padding-bottom: 4px;
     margin-bottom: 24px;
@@ -123,35 +115,41 @@ html, body {
     text-transform: capitalize;
 }
 
-.list-of-blog-entries {
+.znaiblog-list-of-blog-entries {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 24px;
 }
 
-.blog-list-entry-link-wrapper {
+@media only screen and (max-width: 940px) {
+    .znaiblog-list-of-blog-entries {
+        grid-template-columns: 1fr;
+    }
+}
+
+.znaiblog-list-entry-link-wrapper {
     display: block;
     width: 100%;
 }
 
-.blog-list-entry a {
+.znaiblog-list-entry a {
     color: var(--znai-regular-text-color);
     text-decoration: none;
 }
 
-.blog-list-entry-title {
+.znaiblog-list-entry-title {
     font-size: var(--znaiblog-list-title-size);
     color: var(--znaiblog-article-title-color);
     font-weight: bold;
 }
 
-.blog-list-entry-date {
+.znaiblog-list-entry-date {
     color: var(--znai-regular-text-light-color);
     font-size: 12px;
     margin-bottom: 12px;
 }
 
-.blog-list-entry-summary {
+.znaiblog-list-entry-summary {
     color: var(--znai-regular-text-color);
     font-size: 16px;
 }
@@ -188,14 +186,11 @@ html, body {
 :root {
     --znaiblog-article-title-color: #333;
 
-    --znai-single-column-full-width: 900px;
-    --znai-single-side-horizontal-min-spacing: 20px;
     --znaiblog-title-size: 36px;
     --znaiblog-list-title-size: 22px;
 
     --znaiblog-header-background: none;
     --znaiblog-header-color: #232323;
-    --znai-snippets-bullet-background-color: #1267a7;
 
     --znaiblog-mobile-breakpoint: 600px;
 
