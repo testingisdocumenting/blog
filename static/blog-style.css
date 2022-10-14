@@ -6,6 +6,89 @@
         -ms-user-select: none;
             user-select: none;
 }
+.znaiblog-article-section-selection {
+    position: fixed;
+    border-bottom: 1px solid;
+
+    display: -webkit-box;
+
+    display: flex;
+    -webkit-box-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+            justify-content: center;
+
+    background: var(--znaiblog-header-background);
+
+    padding: 4px;
+    box-sizing: border-box;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 32px;
+
+    z-index: 1000;
+}
+
+.znaiblog-article-section-selection.collapsed {
+    cursor: pointer;
+}
+
+.znaiblog-article-section-selection.expanded {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-direction: column;
+
+    bottom: 0;
+    height: 100%;
+    -webkit-box-pack: start;
+            justify-content: flex-start;
+}
+
+.znaiblog-article-section-selection-title-area {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+            align-items: center;
+    padding: 8px;
+}
+
+.znaiblog-article-section-selection-title {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.znaiblog-article-section-selection-close {
+    font-size: 12px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.znaiblog-article-section-selection-sections-list {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+            flex-direction: column;
+    gap: 8px;
+    overflow: auto;
+}
+
+.znaiblog-article-section-selection-section {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.znaiblog-article-section-selection-section.selected {
+    font-weight: bold;
+}
+
+.znaiblog-body-no-scroll {
+  overflow: hidden;
+}
 html, body {
     height: 100%;
 }
@@ -23,7 +106,7 @@ html, body {
 
     padding-left: 0;
     padding-right: 0;
-    overflow: auto
+    overflow: unset;
 }
 
 .znai-diff-highlight {
@@ -189,7 +272,7 @@ html, body {
     --znaiblog-title-size: 36px;
     --znaiblog-list-title-size: 22px;
 
-    --znaiblog-header-background: none;
+    --znaiblog-header-background: var(--znai-background-color);
     --znaiblog-header-color: #232323;
 
     --znaiblog-mobile-breakpoint: 600px;
@@ -201,5 +284,6 @@ html, body {
     --znaiblog-article-title-color: #fafafa;
     --znaiblog-entries-category-color: #eee;
     --znaiblog-header-color: #afafaf;
+    --znaiblog-header-background: var(--znai-background-color);
 }
 
