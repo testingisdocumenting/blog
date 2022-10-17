@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Testing Is Documenting: Index</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-153393045-1', 'auto');
+    ga('send', 'pageview');
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/main.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/blog/style.css">
+</head>
+<link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
+<body class="theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
+</section>
+</div>
+<script type="text/javascript" src="/blog/footer.js"></script>
+<script type="text/javascript" src="/blog/toc.js"></script>
+<script type="text/javascript" src="/blog/assets.js"></script>
+<script type="text/javascript" src="/blog/static/main.js"></script>
+<script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
+<script type="text/javascript" src="/blog/tracking.js"></script>
+<script type="text/javascript" src="/blog/search-index.js"></script>
+<script>
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "title" : "Edit on GitHub",
+      "link" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
+    },
+    "id" : "blog",
+    "title" : "Testing Is Documenting",
+    "type" : "Blog",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "id" : "testing",
+      "title" : "Testing",
+      "type" : "Section",
+      "content" : [ {
+        "tocItems" : [ {
+          "chapterTitle" : "Testing",
+          "pageTitle" : "Testing Makes You Faster Day One",
+          "pageMeta" : {
+            "date" : [ "2019-12-19" ],
+            "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
+          },
+          "dirName" : "testing",
+          "fileName" : "testing-makes-you-faster-day-one",
+          "viewOnRelativePath" : "articles/testing/testing-makes-you-faster-day-one.md",
+          "pageSectionIdTitles" : [ {
+            "title" : "Tests Are Here To Speed You Up",
+            "id" : "tests-are-here-to-speed-you-up"
+          }, {
+            "title" : "Building A Medieval Castle",
+            "id" : "building-a-medieval-castle"
+          }, {
+            "title" : "Teleports System",
+            "id" : "teleports-system"
+          }, {
+            "title" : "Implementing Teleports",
+            "id" : "implementing-teleports"
+          }, {
+            "title" : "Real Life Boring Example",
+            "id" : "real-life-boring-example"
+          }, {
+            "title" : "Summary",
+            "id" : "summary"
+          } ]
+        }, {
+          "chapterTitle" : "Testing",
+          "pageTitle" : "Protect Your Future Self By Encapsulating Test Input Preparation",
+          "pageMeta" : {
+            "date" : [ "2020-01-07" ],
+            "summary" : [ "Examples of how to reduce verbosity and brittleness of your tests by encapsulating input preparation" ]
+          },
+          "dirName" : "testing",
+          "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
+          "viewOnRelativePath" : "articles/testing/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+          "pageSectionIdTitles" : [ {
+            "title" : "Tests Brittleness and Verbosity slows you down",
+            "id" : "tests-brittleness-and-verbosity-slows-you-down"
+          }, {
+            "title" : "Test Input Initial Encapsulation",
+            "id" : "test-input-initial-encapsulation"
+          }, {
+            "title" : "Test Input Encapsulation With WebTau Table Data",
+            "id" : "test-input-encapsulation-with-webtau-table-data"
+          }, {
+            "title" : "Try it out",
+            "id" : "try-it-out"
+          }, {
+            "title" : "Summary",
+            "id" : "summary"
+          } ]
+        }, {
+          "chapterTitle" : "Testing",
+          "pageTitle" : "Ultimate End To End Test",
+          "pageMeta" : {
+            "date" : [ "2020-10-30" ],
+            "summary" : [ "Test across multiple layers like REST/GraphQL API, Web UI, CLI, Database. Use REPL to tighten feedback loop. " ]
+          },
+          "dirName" : "testing",
+          "fileName" : "ultimate-end-to-end-test",
+          "viewOnRelativePath" : "articles/testing/ultimate-end-to-end-test.md",
+          "pageSectionIdTitles" : [ {
+            "title" : "WebTau",
+            "id" : "webtau"
+          }, {
+            "title" : "Disclaimer",
+            "id" : "disclaimer"
+          }, {
+            "title" : "Testing Game Store",
+            "id" : "testing-game-store"
+          }, {
+            "title" : "WebTau Introduction",
+            "id" : "webtau-introduction"
+          }, {
+            "title" : "Basic Configuration",
+            "id" : "basic-configuration"
+          }, {
+            "title" : "Game Store REST API",
+            "id" : "game-store-rest-api"
+          }, {
+            "title" : "HTTP Explicit Auth",
+            "id" : "http-explicit-auth"
+          }, {
+            "title" : "Personas",
+            "id" : "personas"
+          }, {
+            "title" : "HTTP Implicit Auth",
+            "id" : "http-implicit-auth"
+          }, {
+            "title" : "GraphQL",
+            "id" : "graphql"
+          }, {
+            "title" : "GraphQL Explicit Auth",
+            "id" : "graphql-explicit-auth"
+          }, {
+            "title" : "GraphQL Persona Auth",
+            "id" : "graphql-persona-auth"
+          }, {
+            "title" : "Personas Re-use",
+            "id" : "personas-re-use"
+          }, {
+            "title" : "Browser",
+            "id" : "browser"
+          }, {
+            "title" : "Game Store UI",
+            "id" : "game-store-ui"
+          }, {
+            "title" : "UI Page Object",
+            "id" : "ui-page-object"
+          }, {
+            "title" : "WaitTo",
+            "id" : "waitto"
+          }, {
+            "title" : "Browser Explicit Auth",
+            "id" : "browser-explicit-auth"
+          }, {
+            "title" : "Browser Implicit Auth",
+            "id" : "browser-implicit-auth"
+          }, {
+            "title" : "Browser WebSocket",
+            "id" : "browser-websocket"
+          }, {
+            "title" : "Database",
+            "id" : "database"
+          }, {
+            "title" : "CLI Command",
+            "id" : "cli-command"
+          }, {
+            "title" : "TableData",
+            "id" : "tabledata"
+          }, {
+            "title" : "Can I Use TableData With JUnit?",
+            "id" : "can-i-use-tabledata-with-junit"
+          }, {
+            "title" : "Can I Use WebTau With JUnit?",
+            "id" : "can-i-use-webtau-with-junit"
+          }, {
+            "title" : "Reporting",
+            "id" : "reporting"
+          }, {
+            "title" : "REPL",
+            "id" : "repl"
+          }, {
+            "title" : "REPL Browser",
+            "id" : "repl-browser"
+          }, {
+            "title" : "REPL Database",
+            "id" : "repl-database"
+          }, {
+            "title" : "REPL Test Selection",
+            "id" : "repl-test-selection"
+          }, {
+            "title" : "Testing is Documenting",
+            "id" : "testing-is-documenting"
+          }, {
+            "title" : "Capturing Test Artifacts",
+            "id" : "capturing-test-artifacts"
+          }, {
+            "title" : "Example of Generated Documentation",
+            "id" : "example-of-generated-documentation"
+          }, {
+            "title" : "Summary",
+            "id" : "summary"
+          }, {
+            "title" : "To Get Started",
+            "id" : "to-get-started"
+          } ]
+        } ],
+        "type" : "ListOfBlogEntries"
+      } ]
+    } ],
+    "lastModifiedTime" : 1665964648285,
+    "tocItem" : {
+      "chapterTitle" : "Articles",
+      "pageTitle" : "Index",
+      "pageMeta" : { },
+      "dirName" : "articles",
+      "fileName" : "index",
+      "viewOnRelativePath" : "articles/index.md",
+      "pageSectionIdTitles" : [ {
+        "title" : "Testing",
+        "id" : "testing"
+      } ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>

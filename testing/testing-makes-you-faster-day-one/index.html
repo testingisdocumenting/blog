@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Testing Is Documenting: Testing Makes You Faster Day One</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-153393045-1', 'auto');
+    ga('send', 'pageview');
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/main.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/blog/style.css">
+</head>
+<link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
+<body class="theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<header><h1>Tests Are Here To Speed You Up</h1></header>
+<p>&quot;I am not writing tests right now as they are going to slow me down&quot; is one of the most common excuses I heard in the projects I worked on.A lack of test writing experience can make you feel this way, but I think there is another, bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower: the power of exercising any piece of your software in O(1) keystrokes. By O(1) I mean that regardless of how big your application becomes you will always be one button away of seeing the impact of your changes.The superpower of having the tightest feedback loop.Let me try to explain.</p>
+</article>
+
+<article>
+<header><h1>Building A Medieval Castle</h1></header>
+<p>We are going to build a Castle, add features to it, and do a manual inspection of our creation as we go.Let's start small. All we need is a single room and a throne to sit on.Perfect! So let's test it. Quickly get in, walk through the room, sit on the throne. All is good.Let's add a few more rooms and a chest.Our goal is to test if we can open that chest. This time we have to do a little bit more legwork. This time, a simple check took us a few minutes longer.Let's add a bit of security to our castle by adding keys and levers.We have to test each door and to do that we need to go through our entire castle. This makes a good test and a very important one.For our next iteration we decided to add a new smart lock to our chest, so we can open it with our retina.We gotta test this feature. So we open a jar, to pick a key, to open first one door and then to open the other door, to pull the lever, to run the stairs through the opened door. After catching our breath we try to open a chest.A day later, we decide to add an auto lock after three failed attempt. And so we bring a friend who is not registered with our castle to open a jar, to pick a key, to open a door, ... to ..., ..., to try to fail to open a chest.A few iterations later the Security Department expressed the concern that our security could use an upgrade. A trap, puzzle and a dragon later we are ready to deploy.As before, we gotta test every new added Security feature. This is a good test and a very important one. We get caught in a trap, we jump over the trap, we play rock/paper/scissors to lose and to win, open the door, get eaten by the dragon, defeat the dragon and finally reach the chest. All tests passed.Another development iteration passes and we decided to make scissors game to be lefty friendly.And so we bring a friend who is a lefty, can jump over traps, to open a jar, to pick a key, to open a door, to jump over trap, to open a door, to play rock/paper/scissorsA day later we decided to add a fingerprint reader to our chestAnd so we bring another friend who is a lefty, who is not registered with our castle, who can jump over traps, who won't be scared of a dragon, to open a jar, to pick a key, to open a door, to jump over trap, to open a door, to play rock/paper/scissors, to open a lever, to challenge a dragon, to put a finger to a chest.It should be clear by now that the more features we add to the castle, the more time it takes to do a check routine of a single feature. What is interesting is that the big portion of the time is spend getting to the feature we want to test and not the test itself.Having said all that let's add another floor to the castle.There is a new room where you can grab any gear you want and also play a loot box game. Don't worry we won't be running through the castle to test loot box game algorithm (one entire castle run for a single try)Instead, we will create teleports</p>
+</article>
+
+<article>
+<header><h1>Teleports System</h1></header>
+<p>Instead of running around the castle, fighting dragons and jumping over traps, wouldn't it be easier to just appear in certain castle places to perform our routines?Let's add a teleport right next to our new loot box game. Next time we tweak loot algorithm we won't run around the castle, we just show up right where we need to be.Regardless of how big our castle will become, regardless of how many more traps and doors we will add between the castle entrance and the loot floor, when we need to tweak and test our loot box algorithm, we just show up right there.Let's add teleports next to more points of interests, so next time when we tweak our features we can test them in an instance.On our first day we only had one room and a throne at the end. But if on the same day we would add a teleport next to the throne - we would already be saving time running through the room.Teleporting would make us faster day one.</p>
+</article>
+
+<article>
+<header><h1>Implementing Teleports</h1></header>
+<p>The castle we have built is your app. And the main entrance is your language main function.One way to build teleports is to implement more than one main file with its own main function. java class ChestTeleport { public static void main() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); assert !chest.open(wrongAuth); FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); assert chest.open(validAuth)); } } If you do just that it is already going to be a time saver. Any time you want to test a different portion of your castle, you just use a different teleport - a different file to execute.As the number of teleports grow it may become harder to sort through them to pick one to use. Also teleports that are rarely used may become obsolete and point you to non existing parts of your castle.Fortunately most languages have a testing framework to define and structure your teleports. Moreover they will make sure that teleports are still functioning. java class ChestTest { @Test public void invalidFingerAuth() { FingerAuth wrongAuth = new FingerAuth('wrongPerson'); SmartLockChest chest = new Chest(); Assert.assertFalse(chest.open(auth)); } @Test public void validFingerAuth() { FingerAuth validAuth = new FingerAuth('validPerson'); SmartLockChest chest = new Chest(); Assert.assertTrue(chest.open(auth)); } } This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in one button press. Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.</p>
+</article>
+
+<article>
+<header><h1>Real Life Boring Example</h1></header>
+<p>You probably don't face castles and dragons every day at your work, so let me map it to a boring real life example.Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good. A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day. So how do you test this scenario?You create a SysAdmin Ticket to request WRITE access to DEV database. Wait for approval. Restart the server and check your code.Note: You may say, but hey, I can run my database locally! Sure, but not every big company and not every software has moved on to the greatest tech. And most excuses for not writing tests come from Enterprise engineers working on legacy applications. Plus it helps to make a point.Your code is in production for a month. Everyone is happy, the page is a great success and have many daily visitors. Hence a new request comes up: you need to change the sorting works. text Smith Bo Smith Bob Smith Bobed Smith Al Smith Alice text Smith Alice Smith Al Smith Bobed Smith Bob Smith Bo Basically, still sort alphabetically, but put longer names at the top. It makes page looks better!You fire up your DEV to realize the data is gone. You create a SysAdmin Ticket to request WRITE access to DEV database. Wait for approval. Restart the server and start coding.Let's rewind and try again. Instead of jumping to deploy and database manipulations, let's build a teleport. java class EmployeesSorterTest { @Test public void matchingLastName() { EmployeesList list = new EmployeesList(); list.add(&quot;Smith&quot;, &quot;Bobed&quot;); list.add(&quot;Smith&quot;, &quot;Alice&quot;); list.add(&quot;Smith&quot;, &quot;Al&quot;); list.add(&quot;Smith&quot;, &quot;Bob&quot;); EmployeesSorter employeesSorter = new EmployeesSorter(); EmployeesList sorted = employeesSorter.sort(list); Assert.assertEqual(&quot;Alice&quot;, sorted.get(0).getFirstName()); Assert.assertEqual(&quot;Al&quot;, sorted.get(1).getFirstName()); Assert.assertEqual(&quot;Bobed&quot;, sorted.get(2).getFirstName()); Assert.assertEqual(&quot;Bob&quot;, sorted.get(3).getFirstName()); } } Whether you implement EmployeesSorterTest first or EmployeesSorter is not that important to me.What important is you have a very tight feedback loop between your changes and the result. You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth systems and get straight to the business logic at hand.</p>
+</article>
+
+<article>
+<header><h1>Summary</h1></header>
+<p>Having a tight feedback loop is important for being efficient engineer. Tests are your teleports into any part of your application. Tests make you fast.</p>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/blog/footer.js"></script>
+<script type="text/javascript" src="/blog/toc.js"></script>
+<script type="text/javascript" src="/blog/assets.js"></script>
+<script type="text/javascript" src="/blog/static/main.js"></script>
+<script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
+<script type="text/javascript" src="/blog/tracking.js"></script>
+<script type="text/javascript" src="/blog/search-index.js"></script>
+<script>
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "title" : "Edit on GitHub",
+      "link" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
+    },
+    "id" : "blog",
+    "title" : "Testing Is Documenting",
+    "type" : "Blog",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "allAtOnce" : true,
+      "type" : "Meta"
+    }, {
+      "id" : "tests-are-here-to-speed-you-up",
+      "title" : "Tests Are Here To Speed You Up",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "type" : "Emphasis",
+          "content" : [ {
+            "text" : "\"I am not writing tests right now as they are going to slow me down\"",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " is one of the most common excuses I heard in",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "the projects I worked on.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "A lack of test writing experience can make you feel this way, but I think there is another,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "bigger reason for the perception that tests slow you down. I believe this reason is actually an untapped superpower:",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "the power of exercising any piece of your software in ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "O(1)",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " keystrokes. By ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "O(1)",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " I mean that regardless of how big",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "your application becomes you will always be one button away of seeing the impact of your changes.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The superpower of having the tightest feedback loop.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let me try to explain.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "id" : "building-a-medieval-castle",
+      "title" : "Building A Medieval Castle",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We are going to build a Castle, add features to it, and do a manual inspection of our creation as we go.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's start small. All we need is a single room and a throne to sit on.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Perfect! So let's test it. Quickly get in, walk through the room, sit on the throne. All is good.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add a few more rooms and a chest.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Our goal is to test if we can open that chest. This time we have to do a little bit more legwork.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "This time, a simple check took us a few minutes longer.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add a bit of security to our castle by adding keys and levers.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We have to test each door and to do that we need to go through our entire castle.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "This makes a good test and a very important one.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "For our next iteration we decided to add a new smart lock to our chest, so we can open it",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "with our retina.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three", "smartLock" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We gotta test this feature. So we open a jar, to pick a key, to open first one door and then to open the other door, to pull the lever,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "to run the stairs through the opened door. After catching our breath we try to open a chest.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "A day later, we decide to add an auto lock after three failed attempt.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "And so we bring a friend who is not registered with our castle to open a jar, to pick a key,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "to open a door, ... to ..., ..., to try to fail to open a chest.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "A few iterations later the Security Department expressed the concern that our security could use an upgrade.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "A trap, puzzle and a dragon later we are ready to deploy.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three", "smartLock", "four", "scissors" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "As before, we gotta test every new added Security feature. This is a good test and a very important one.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "We get caught in a trap, we jump over the trap, we play rock/paper/scissors to lose and to win, open the door,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "get eaten by the dragon, defeat the dragon and finally reach the chest. All tests passed.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Another development iteration passes and we decided to make ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "Emphasis",
+          "content" : [ {
+            "text" : "scissors",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " game to be lefty friendly.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three", "smartLock", "four", "scissorsLeft" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "And so we bring a friend who is a lefty, can jump over traps, to open a jar, to pick a key, to open a door, to jump over trap,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "to open a door, to play rock/paper/scissors",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "A day later we decided to add a fingerprint reader to our chest",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "And so we bring another friend who is a lefty, who is not registered with our castle, who can jump over traps,",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "who won't be scared of a dragon, to open a jar, to pick a key, to open a door, to jump over trap, to open a door, to",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "play rock/paper/scissors, to open a lever, to challenge a dragon, to put a finger to a chest.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "It should be clear by now that the more features we add to the castle, the more time it takes to do a check routine of a single feature.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "What is interesting is that the big portion of the time is spend getting to the feature we want to test and not the test itself.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Having said all that let's add another floor to the castle.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameTwo" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "There is a new room where you can grab any gear you want and also play a ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "loot box",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " game.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Don't worry we won't be running through the castle to test ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "loot box",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " game algorithm (one entire castle run for a single try)",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Instead, we will create ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "StrongEmphasis",
+          "content" : [ {
+            "text" : "teleports",
+            "type" : "SimpleText"
+          } ]
+        } ]
+      } ]
+    }, {
+      "id" : "teleports-system",
+      "title" : "Teleports System",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Instead of running around the castle, fighting dragons and jumping over traps, wouldn't it be easier to just appear",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "in certain castle places to perform our routines?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add a ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "teleport",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " right next to our new loot box game.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Next time we tweak loot algorithm we won't run around the castle, we just show up right where we need to be.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "t3", "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameOne" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Regardless of how big our castle will become, regardless of how many more traps and doors we will add between the castle entrance and",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "the loot floor, when we need to tweak and test our loot box algorithm, we just show up right there.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "teleports",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " next to more points of interests, so next time when we tweak our features we can test them in an instance.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "svgSrc" : "/blog/assets/castle.svg?timestamp=1640279497856",
+        "idsToReveal" : [ "t1", "t2", "t3", "one", "two", "three", "smartLock", "smartLock", "smartLockThumbs", "four", "scissorsLeft", "five", "cardGameOne" ],
+        "actualSize" : true,
+        "type" : "Svg"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "On our first day we only had one room and a throne at the end.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "But if on the same day we would add a teleport next to the throne - we would already be saving time running through the room.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Teleporting would make us faster day one.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "id" : "implementing-teleports",
+      "title" : "Implementing Teleports",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "The castle we have built is your app. And the main entrance is your language ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "main",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " function.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "One way to build teleports is to implement more than one ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "main",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " file with its own ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "main",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " function.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "class ChestTeleport {\n    public static void main() {\n        FingerAuth wrongAuth = new FingerAuth('wrongPerson');\n        SmartLockChest chest = new Chest();\n        assert !chest.open(wrongAuth);\n\n        FingerAuth validAuth = new FingerAuth('validPerson');\n        SmartLockChest chest = new Chest();\n        assert chest.open(validAuth));\n    }\n}\n",
+        "lineNumber" : "",
+        "title" : "Java example of Chest Teleport",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "If you do just that it is already going to be a time saver. Any time you want to test a different portion of your castle, you just use a",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "different teleport - a different file to execute.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "As the number of teleports grow it may become harder to sort through them to pick one to use.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Also teleports that are rarely used may become obsolete and point you to non existing parts of your castle.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Fortunately most languages have a testing framework to define and structure your teleports. Moreover they will make sure",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "that teleports are still functioning.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "class ChestTest {\n    @Test\n    public void invalidFingerAuth() {\n        FingerAuth wrongAuth = new FingerAuth('wrongPerson');\n        SmartLockChest chest = new Chest();\n        Assert.assertFalse(chest.open(auth));\n    }\n\n    @Test\n    public void validFingerAuth() {\n        FingerAuth validAuth = new FingerAuth('validPerson');\n        SmartLockChest chest = new Chest();\n        Assert.assertTrue(chest.open(auth));\n    }\n}\n",
+        "lineNumber" : "",
+        "title" : "Java example of Chest Test",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "This is the untapped power of tests I was talking about at the beginning - the power to exercise any piece of your software in one button press.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Regardless of how large or small you software is, tweaking your castle and validating it in a matters of seconds using",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "an ever growing system of teleports will make you consistently productive on day one, day two, day hundred and day thousand.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "id" : "real-life-boring-example",
+      "title" : "Real Life Boring Example",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You probably don't face castles and dragons every day at your work, so let me map it to a boring real life example.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's add a page to Enterprise Corporate Website. Page will list employees that have birthdays today. List must be in an alphabetic order.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Your fire up your IDE, write new page, deploy to DEV environment and test it. All looks good.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "A minute later you realize that your company doesn't have employees with the same last name that have birthdays on the same day.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "So how do you test this scenario?",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You create a SysAdmin Ticket to request ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WRITE",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " access to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " database. Wait for approval. Restart the server and check your code.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Note: You may say, but hey, I can run my database locally! Sure, but not every big company and not every software has moved on to the greatest tech.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "And most excuses for not writing tests come from Enterprise engineers working on legacy applications. Plus it helps to make a point.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Your code is in production for a month. Everyone is happy, the page is a great success and have many daily visitors.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Hence a new request comes up: you need to change the sorting works.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "columns" : [ {
+          "content" : [ {
+            "lang" : "text",
+            "snippet" : "Smith Bo\nSmith Bob\nSmith Bobed\nSmith Al\nSmith Alice\n",
+            "lineNumber" : "",
+            "title" : "instead of",
+            "type" : "Snippet"
+          } ]
+        }, {
+          "content" : [ {
+            "lang" : "text",
+            "snippet" : "Smith Alice\nSmith Al\nSmith Bobed\nSmith Bob\nSmith Bo\n",
+            "lineNumber" : "",
+            "title" : "expected",
+            "type" : "Snippet"
+          } ]
+        } ],
+        "config" : { },
+        "type" : "Columns"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Basically, still sort alphabetically, but put longer names at the top. It makes page looks better!",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "You fire up your ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " to realize the data is gone. You create a SysAdmin Ticket to request ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WRITE",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " access to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "DEV",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " database.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Wait for approval. Restart the server and start coding.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's rewind and try again. Instead of jumping to deploy and database manipulations, let's build a teleport.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "java",
+        "snippet" : "class EmployeesSorterTest {\n    @Test\n    public void matchingLastName() {\n        EmployeesList list = new EmployeesList();\n        list.add(\"Smith\", \"Bobed\");\n        list.add(\"Smith\", \"Alice\");\n        list.add(\"Smith\", \"Al\");\n        list.add(\"Smith\", \"Bob\");\n\n        EmployeesSorter employeesSorter = new EmployeesSorter();\n        EmployeesList sorted = employeesSorter.sort(list);\n        \n        Assert.assertEqual(\"Alice\", sorted.get(0).getFirstName());\n        Assert.assertEqual(\"Al\", sorted.get(1).getFirstName());\n        Assert.assertEqual(\"Bobed\", sorted.get(2).getFirstName());\n        Assert.assertEqual(\"Bob\", sorted.get(3).getFirstName());\n    }\n}\n",
+        "lineNumber" : "",
+        "title" : "Employees Sort Teleport",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Whether you implement ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "EmployeesSorterTest",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " first or ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "EmployeesSorter",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " is not that important to me.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "What important is you have a very tight feedback loop between your changes and the result.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "You bypass database admins (ahem, dragon, ahem, JK), web pages, internal auth systems and get straight to the business logic at hand.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "id" : "summary",
+      "title" : "Summary",
+      "type" : "Section",
+      "content" : [ {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Having a tight feedback loop is important for being efficient engineer.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Tests are your teleports into any part of your application.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Tests make you fast.",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ],
+    "lastModifiedTime" : 1665933207396,
+    "tocItem" : {
+      "chapterTitle" : "Testing",
+      "pageTitle" : "Testing Makes You Faster Day One",
+      "pageMeta" : {
+        "date" : [ "2019-12-19" ],
+        "summary" : [ "How testing makes you fast day one and not in some unknown future" ]
+      },
+      "dirName" : "testing",
+      "fileName" : "testing-makes-you-faster-day-one",
+      "viewOnRelativePath" : "articles/testing/testing-makes-you-faster-day-one.md",
+      "pageSectionIdTitles" : [ {
+        "title" : "Tests Are Here To Speed You Up",
+        "id" : "tests-are-here-to-speed-you-up"
+      }, {
+        "title" : "Building A Medieval Castle",
+        "id" : "building-a-medieval-castle"
+      }, {
+        "title" : "Teleports System",
+        "id" : "teleports-system"
+      }, {
+        "title" : "Implementing Teleports",
+        "id" : "implementing-teleports"
+      }, {
+        "title" : "Real Life Boring Example",
+        "id" : "real-life-boring-example"
+      }, {
+        "title" : "Summary",
+        "id" : "summary"
+      } ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>

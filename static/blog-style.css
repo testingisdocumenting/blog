@@ -184,20 +184,6 @@ html, body {
     margin-left: 0;
     margin-right: 0;
 }
-.znaiblog-list-all-categories {
-}
-
-.znaiblog-list-of-blog-entries-category {
-    font-size: 32px;
-    padding-bottom: 4px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid gray;
-
-    color: var(--znaiblog-entries-category-color);
-
-    text-transform: capitalize;
-}
-
 .znaiblog-list-of-blog-entries {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
