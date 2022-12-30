@@ -1,7 +1,7 @@
 :root {
     --znai-brand-primary-color: #7f716c;
-    --znai-regular-text-size: 18px;
-    --znai-inlined-code-text-size: 16px;
+    --znai-regular-text-size: 16px;
+    --znai-inlined-code-text-size: 14px;
     --znai-link-color: #7d9bce;
 }
 
