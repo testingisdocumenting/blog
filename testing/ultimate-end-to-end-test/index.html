@@ -271,6 +271,7 @@
 </div>
 <script type="text/javascript" src="/blog/footer.js"></script>
 <script type="text/javascript" src="/blog/toc.js"></script>
+<script type="text/javascript" src="/blog/documentation-references.js"></script>
 <script type="text/javascript" src="/blog/assets.js"></script>
 <script type="text/javascript" src="/blog/static/main.js"></script>
 <script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
@@ -668,6 +669,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "title" : "admin tool cli output",
         "lines" : [ "\u001B[36mList of games\u001B[0m", "\u001B[35mg1 \u001B[33m        Slay The Spire \u001B[32m       card rpg \u001B[33m20.0\u001B[0m", "\u001B[35mg2 \u001B[33m        Civilization 6 \u001B[32m       strategy \u001B[33m60.0\u001B[0m", "\u001B[35mg3 \u001B[33m                  Doom \u001B[32m            fps \u001B[33m60.0\u001B[0m", "\u001B[35mg4 \u001B[33m          Last Of Us 2 \u001B[32madventure drama \u001B[33m60.0\u001B[0m", "\u001B[35mg5 \u001B[33m                Inside \u001B[32m      adventure \u001B[33m10.0\u001B[0m", "\u001B[35mg6 \u001B[33m           Hearthstone \u001B[32m           card \u001B[33m 0.0\u001B[0m", "\u001B[35mg7 \u001B[33m            Division 2 \u001B[32m    shooter rpg \u001B[33m30.0\u001B[0m", "\u001B[35mg8 \u001B[33mAssassin Creed Odyssey \u001B[32m            rpg \u001B[33m40.0\u001B[0m" ],
+        "anchorId" : "testing-game-store-admin-tool-cli-output",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -698,6 +700,7 @@ ReactDOM.render(React.createElement(Documentation, {
           }
         },
         "paths" : [ ],
+        "anchorId" : "testing-game-store-response",
         "type" : "Json"
       }, {
         "type" : "Paragraph",
@@ -763,6 +766,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "completed" : false
         },
         "paths" : [ "root.title", "root.completed" ],
+        "anchorId" : "webtau-introduction-response",
         "type" : "Json"
       }, {
         "type" : "Paragraph",
@@ -838,6 +842,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "endLine" : "executed HTTP GET",
         "highlight" : [ 2, 8, 15 ],
         "lines" : [ "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m basic http invocation \u001B[35m(httpBasics.groovy)\u001B[0m", "\u001B[33m> \u001B[34mexecuting HTTP GET \u001B[35mhttps://jsonplaceholder.typicode.com/todos/1\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mbody.title \u001B[32mequals \"delectus aut autem\"", "      body.title:   actual: \"delectus aut autem\" <java.lang.String>", "                  expected: \"delectus aut autem\" <java.lang.String>\u001B[33m (\u001B[32m16ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mbody.completed \u001B[32mequals false", "      body.completed:   actual: false <java.lang.Boolean>", "                      expected: false <java.lang.Boolean>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 200", "      header.statusCode:   actual: 200 <java.lang.Integer>", "                         expected: 200 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[33mresponse\u001B[36m (application/json; charset=utf-8):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"userId\": \u001B[36m1\u001B[33m,\u001B[0m", "    \u001B[35m\"id\": \u001B[36m1\u001B[33m,\u001B[0m", "    \u001B[35m\"title\": \u001B[32m\u001B[1m\u001B[32m__\"delectus aut autem\"__\u001B[33m,\u001B[0m", "    \u001B[35m\"completed\": \u001B[36m\u001B[1m\u001B[32m__false__\u001B[0m", "  \u001B[33m}\u001B[0m", "\u001B[32m. \u001B[34mexecuted HTTP GET \u001B[35mhttps://jsonplaceholder.typicode.com/todos/1\u001B[33m (\u001B[32m359ms\u001B[33m)\u001B[0m" ],
+        "anchorId" : "webtau-introduction-execution-output",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -995,6 +1000,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "priceUsd" : 20.0
         },
         "paths" : [ ],
+        "anchorId" : "game-store-rest-api-register-a-new-game-and-check-it-after",
         "type" : "Json"
       }, {
         "lang" : "groovy",
@@ -1021,6 +1027,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "priceUsd" : 20.0
         },
         "paths" : [ "root.id", "root.title", "root.type", "root.priceUsd" ],
+        "anchorId" : "game-store-rest-api-game-post-response",
         "type" : "Json"
       }, {
         "type" : "Paragraph",
@@ -1141,6 +1148,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "favoriteGenre" : "RPG"
         },
         "paths" : [ "root.userId" ],
+        "anchorId" : "http-explicit-auth-user-preferences-response",
         "type" : "Json"
       } ]
     }, {
@@ -1203,6 +1211,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "endLine" : "uid-bob",
         "revealLineStop" : [ 0, 1, 2 ],
         "lines" : [ "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m persona demo \u001B[35m(personaDemo.groovy)\u001B[0m", "NA", "uid-alice", "uid-bob" ],
+        "anchorId" : "personas-output",
         "type" : "CliOutput"
       } ]
     }, {
@@ -1249,6 +1258,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "endLine" : "Bob",
         "highlight" : [ 2, 7, 8, 9, 12, 15, 18, 19, 25, 22, 23, 26 ],
         "lines" : [ "\u001B[34mrunning: \u001B[35mscenarios/gamestore/userPreferencesRest.groovy \u001B[33msave preferences with personas auth\u001B[0m", "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m save preferences with personas auth \u001B[35m(userPreferencesRest.groovy)\u001B[0m", "\u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mexecuting HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[0m", "  \u001B[33mrequest\u001B[36m (application/json):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"favoriteGenre\": \u001B[32m\"RPG\"\u001B[0m", "  \u001B[33m}\u001B[0m", "  \u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mmapping \u001B[36moperation id\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mmapped \u001B[36moperation id \u001B[33mas \u001B[32m\"PUT /api/user-preferences\"\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mbody.userId \u001B[32mequals \"uid-alice\"", "      body.userId:   actual: \"uid-alice\" <java.lang.String>", "                   expected: \"uid-alice\" <java.lang.String>\u001B[33m (\u001B[32m1ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mbody.favoriteGenre \u001B[32mequals \"RPG\"", "      body.favoriteGenre:   actual: \"RPG\" <java.lang.String>", "                          expected: \"RPG\" <java.lang.String>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 200", "      header.statusCode:   actual: 200 <java.lang.Integer>", "                         expected: 200 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mvalidating \u001B[36mrequest and response\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mvalidated \u001B[36mrequest and response\u001B[33m (\u001B[32m5ms\u001B[33m)\u001B[0m", "  \u001B[33mresponse\u001B[36m (application/json):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"userId\": \u001B[32m\u001B[1m\u001B[32m__\"uid-alice\"__\u001B[33m,\u001B[0m", "    \u001B[35m\"favoriteGenre\": \u001B[32m\u001B[1m\u001B[32m__\"RPG\"__\u001B[0m", "  \u001B[33m}\u001B[0m", "\u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mexecuted HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[33m (\u001B[32m164ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[33mBob \u001B[0m\u001B[34mexecuting HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[0m" ],
+        "anchorId" : "http-implicit-auth-webtau-output",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -1460,6 +1470,7 @@ ReactDOM.render(React.createElement(Documentation, {
           }
         },
         "paths" : [ "root.data.game.title" ],
+        "anchorId" : "graphql-response",
         "type" : "Json"
       }, {
         "type" : "Paragraph",
@@ -1562,6 +1573,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "data" : { }
         },
         "paths" : [ "root.errors[0].message" ],
+        "anchorId" : "graphql-explicit-auth-graphql-error-response",
         "type" : "Json"
       }, {
         "lang" : "groovy",
@@ -1791,6 +1803,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "endLine" : "expected pattern: speedtest.net",
         "highlight" : [ 5, 13, 17, 19 ],
         "lines" : [ "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m basic browser interaction \u001B[35m(browserBasics.groovy)\u001B[0m", "\u001B[33m> \u001B[34minitializing \u001B[36mwebdriver \u001B[33mfor \u001B[0m\u001B[1mchrome\u001B[0m", "\u001B[32m. \u001B[34minitialized \u001B[36mwebdriver \u001B[33mfor \u001B[0m\u001B[1mchrome\u001B[33m (\u001B[32m2s 39ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[34mopening \u001B[35mhttps://google.com\u001B[0m", "\u001B[32m. \u001B[34mopened \u001B[35mhttps://google.com\u001B[33m (\u001B[32m593ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[34msetting value \u001B[32mtest\\n \u001B[33mto \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[0m", "  \u001B[33m> \u001B[34mclearing \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[0m", "  \u001B[32m. \u001B[34mcleared \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[33m (\u001B[32m19ms\u001B[33m)\u001B[0m", "  \u001B[33m> \u001B[34msending keys \u001B[32mtest\\n \u001B[33mto \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[0m", "  \u001B[32m. \u001B[34msent keys \u001B[32mtest\\n \u001B[33mto \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[33m (\u001B[32m906ms\u001B[33m)\u001B[0m", "\u001B[32m. \u001B[34mset value \u001B[32mtest\\n \u001B[33mto \u001B[35mby css \u001B[1m\u001B[35minput[title=\"Search\"]\u001B[33m (\u001B[32m945ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[36mdocumentation \u001B[34mcapturing \u001B[36mscreenshot \u001B[33mas \u001B[35mbrowser-basic\u001B[0m", "\u001B[32m. \u001B[36mdocumentation \u001B[34mcaptured \u001B[36mscreenshot \u001B[33mas \u001B[35m/Users/mykolagolubyev/work/testingisdocumenting/blog/game-store/game-store-tests/game-store-tests-e2e/src/test/groovy/basicScenarios/../../../../target/doc-artifacts/browser-basic.png\u001B[33m (\u001B[32m440ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[34mwaiting \u001B[33mto \u001B[36mcount \u001B[33mof \u001B[35mby css \u001B[1m\u001B[35mh3 \u001B[32mto be greater than or equal to 1\u001B[0m", "\u001B[32m. \u001B[36mcount \u001B[33mof \u001B[35mby css \u001B[1m\u001B[35mh3 \u001B[32mgreater than or equal 1", "    count:   actual: 13 <java.lang.Integer>", "           expected: greater than or equal to 1 <java.lang.Integer>\u001B[33m (\u001B[32m18ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[34mclicking \u001B[35mby css \u001B[1m\u001B[35mh3\u001B[37m, \u001B[35melement(s) with regexp \u001B[1m\u001B[35mSpeedtest.*Ookla\u001B[0m", "\u001B[32m. \u001B[34mclicked \u001B[35mby css \u001B[1m\u001B[35mh3\u001B[37m, \u001B[35melement(s) with regexp \u001B[1m\u001B[35mSpeedtest.*Ookla\u001B[33m (\u001B[32m646ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[34mexpecting \u001B[36mfull page url \u001B[33mof \u001B[0m\u001B[1mbrowser \u001B[32mto equal pattern /speedtest.net/\u001B[0m", "\u001B[32m. \u001B[36mfull page url \u001B[33mof \u001B[0m\u001B[1mbrowser \u001B[32mequals pattern /speedtest.net/", "    full page url:    actual string: https://www.speedtest.net/", "                   expected pattern: speedtest.net\u001B[33m (\u001B[32m4ms\u001B[33m)\u001B[0m" ],
+        "anchorId" : "browser-webtau-output",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -2510,6 +2523,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "priceUsd" : 60.0
         } ],
         "paths" : [ "root[0].id", "root[0].title", "root[1].id", "root[1].title" ],
+        "anchorId" : "database-games-list-json-response",
         "type" : "Json"
       } ]
     }, {
@@ -2566,6 +2580,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "title" : "Admin tool output",
         "lines" : [ "\u001B[36mList of games\u001B[0m", "\u001B[35m43daf57f-ca2d-477b-8853-dc7eeec30c7c \u001B[33mSlay The Spire \u001B[32mcard rpg \u001B[33m20.0\u001B[0m", "\u001B[35m0e731811-d2a5-4a4a-9431-e16e0e9f3ed4 \u001B[33mCivilization 6 \u001B[32mstrategy \u001B[33m60.0\u001B[0m" ],
+        "anchorId" : "cli-command-admin-tool-output",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -2685,6 +2700,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "startLine" : "table data demo",
         "endLine" : "100, 100",
         "lines" : [ "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m table data demo \u001B[35m(tableDataDemo.groovy)\u001B[0m", "table data:", ":id                                    |name|score|type |disabled:", ".______________________________________.____._____._____.________.", "|\"10a7feee-b965-4670-bc1f-b832ca012f61\"|\"A\" |100  |\"T0R\"|false   |", ".______________________________________.____._____._____.________|", "|\"06a9e6d6-746a-4f47-b983-e09d9dd44517\"|\"B\" |100  |\"MBR\"|true    |", ".______________________________________.____._____._____.________|", "|\"50138e3e-a815-4a50-83a6-7db1c63fa2eb\"|\"C\" |101  |\"PO\" |true    |", ".______________________________________.____._____._____.________|", "|\"e5f3989f-1d71-4698-9646-15ff54ed9d18\"|\"C\" |102  |\"AC\" |true    |", ".______________________________________.____._____._____.________|", "|\"216e0b81-9b70-4259-b205-f8642a995de0\"|\"C\" |103  |\"PO\" |false   |", ".______________________________________.____._____._____.________|", "|\"1e97ee07-0848-4950-a1fb-c78bc9b843a8\"|\"C\" |104  |\"AC\" |false   |", ".______________________________________.____._____._____.________|", "", "[100, 100, 101, 102, 103, 104]" ],
+        "anchorId" : "tabledata-webtau-output",
         "type" : "CliOutput"
       } ]
     }, {
@@ -3589,6 +3605,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "DB REPL",
         "revealLineStop" : [ 0 ],
         "lines" : [ "  \u001B[33m> \u001B[34mmapping \u001B[36moperation id\u001B[0m", "  \u001B[32m. \u001B[34mmapped \u001B[36moperation id \u001B[33mas \u001B[32m\"POST /api/game\"\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 201", "      header.statusCode:   actual: 201 <java.lang.Integer>", "                         expected: 201 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[33m> \u001B[34mvalidating \u001B[36mrequest and response\u001B[0m", "  \u001B[32m. \u001B[34mvalidated \u001B[36mrequest and response\u001B[33m (\u001B[32m1ms\u001B[33m)\u001B[0m", "  \u001B[33mresponse\u001B[36m (application/json):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"id\": \u001B[32m\"g2\"\u001B[33m,\u001B[0m", "    \u001B[35m\"title\": \u001B[32m\"Doom\"\u001B[33m,\u001B[0m", "    \u001B[35m\"type\": \u001B[32m\"fps\"\u001B[33m,\u001B[0m", "    \u001B[35m\"priceUsd\": \u001B[36m40\u001B[0m", "  \u001B[33m}\u001B[0m", "\u001B[32m. \u001B[34mexecuted HTTP POST \u001B[35mhttp://localhost:8080/api/game\u001B[33m (\u001B[32m123ms\u001B[33m)\u001B[0m", "\u001B[1mwebtau:\u001B[m000\u001B[1m>\u001B[m db.query(\"select * from Game\")", "\u001B[33m> \u001B[34mcreating \u001B[36mdb datasource \u001B[0m\u001B[1mprimary\u001B[0m" ],
+        "anchorId" : "repl-database-db-repl",
         "type" : "CliOutput"
       } ]
     }, {
@@ -3626,6 +3643,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "stickySlide" : "left"
         },
         "lines" : [ "\u001B[1mwebtau:\u001B[m000\u001B[1m>\u001B[m ls", "\u001B[34mTest files:\u001B[0m", "\u001B[33m0\u001B[35m scenarios/gamestore/adminCliTool.groovy\u001B[0m", "\u001B[33m1\u001B[35m scenarios/gamestore/userPreferencesRest.groovy\u001B[0m", "\u001B[33m2\u001B[35m scenarios/gamestore/userPreferencesGraphQL.groovy\u001B[0m", "\u001B[33m3\u001B[35m scenarios/gamestore/userPreferencesUi.groovy\u001B[0m" ],
+        "anchorId" : "repl-test-selection-test-files-listing",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -3645,6 +3663,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "Test file selection",
         "revealLineStop" : [ 0 ],
         "lines" : [ "\u001B[1mwebtau:\u001B[m000\u001B[1m>\u001B[m s \"userPreferencesRest\"", "\u001B[34mTest scenarios of \u001B[35mscenarios/gamestore/userPreferencesRest.groovy\u001B[34m:\u001B[0m", "\u001B[33m0\u001B[35m save preferences without auth\u001B[0m", "\u001B[33m1\u001B[35m save preferences with explicit auth\u001B[0m", "\u001B[33m2\u001B[35m save preferences with personas auth\u001B[0m", "\u001B[33m3\u001B[35m read preferences with personas auth\u001B[0m" ],
+        "anchorId" : "repl-test-selection-test-file-selection",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -3658,6 +3677,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "endLine" : "Bob",
         "excludeRegexp" : [ "before first test" ],
         "lines" : [ "\u001B[1mwebtau:\u001B[m000\u001B[1m>\u001B[m r \"save preferences with personas auth\"", "\u001B[33m> \u001B[34mpinging \u001B[35mhttp://localhost:8080/actuator/health\u001B[0m", "  \u001B[33m> \u001B[34mexecuting HTTP GET \u001B[35mhttp://localhost:8080/actuator/health\u001B[0m", "    \u001B[32m. \u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 200", "        header.statusCode:   actual: 200 <java.lang.Integer>", "                           expected: 200 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "    \u001B[33m> \u001B[34mvalidating \u001B[36mrequest and response\u001B[0m", "\u001B[33mPath, http://localhost:8080/actuator/health is not found in OpenAPI spec\u001B[0m", "    \u001B[32m. \u001B[34mvalidated \u001B[36mrequest and response\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "    \u001B[33mresponse\u001B[36m (application/json):\u001B[0m", "    \u001B[33m{\u001B[0m", "      \u001B[35m\"status\": \u001B[32m\"UP\"\u001B[0m", "    \u001B[33m}\u001B[0m", "  \u001B[32m. \u001B[34mexecuted HTTP GET \u001B[35mhttp://localhost:8080/actuator/health\u001B[33m (\u001B[32m4ms\u001B[33m)\u001B[0m", "\u001B[32m. \u001B[34mpinged \u001B[35mhttp://localhost:8080/actuator/health\u001B[33m (\u001B[32m4ms\u001B[33m)\u001B[0m", "\u001B[0m", "\u001B[34mrunning: \u001B[35mscenarios/gamestore/userPreferencesRest.groovy \u001B[33msave preferences with personas auth\u001B[0m", "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m save preferences with personas auth \u001B[35m(userPreferencesRest.groovy)\u001B[0m", "\u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mexecuting HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[0m", "  \u001B[33mrequest\u001B[36m (application/json):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"favoriteGenre\": \u001B[32m\"RPG\"\u001B[0m", "  \u001B[33m}\u001B[0m", "  \u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mmapping \u001B[36moperation id\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mmapped \u001B[36moperation id \u001B[33mas \u001B[32m\"PUT /api/user-preferences\"\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mbody.userId \u001B[32mequals \"uid-alice\"", "      body.userId:   actual: \"uid-alice\" <java.lang.String>", "                   expected: \"uid-alice\" <java.lang.String>\u001B[33m (\u001B[32m1ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mbody.favoriteGenre \u001B[32mequals \"RPG\"", "      body.favoriteGenre:   actual: \"RPG\" <java.lang.String>", "                          expected: \"RPG\" <java.lang.String>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 200", "      header.statusCode:   actual: 200 <java.lang.Integer>", "                         expected: 200 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[33m> \u001B[33mAlice \u001B[0m\u001B[34mvalidating \u001B[36mrequest and response\u001B[0m", "  \u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mvalidated \u001B[36mrequest and response\u001B[33m (\u001B[32m5ms\u001B[33m)\u001B[0m", "  \u001B[33mresponse\u001B[36m (application/json):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"userId\": \u001B[32m\u001B[1m\u001B[32m__\"uid-alice\"__\u001B[33m,\u001B[0m", "    \u001B[35m\"favoriteGenre\": \u001B[32m\u001B[1m\u001B[32m__\"RPG\"__\u001B[0m", "  \u001B[33m}\u001B[0m", "\u001B[32m. \u001B[33mAlice \u001B[0m\u001B[34mexecuted HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[33m (\u001B[32m164ms\u001B[33m)\u001B[0m", "\u001B[33m> \u001B[33mBob \u001B[0m\u001B[34mexecuting HTTP PUT \u001B[35mhttp://localhost:8080/api/user-preferences\u001B[0m" ],
+        "anchorId" : "repl-test-selection-test-ran-context-is-preserved",
         "type" : "CliOutput"
       }, {
         "type" : "Paragraph",
@@ -3704,6 +3724,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "Experiments after a test run",
         "revealLineStop" : [ 0 ],
         "lines" : [ "\u001B[1mwebtau:\u001B[m000\u001B[1m>\u001B[m db.query(\"select * from user_preferences\")", "\u001B[33m> \u001B[34mrunning DB query \u001B[32mselect * from user_preferences \u001B[33mon \u001B[0m\u001B[1mprimary-db\u001B[0m", "\u001B[32m. \u001B[34mran DB query \u001B[32mselect * from user_preferences \u001B[33mon \u001B[0m\u001B[1mprimary-db\u001B[33m (\u001B[32m1ms\u001B[33m)\u001B[0m", "\u001B[33mUSER_ID    \u001B[33m, \u001B[0m\u001B[33mFAVORITE_GENRE\u001B[0m", "\"user-a\"   \u001B[33m, \u001B[0m\"RPG\"         ", "\"uid-alice\"\u001B[33m, \u001B[0m\"RPG\"         ", "\"uid-bob\"  \u001B[33m, \u001B[0m\"Strategy\"    ", "\u001B[0m" ],
+        "anchorId" : "repl-test-selection-experiments-after-a-test-run",
         "type" : "CliOutput"
       } ]
     }, {
@@ -3910,7 +3931,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "meta" : {
           "stickySlide" : "left 40%"
         },
-        "imageSrc" : "/blog/articles/testing/img/ue2e-ide-doc-artifacts.png",
+        "imageSrc" : "/blog/testing/img/ue2e-ide-doc-artifacts.png",
         "timestamp" : 1665185652708,
         "shapes" : [ ],
         "width" : 934.0,
@@ -4053,6 +4074,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "title" : "list-games-cli/out.txt",
         "lines" : [ "\u001B[36mList of games\u001B[0m", "\u001B[35m43daf57f-ca2d-477b-8853-dc7eeec30c7c \u001B[33mSlay The Spire \u001B[32mcard rpg \u001B[33m20.0\u001B[0m", "\u001B[35m0e731811-d2a5-4a4a-9431-e16e0e9f3ed4 \u001B[33mCivilization 6 \u001B[32mstrategy \u001B[33m60.0\u001B[0m" ],
+        "anchorId" : "capturing-test-artifacts-list-games-cli-out-txt",
         "type" : "CliOutput"
       } ]
     }, {
@@ -4269,7 +4291,7 @@ ReactDOM.render(React.createElement(Documentation, {
       },
       "dirName" : "testing",
       "fileName" : "ultimate-end-to-end-test",
-      "viewOnRelativePath" : "articles/testing/ultimate-end-to-end-test.md",
+      "viewOnRelativePath" : "testing/ultimate-end-to-end-test.md",
       "pageSectionIdTitles" : [ {
         "title" : "WebTau",
         "id" : "webtau"

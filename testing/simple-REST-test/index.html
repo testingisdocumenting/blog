@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"> 
+<title>Testing Is Documenting: Simple and powerful HTTP API tests</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-153393045-1', 'auto');
+    ga('send', 'pageview');
+</script><link rel="stylesheet" type="text/css" href="/blog/static/css/katex.min.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/main.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/blog-style.css">
+<link rel="stylesheet" type="text/css" href="/blog/static/css/global-overrides.css">
+<link rel="stylesheet" type="text/css" href="/blog/style.css">
+</head>
+<link rel="shortcut icon" href="/blog/favicon.png"type="image/ico"/>
+<body class="theme-znai-dark">
+<script>(function() {
+    var themeNameKey = 'znaiTheme';
+    var darkThemeName = 'znai-dark';
+    var lightThemeName = 'default';
+
+    var znaiTheme = {
+        changeHandlers: [],
+        addChangeHandler(handler) {
+            this.changeHandlers.push(handler);
+        },
+        removeChangeHandler(handler) {
+            var idx = this.changeHandlers.indexOf(handler);
+            this.changeHandlers.splice(idx, 1);
+        },
+        set(name) {
+            this.name = name;
+            document.body.className = 'theme-' + name;
+
+            var idx = 0;
+            var len = this.changeHandlers.length;
+            for (; idx < len; idx++) {
+                this.changeHandlers[idx](name);
+            }
+        },
+        setExplicitly(name) {
+            storeThemeName(name);
+            this.set(name);
+        },
+        setExplicitlyIfNotSetAlready(name) {
+            const themeName = getStoredThemeName();
+            if (themeName) {
+                return
+            }
+
+            this.setExplicitly(name)
+        },
+        toggle() {
+            this.setExplicitly(this.name === lightThemeName ? darkThemeName : lightThemeName)
+        }
+    };
+
+    var mediaThemeName = setLightMatchMediaListenerAndGetThemeName()
+    var themeName = getStoredThemeName() || mediaThemeName;
+    znaiTheme.set(themeName);
+
+    window.znaiTheme = znaiTheme;
+
+    function getStoredThemeName() {
+        return localStorage.getItem(themeNameKey);
+    }
+
+    function storeThemeName(name) {
+        return localStorage.setItem(themeNameKey, name);
+    }
+
+    function setLightMatchMediaListenerAndGetThemeName() {
+        if (!window.matchMedia) {
+            return darkThemeName;
+        }
+
+        var lightQuery = window.matchMedia('(prefers-color-scheme: light)');
+        lightQuery.addListener(function (e) {
+            const newThemeName = e.matches ? lightThemeName : darkThemeName;
+            znaiTheme.setExplicitly(newThemeName);
+        });
+
+        return lightQuery.matches ? lightThemeName : darkThemeName;
+    }
+})()</script>
+<div id="znai"><div id="znai-initial-page-loading" style="margin: -20px 0 0 -20px; padding: 0 40px 40px 0; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center">
+    <div></div>
+</div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
+<article>
+<header><h1>First Test</h1></header>
+<p>I want to show you how to write and run concise, readable and powerful HTTP API tests using WebTau tool.We are going to test a Todo API. https://jsonplaceholder.typicode.com JSON Placeholder website is going to help us with this.Our first test will send GET request to and assertion of the title response field scenario(&quot;check todo item title&quot;) { http.get(&quot;https://jsonplaceholder.typicode.com/todos/1&quot;) { // GET call to a provided URL (full URL is not required) title.should == &quot;delectus aut autem&quot; // automatic mapping of the JSON response } } To run the test, we will use WebTau command line tool. One way to install it is to use https://brew.sh brew. Other options available in documentation https://testingisdocumenting.org/webtau/getting-started/installation#groovy-runner Installation section. brew install testingisdocumenting/brew/webtau webtau scenarios/apitest.groovy Let's take a look at the output produced by the test run scenario check todo item title (apitest.groovy) &gt; executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals &quot;delectus aut autem&quot; body.title: actual: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; expected: &quot;delectus aut autem&quot; &lt;java.lang.String&gt; (21ms) . header.statusCode equals 200 header.statusCode: actual: 200 &lt;java.lang.Integer&gt; expected: 200 &lt;java.lang.Integer&gt; (0ms) response (application/json; charset=utf-8): { &quot;userId&quot;: 1, &quot;id&quot;: 1, &quot;title&quot;: __&quot;delectus aut autem&quot;__, &quot;completed&quot;: false } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (518ms) [.] check todo item title (apitest.groovy) Few things to note:WebTau produces detailed log of what happens Automatic assertion on statusCode when no explicit assertion provided Highlighting asserted fields in the response</p>
+</article>
+
+<article>
+<header><h1>Base URL</h1></header>
+<p>In the example above we use the full URL to the TODO item resource. To be able to run the test against different environments (e.g. localhost) we should extract base URL.There are multiple ways to specify base URL, most commons are:Command line parameter Config file scenario(&quot;check todo item title&quot;) { http.get(&quot;/todos/1&quot;) { title.should == &quot;delectus aut autem&quot; } } To set base URL via command line we need to pass --url parameter to the CLI call webtau scenarios/apitest.groovy --url https://jsonplaceholder.typicode.com To set base URL using a config file use url = &quot;https://jsonplaceholder.typicode.com&quot;</p>
+</article>
+
+<article>
+<header><h1>Extracting Data</h1></header>
+<p>Next, let me show you how to use data from one response to initiate the next one. We will create a TODO item and then extract its id for further usage. scenario(&quot;create and update todo item&quot;) { // create new item def itemId = http.post(&quot;/posts&quot;, [title: &quot;my todo item&quot;, body: &quot;write test&quot;, userId: 1]) { return id // extract auto parsed response field } // use extracted id as part of URL http.get(&quot;/todos/${itemId}&quot;) { id.should == itemId } }</p>
+</article>
+
+<article>
+<header><h1>Reporting</h1></header>
+<p>I already show you console output WebTau produces. Let me finish this post with a screenshot of an HTML report that WebTau generates.Generated report is a self-contained single HTML file that you can Slack around. Report captures a lot of details and provides permalink behavior. E.g. open a specific test and specific HTML call and then share the link.</p>
+</article>
+
+<article>
+<header><h1>Outro</h1></header>
+<p>I demoed basic functionality of testing HTTP based API. Should be enough for you to start writing your tests.There are so many other things you can do with WebTau and HTTP API, Browser, CLI, DataBase and Business Logic.</p>
+</article>
+</section>
+</div>
+<script type="text/javascript" src="/blog/footer.js"></script>
+<script type="text/javascript" src="/blog/toc.js"></script>
+<script type="text/javascript" src="/blog/documentation-references.js"></script>
+<script type="text/javascript" src="/blog/assets.js"></script>
+<script type="text/javascript" src="/blog/static/main.js"></script>
+<script type="text/javascript" src="/blog/static/blog-bundle.js"></script>
+<script type="text/javascript" src="/blog/tracking.js"></script>
+<script type="text/javascript" src="/blog/search-index.js"></script>
+<script>
+document.getElementById('znai').innerHTML = '';
+/*<!--*/
+ReactDOM.render(React.createElement(Documentation, {
+  "docMeta" : {
+    "viewOn" : {
+      "title" : "Edit on GitHub",
+      "link" : "https://github.com/testingisdocumenting/blog/blob/master/blog-content"
+    },
+    "id" : "blog",
+    "title" : "Testing Is Documenting",
+    "type" : "Blog",
+    "previewEnabled" : false
+  },
+  "page" : {
+    "type" : "Page",
+    "content" : [ {
+      "type" : "Paragraph",
+      "content" : [ {
+        "text" : "I want to show you how to write and run concise, readable and powerful HTTP API tests using ",
+        "type" : "SimpleText"
+      }, {
+        "code" : "WebTau",
+        "type" : "InlinedCode"
+      }, {
+        "text" : " tool.",
+        "type" : "SimpleText"
+      } ]
+    }, {
+      "id" : "first-test",
+      "title" : "First Test",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We are going to test a Todo API. ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://jsonplaceholder.typicode.com",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "JSON Placeholder",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " website is going to help us with this.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "GET https://jsonplaceholder.typicode.com/todos/1",
+        "paths" : [ "root.title" ],
+        "data" : {
+          "userId" : 1,
+          "id" : 1,
+          "title" : "delectus aut autem",
+          "completed" : false
+        },
+        "anchorId" : "first-test-get-https-jsonplaceholder-typicode-com-todos-1",
+        "type" : "Json"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Our first test will send GET request to ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "https://jsonplaceholder.typicode.com/todos/1",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " and assertion of the ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "title",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " response field",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "groovy",
+        "snippet" : "scenario(\"check todo item title\") {\n    http.get(\"https://jsonplaceholder.typicode.com/todos/1\") { // GET call to a provided URL (full URL is not required)\n        title.should == \"delectus aut autem\" // automatic mapping of the JSON response\n    }\n}",
+        "autoTitle" : true,
+        "highlight" : [ 2 ],
+        "excludeRegexp" : "http.doc",
+        "commentsType" : "inline",
+        "title" : "scenarios/apitest.groovy",
+        "anchorId" : "first-test-scenarios-apitest-groovy",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "To run the test, we will use ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " command line tool. One way to install it is to use ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://brew.sh",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "brew",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : ".",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Other options available in documentation ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://testingisdocumenting.org/webtau/getting-started/installation#groovy-runner",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Installation",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " section.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "command" : "brew install testingisdocumenting/brew/webtau",
+        "paramsToHighlight" : [ ],
+        "type" : "CliCommand"
+      }, {
+        "command" : "webtau scenarios/apitest.groovy",
+        "paramsToHighlight" : [ ],
+        "type" : "CliCommand"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Let's take a look at the output produced by the test run",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "console output",
+        "excludeRegexp" : "documentation",
+        "highlight" : [ 5, 12 ],
+        "lines" : [ "\u001B[43;1m\u001B[30mscenario\u001B[0m\u001B[34m check todo item title \u001B[35m(apitest.groovy)\u001B[0m", "\u001B[33m> \u001B[34mexecuting HTTP GET \u001B[35mhttps://jsonplaceholder.typicode.com/todos/1\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mbody.title \u001B[32mequals \"delectus aut autem\"", "      body.title:   actual: \"delectus aut autem\" <java.lang.String>", "                  expected: \"delectus aut autem\" <java.lang.String>\u001B[33m (\u001B[32m21ms\u001B[33m)\u001B[0m", "  \u001B[32m. \u001B[0m\u001B[1mheader.statusCode \u001B[32mequals 200", "      header.statusCode:   actual: 200 <java.lang.Integer>", "                         expected: 200 <java.lang.Integer>\u001B[33m (\u001B[32m0ms\u001B[33m)\u001B[0m", "  \u001B[33mresponse\u001B[36m (application/json; charset=utf-8):\u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"userId\": \u001B[36m1\u001B[33m,\u001B[0m", "    \u001B[35m\"id\": \u001B[36m1\u001B[33m,\u001B[0m", "    \u001B[35m\"title\": \u001B[32m\u001B[1m\u001B[32m__\"delectus aut autem\"__\u001B[33m,\u001B[0m", "    \u001B[35m\"completed\": \u001B[36mfalse\u001B[0m", "  \u001B[33m}\u001B[0m", "\u001B[32m. \u001B[34mexecuted HTTP GET \u001B[35mhttps://jsonplaceholder.typicode.com/todos/1\u001B[33m (\u001B[32m518ms\u001B[33m)\u001B[0m", "\u001B[32m[.] \u001B[34mcheck todo item title \u001B[35m(apitest.groovy)\u001B[0m", "\u001B[0m" ],
+        "anchorId" : "first-test-console-output",
+        "type" : "CliOutput"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Few things to note:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "WebTau produces detailed log of what happens",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Automatic assertion on statusCode when no explicit assertion provided",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Highlighting asserted fields in the response",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      } ]
+    }, {
+      "id" : "base-url",
+      "title" : "Base URL",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "In the example above we use the full URL to the TODO item resource. To be able to run the test against different environments (e.g. localhost)",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "we should extract base URL.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "There are multiple ways to specify base URL, most commons are:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Command line parameter",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "Config file",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      }, {
+        "lang" : "groovy",
+        "snippet" : "scenario(\"check todo item title\") {\n    http.get(\"/todos/1\") {\n        title.should == \"delectus aut autem\"\n    }\n}",
+        "title" : "apitest.groovy",
+        "highlight" : [ 1 ],
+        "anchorId" : "base-url-apitest-groovy",
+        "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "To set base URL via command line we need to pass ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "--url",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " parameter to the CLI call",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "command" : "webtau scenarios/apitest.groovy --url https://jsonplaceholder.typicode.com",
+        "paramsToHighlight" : [ ],
+        "type" : "CliCommand"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "To set base URL using a config file use",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "lang" : "groovy",
+        "snippet" : "url = \"https://jsonplaceholder.typicode.com\"",
+        "title" : "webtau.cfg.groovy",
+        "includeRegexp" : "url = ",
+        "anchorId" : "base-url-webtau-cfg-groovy",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "extracting-data",
+      "title" : "Extracting Data",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Next, let me show you how to use data from one response to initiate the next one.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "We will create a TODO item and then extract its id for further usage.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "title" : "POST https://jsonplaceholder.typicode.com/posts",
+        "paths" : [ "root.id" ],
+        "data" : {
+          "userId" : 1,
+          "id" : 1,
+          "title" : "delectus aut autem",
+          "completed" : false
+        },
+        "anchorId" : "extracting-data-post-https-jsonplaceholder-typicode-com-posts",
+        "type" : "Json"
+      }, {
+        "lang" : "groovy",
+        "snippet" : "scenario(\"create and update todo item\") {\n    // create new item\n    def itemId = http.post(\"/posts\", [title: \"my todo item\", body: \"write test\", userId: 1]) {\n        return id // extract auto parsed response field\n    }\n\n    // use extracted id as part of URL\n    http.get(\"/todos/${itemId}\") {\n        id.should == itemId\n    }\n}",
+        "autoTitle" : true,
+        "commentsType" : "inline",
+        "excludeRegexp" : "http.doc",
+        "title" : "scenarios/apitestCreate.groovy",
+        "anchorId" : "extracting-data-scenarios-apitestcreate-groovy",
+        "type" : "Snippet"
+      } ]
+    }, {
+      "id" : "reporting",
+      "title" : "Reporting",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "I already show you console output ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " produces. Let me finish this post with a screenshot of an HTML report that ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " generates.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "annotate" : true,
+        "border" : true,
+        "imageSrc" : "/blog/doc-artifacts/todo-item-report.png",
+        "timestamp" : 1672421236136,
+        "shapes" : [ ],
+        "width" : 1200.0,
+        "height" : 576.0,
+        "type" : "AnnotatedImage"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Generated report is a self-contained single HTML file that you can Slack around. Report captures a lot of details and provides permalink behavior.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "E.g. open a specific test and specific HTML call and then share the link.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    }, {
+      "id" : "outro",
+      "title" : "Outro",
+      "type" : "Section",
+      "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "I demoed basic functionality of testing HTTP based API. Should be enough for you to start writing your tests.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "There are so many other things you can do with WebTau and HTTP API, Browser, CLI, DataBase and Business Logic.",
+          "type" : "SimpleText"
+        } ]
+      } ]
+    } ],
+    "lastModifiedTime" : 1672421597275,
+    "tocItem" : {
+      "chapterTitle" : "Testing",
+      "pageTitle" : "Simple and powerful HTTP API tests",
+      "pageMeta" : {
+        "date" : [ "2022-12-28" ],
+        "title" : [ "Simple and powerful HTTP API tests" ],
+        "summary" : [ "Introduction to WebTau HTTP module to interact with HTTP API for testing and setup" ]
+      },
+      "dirName" : "testing",
+      "fileName" : "simple-REST-test",
+      "viewOnRelativePath" : "testing/simple-REST-test.md",
+      "pageSectionIdTitles" : [ {
+        "title" : "First Test",
+        "id" : "first-test"
+      }, {
+        "title" : "Base URL",
+        "id" : "base-url"
+      }, {
+        "title" : "Extracting Data",
+        "id" : "extracting-data"
+      }, {
+        "title" : "Reporting",
+        "id" : "reporting"
+      }, {
+        "title" : "Outro",
+        "id" : "outro"
+      } ]
+    }
+  }
+}), document.getElementById("znai"));
+/*-->*/
+
+</script>
+
+</body>
+</html>

@@ -25,7 +25,7 @@ toc = [ {
     },
     "dirName" : "testing",
     "fileName" : "testing-makes-you-faster-day-one",
-    "viewOnRelativePath" : "articles/testing/testing-makes-you-faster-day-one.md",
+    "viewOnRelativePath" : "testing/testing-makes-you-faster-day-one.md",
     "pageSectionIdTitles" : [ {
       "title" : "Tests Are Here To Speed You Up",
       "id" : "tests-are-here-to-speed-you-up"
@@ -54,7 +54,7 @@ toc = [ {
     },
     "dirName" : "testing",
     "fileName" : "protect-your-future-self-by-encapsulating-test-input-preparation",
-    "viewOnRelativePath" : "articles/testing/protect-your-future-self-by-encapsulating-test-input-preparation.md",
+    "viewOnRelativePath" : "testing/protect-your-future-self-by-encapsulating-test-input-preparation.md",
     "pageSectionIdTitles" : [ {
       "title" : "Tests Brittleness and Verbosity slows you down",
       "id" : "tests-brittleness-and-verbosity-slows-you-down"
@@ -80,7 +80,7 @@ toc = [ {
     },
     "dirName" : "testing",
     "fileName" : "ultimate-end-to-end-test",
-    "viewOnRelativePath" : "articles/testing/ultimate-end-to-end-test.md",
+    "viewOnRelativePath" : "testing/ultimate-end-to-end-test.md",
     "pageSectionIdTitles" : [ {
       "title" : "WebTau",
       "id" : "webtau"
@@ -187,17 +187,44 @@ toc = [ {
       "title" : "To Get Started",
       "id" : "to-get-started"
     } ]
+  }, {
+    "chapterTitle" : "Testing",
+    "pageTitle" : "Simple and powerful HTTP API tests",
+    "pageMeta" : {
+      "date" : [ "2022-12-28" ],
+      "title" : [ "Simple and powerful HTTP API tests" ],
+      "summary" : [ "Introduction to WebTau HTTP module to interact with HTTP API for testing and setup" ]
+    },
+    "dirName" : "testing",
+    "fileName" : "simple-REST-test",
+    "viewOnRelativePath" : "testing/simple-REST-test.md",
+    "pageSectionIdTitles" : [ {
+      "title" : "First Test",
+      "id" : "first-test"
+    }, {
+      "title" : "Base URL",
+      "id" : "base-url"
+    }, {
+      "title" : "Extracting Data",
+      "id" : "extracting-data"
+    }, {
+      "title" : "Reporting",
+      "id" : "reporting"
+    }, {
+      "title" : "Outro",
+      "id" : "outro"
+    } ]
   } ]
 }, {
-  "chapterTitle" : "Articles",
-  "dirName" : "articles",
+  "chapterTitle" : "Blog Content",
+  "dirName" : "blog-content",
   "items" : [ {
-    "chapterTitle" : "Articles",
+    "chapterTitle" : "Blog Content",
     "pageTitle" : "Index",
     "pageMeta" : { },
-    "dirName" : "articles",
+    "dirName" : "blog-content",
     "fileName" : "index",
-    "viewOnRelativePath" : "articles/index.md",
+    "viewOnRelativePath" : "index.md",
     "pageSectionIdTitles" : [ {
       "title" : "Testing",
       "id" : "testing"

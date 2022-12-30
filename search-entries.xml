@@ -367,4 +367,44 @@
       <score>STANDARD</score>
     </text>
   </entry>
+  <entry>
+    <url>/blog/testing/simple-REST-test#first-test</url>
+    <fullTitle>Testing Is Documenting: Simple and powerful HTTP API tests, First Test [Testing]</fullTitle>
+    <text>
+      <text>I want to show you how to write and run concise, readable and powerful HTTP API tests using WebTau tool.We are going to test a Todo API. https://jsonplaceholder.typicode.com JSON Placeholder website is going to help us with this.Our first test will send GET request to and assertion of the title response field scenario("check todo item title") { http.get("https://jsonplaceholder.typicode.com/todos/1") { // GET call to a provided URL (full URL is not required) title.should == "delectus aut autem" // automatic mapping of the JSON response } } To run the test, we will use WebTau command line tool. One way to install it is to use https://brew.sh brew. Other options available in documentation https://testingisdocumenting.org/webtau/getting-started/installation#groovy-runner Installation section. brew install testingisdocumenting/brew/webtau webtau scenarios/apitest.groovy Let's take a look at the output produced by the test run scenario check todo item title (apitest.groovy) > executing HTTP GET https://jsonplaceholder.typicode.com/todos/1 . body.title equals "delectus aut autem" body.title: actual: "delectus aut autem" &lt;java.lang.String> expected: "delectus aut autem" &lt;java.lang.String> (21ms) . header.statusCode equals 200 header.statusCode: actual: 200 &lt;java.lang.Integer> expected: 200 &lt;java.lang.Integer> (0ms) response (application/json; charset=utf-8): { "userId": 1, "id": 1, "title": __"delectus aut autem"__, "completed": false } . executed HTTP GET https://jsonplaceholder.typicode.com/todos/1 (518ms) [.] check todo item title (apitest.groovy) Few things to note:WebTau produces detailed log of what happens Automatic assertion on statusCode when no explicit assertion provided Highlighting asserted fields in the response</text>
+      <score>STANDARD</score>
+    </text>
+  </entry>
+  <entry>
+    <url>/blog/testing/simple-REST-test#base-url</url>
+    <fullTitle>Testing Is Documenting: Simple and powerful HTTP API tests, Base URL [Testing]</fullTitle>
+    <text>
+      <text>In the example above we use the full URL to the TODO item resource. To be able to run the test against different environments (e.g. localhost) we should extract base URL.There are multiple ways to specify base URL, most commons are:Command line parameter Config file scenario("check todo item title") { http.get("/todos/1") { title.should == "delectus aut autem" } } To set base URL via command line we need to pass --url parameter to the CLI call webtau scenarios/apitest.groovy --url https://jsonplaceholder.typicode.com To set base URL using a config file use url = "https://jsonplaceholder.typicode.com"</text>
+      <score>STANDARD</score>
+    </text>
+  </entry>
+  <entry>
+    <url>/blog/testing/simple-REST-test#extracting-data</url>
+    <fullTitle>Testing Is Documenting: Simple and powerful HTTP API tests, Extracting Data [Testing]</fullTitle>
+    <text>
+      <text>Next, let me show you how to use data from one response to initiate the next one. We will create a TODO item and then extract its id for further usage. scenario("create and update todo item") { // create new item def itemId = http.post("/posts", [title: "my todo item", body: "write test", userId: 1]) { return id // extract auto parsed response field } // use extracted id as part of URL http.get("/todos/${itemId}") { id.should == itemId } }</text>
+      <score>STANDARD</score>
+    </text>
+  </entry>
+  <entry>
+    <url>/blog/testing/simple-REST-test#reporting</url>
+    <fullTitle>Testing Is Documenting: Simple and powerful HTTP API tests, Reporting [Testing]</fullTitle>
+    <text>
+      <text>I already show you console output WebTau produces. Let me finish this post with a screenshot of an HTML report that WebTau generates.Generated report is a self-contained single HTML file that you can Slack around. Report captures a lot of details and provides permalink behavior. E.g. open a specific test and specific HTML call and then share the link.</text>
+      <score>STANDARD</score>
+    </text>
+  </entry>
+  <entry>
+    <url>/blog/testing/simple-REST-test#outro</url>
+    <fullTitle>Testing Is Documenting: Simple and powerful HTTP API tests, Outro [Testing]</fullTitle>
+    <text>
+      <text>I demoed basic functionality of testing HTTP based API. Should be enough for you to start writing your tests.There are so many other things you can do with WebTau and HTTP API, Browser, CLI, DataBase and Business Logic.</text>
+      <score>STANDARD</score>
+    </text>
+  </entry>
 </znai>
