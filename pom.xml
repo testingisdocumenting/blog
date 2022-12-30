@@ -19,13 +19,14 @@
         <module>functional-test-docs</module>
         <module>blog-content</module>
         <module>game-store</module>
+        <module>rest-testing</module>
     </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <groovy.version>2.5.7</groovy.version>
-        <webtau.version>1.49</webtau.version>
+        <webtau.version>1.51-SNAPSHOT</webtau.version>
         <znai.version>1.61</znai.version>
         <junit.version>4.13.1</junit.version>
     </properties>
