@@ -214,6 +214,36 @@ toc = [ {
       "title" : "Outro",
       "id" : "outro"
     } ]
+  }, {
+    "chapterTitle" : "Testing",
+    "pageTitle" : "Simplified Unit And E2E testing with WebTau",
+    "pageMeta" : {
+      "date" : [ "2023-02-22" ],
+      "title" : [ "Simplified Unit And E2E testing with WebTau" ],
+      "summary" : [ "Learn about simplified way of writing and investigating tests on all levels" ]
+    },
+    "dirName" : "testing",
+    "fileName" : "simplified-unit-and-e2e-testing",
+    "viewOnRelativePath" : "testing/simplified-unit-and-e2e-testing.md",
+    "pageSectionIdTitles" : [ {
+      "title" : "Business Logic Data Preparation",
+      "id" : "business-logic-data-preparation"
+    }, {
+      "title" : "Business Logic Data Validation",
+      "id" : "business-logic-data-validation"
+    }, {
+      "title" : "REST API And Database",
+      "id" : "rest-api-and-database"
+    }, {
+      "title" : "Reporting",
+      "id" : "reporting"
+    }, {
+      "title" : "There Is More",
+      "id" : "there-is-more"
+    }, {
+      "title" : "GitHub And Star WebTau",
+      "id" : "github-and-star-webtau"
+    } ]
   } ]
 }, {
   "chapterTitle" : "Blog Content",

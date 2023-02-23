@@ -215,7 +215,7 @@
 
 <article>
 <header><h1>Can I Use WebTau With JUnit?</h1></header>
-<p>Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object&gt; payload = aMapOf( // define payload as a map &quot;id&quot;, &quot;g1&quot;, &quot;title&quot;, &quot;Slay The Spire&quot;, &quot;type&quot;, &quot;card rpg&quot;, &quot;priceUsd&quot;, 20); http.post(&quot;/api/game&quot;, payload); // same post as in Groovy http.get(&quot;/api/game/g1&quot;, (header, body) -&gt; { body.get(&quot;title&quot;).should(equal(&quot;Slay The Spire&quot;)); // validating title field in the response }); } } In case of JUnit runner, WebTau reads config values from webtau.properties resource file: url=http://localhost:8080</p>
+<p>Since we are talking about JUnit and Java, let me show you an example of REST API test using JUnit5 and Java syntax: package com.example.junit5; import org.junit.jupiter.api.Test; import org.testingisdocumenting.webtau.junit5.WebTau; import java.util.Map; import static org.testingisdocumenting.webtau.WebTauDsl.*; // convenient import for Java @WebTau // optional annotation to include this test into web report public class PostGetJavaTest { @Test public void registerNewGame() { Map&lt;String, Object&gt; payload = aMapOf( // define payload as a map &quot;id&quot;, &quot;g1&quot;, &quot;title&quot;, &quot;Slay The Spire&quot;, &quot;type&quot;, &quot;card rpg&quot;, &quot;priceUsd&quot;, 20); http.post(&quot;/api/game&quot;, payload); // same post as in Groovy http.get(&quot;/api/game/g1&quot;, (header, body) -&gt; { body.get(&quot;title&quot;).should(equal(&quot;Slay The Spire&quot;)); // validating title field in the response }); } } In case of JUnit runner, WebTau reads config values from webtau.properties resource file: url=http://localhost:8080 dbUrl=jdbc:h2:file:~/gamestore/h2-db;AUTO_SERVER=TRUE dbDriverClassName=org.h2.Driver dbUserName=sa dbPassword=password</p>
 </article>
 
 <article>
@@ -648,7 +648,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "fit" : true,
         "border" : true,
         "imageSrc" : "/blog/game-store-main-page.png",
-        "timestamp" : 1664987216762,
+        "timestamp" : 1664987216000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -903,7 +903,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "scaleRatio" : 0.5,
         "border" : true,
         "imageSrc" : "/blog/game-store-report-http-call.png",
-        "timestamp" : 1664987240547,
+        "timestamp" : 1664987240000,
         "shapes" : [ ],
         "width" : 2400.0,
         "height" : 1752.0,
@@ -1570,7 +1570,9 @@ ReactDOM.render(React.createElement(Documentation, {
           "errors" : [ {
             "message" : "forbidden"
           } ],
-          "data" : { }
+          "data" : {
+            "updateUserPreferences" : null
+          }
         },
         "paths" : [ "root.errors[0].message" ],
         "anchorId" : "graphql-explicit-auth-graphql-error-response",
@@ -1756,7 +1758,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "fit" : true,
         "border" : true,
         "imageSrc" : "/blog/browser-basic.png",
-        "timestamp" : 1664987202586,
+        "timestamp" : 1664987202000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -1831,7 +1833,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "fit" : true,
         "border" : true,
         "imageSrc" : "/blog/landing-page.png",
-        "timestamp" : 1664987212200,
+        "timestamp" : 1664987212000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -1860,7 +1862,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "fit" : true,
         "border" : true,
         "imageSrc" : "/blog/landing-page-reduced.png",
-        "timestamp" : 1664987213160,
+        "timestamp" : 1664987213000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -2142,7 +2144,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "caption" : "user preferences",
         "fit" : true,
         "imageSrc" : "/blog/user-preferences-screen.png",
-        "timestamp" : 1664987221300,
+        "timestamp" : 1664987221000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -2159,7 +2161,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "caption" : "login is required",
         "fit" : true,
         "imageSrc" : "/blog/login-screen.png",
-        "timestamp" : 1664987219653,
+        "timestamp" : 1664987219000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -2417,7 +2419,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "stickySlide" : "left"
         },
         "imageSrc" : "/blog/admin-send-message.png",
-        "timestamp" : 1664987210931,
+        "timestamp" : 1664987210000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -2426,7 +2428,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "fit" : true,
         "border" : true,
         "imageSrc" : "/blog/landing-received-message.png",
-        "timestamp" : 1664987211207,
+        "timestamp" : 1664987211000,
         "shapes" : [ ],
         "width" : 1800.0,
         "height" : 952.0,
@@ -2785,7 +2787,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       }, {
         "lang" : "properties",
-        "snippet" : "url=http://localhost:8080",
+        "snippet" : "url=http://localhost:8080\ndbUrl=jdbc:h2:file:~/gamestore/h2-db;AUTO_SERVER=TRUE\ndbDriverClassName=org.h2.Driver\ndbUserName=sa\ndbPassword=password",
         "title" : "src/test/resources/webtau.properties",
         "anchorId" : "can-i-use-webtau-with-junit-src-test-resources-webtau-properties",
         "type" : "Snippet"
@@ -2820,7 +2822,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-report-summary.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-report-summary.png",
-        "timestamp" : 1664987237048,
+        "timestamp" : 1664987237000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -2969,7 +2971,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-skipped-operations.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-skipped-operations.png",
-        "timestamp" : 1664987237760,
+        "timestamp" : 1664987237000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3103,7 +3105,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-overall-http-performance.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-overall-http-performance.png",
-        "timestamp" : 1664987238845,
+        "timestamp" : 1664987238000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3131,7 +3133,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-operations-http-performance.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-operations-http-performance.png",
-        "timestamp" : 1664987239336,
+        "timestamp" : 1664987239000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3194,7 +3196,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-report-test-summary.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-report-test-summary.png",
-        "timestamp" : 1664987239947,
+        "timestamp" : 1664987239000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3262,7 +3264,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-report-http-call.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-report-http-call.png",
-        "timestamp" : 1664987240547,
+        "timestamp" : 1664987240000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3324,7 +3326,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-report-cli-call.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-report-cli-call.png",
-        "timestamp" : 1664987241233,
+        "timestamp" : 1664987241000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3385,7 +3387,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "annotationsPath" : "game-store-report-steps.json",
         "border" : true,
         "imageSrc" : "/blog/game-store-report-steps.png",
-        "timestamp" : 1664987241863,
+        "timestamp" : 1664987241000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -3932,7 +3934,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "stickySlide" : "left 40%"
         },
         "imageSrc" : "/blog/testing/img/ue2e-ide-doc-artifacts.png",
-        "timestamp" : 1665185652708,
+        "timestamp" : 1677084822000,
         "shapes" : [ ],
         "width" : 934.0,
         "height" : 1214.0,
@@ -3995,7 +3997,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "stickySlide" : "top 40%"
         },
         "imageSrc" : "/blog/admin-ui-filter.png",
-        "timestamp" : 1664987214342,
+        "timestamp" : 1664987214000,
         "shapes" : [ {
           "type" : "badge",
           "text" : "1",
@@ -4113,7 +4115,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "scaleRatio" : 0.5,
         "border" : true,
         "imageSrc" : "/blog/game-store-docs-web-ui.png",
-        "timestamp" : 1664987246061,
+        "timestamp" : 1664987246000,
         "shapes" : [ ],
         "width" : 2400.0,
         "height" : 2494.0,
@@ -4123,7 +4125,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "scaleRatio" : 0.5,
         "border" : true,
         "imageSrc" : "/blog/game-store-docs-rest-api.png",
-        "timestamp" : 1664987246706,
+        "timestamp" : 1664987246000,
         "shapes" : [ ],
         "width" : 2400.0,
         "height" : 2494.0,
@@ -4133,7 +4135,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "scaleRatio" : 0.5,
         "border" : true,
         "imageSrc" : "/blog/game-store-docs-cli.png",
-        "timestamp" : 1664987247860,
+        "timestamp" : 1664987247000,
         "shapes" : [ ],
         "width" : 2400.0,
         "height" : 2494.0,
@@ -4281,7 +4283,7 @@ ReactDOM.render(React.createElement(Documentation, {
         } ]
       } ]
     } ],
-    "lastModifiedTime" : 1665933207400,
+    "lastModifiedTime" : 1677084822000,
     "tocItem" : {
       "chapterTitle" : "Testing",
       "pageTitle" : "Ultimate End To End Test",
