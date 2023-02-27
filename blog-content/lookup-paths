@@ -4,7 +4,10 @@
 ../functional-test-docs/src/test/groovy
 ../rest-testing/src/test/groovy
 ../rest-testing/target/console-output-capture
+../game-store/game-store-backend
 ../game-store/game-store-backend/src/main
+../game-store/game-store-backend/src/main/java
+../game-store/game-store-backend/src/test/java
 ../game-store/game-store-tests/game-store-tests-e2e
 ../game-store/game-store-tests/game-store-tests-e2e/target/doc-artifacts
 ../game-store/game-store-tests/game-store-tests-doc-tests/target/doc-artifacts
