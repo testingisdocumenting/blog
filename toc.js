@@ -220,7 +220,7 @@ toc = [ {
     "pageMeta" : {
       "date" : [ "2023-02-22" ],
       "title" : [ "Simplified Unit And E2E testing with WebTau" ],
-      "summary" : [ "Learn about simplified way of writing and investigating tests on all levels" ]
+      "summary" : [ "Learn how to simplify your data input and output preparation for your business and infrastructure logic." ]
     },
     "dirName" : "testing",
     "fileName" : "simplified-unit-and-e2e-testing",

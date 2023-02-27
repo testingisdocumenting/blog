@@ -95,12 +95,12 @@
 </div><section style="max-width: 640px; margin-left: auto; margin-right: auto;">
 <article>
 <header><h1>Business Logic Data Preparation</h1></header>
-<p>I want to show you how to create complex domain data using WebTau table .Let's implement and test game store checkout price discount logic.Discount logic depends on:how many distinct type of games you buy each distinct game type will yield 10% discount, as long as games cost more than $15 no more than three distinct games types will be counted As an example, given the following checkout cart, a user will get 20% discount: id type price g1 RPG 10 g2 RPG 50 g3 Action 70 g4 Puzzle 10 Let's create a discount calculator to implement the business rule: public class DiscountCalculator { public int calculateDiscountPercentage(List&lt;Game&gt; games) { long numberOfDistinctTypes = games.stream() .filter(game -&gt; game.getPriceUsd().compareTo(BigDecimal.valueOf(15)) &gt; 0) // price filter .map(Game::getType) .distinct() // only distinct game types .count(); long limitedDistinctTypes = Math.min(3, numberOfDistinctTypes); // no more than three return (int) (limitedDistinctTypes * 10); } } To test that code we will need to create a sufficient number of Game instances to make sure we cover:Only one game per type Only games with high enough price No more than three distinct types Creating many Game instances is a lot of boilerplate: Game game1 = new Game(); game1.setId(&quot;id1&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(12)); Game game2 = new Game(); game1.setId(&quot;id2&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(28)); Game game3 = new Game(); game1.setId(&quot;id3&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(70)); // .... List&lt;Game&gt; checkoutGames = Arrays.asList(game1, game2, game3); public class DiscountCalculatorTest { @Test public void discountBasedUniqueGenresAbove15DollarsLimitedBy3() { List&lt;Game&gt; checkoutGames = createGames(table(&quot;id&quot; , &quot;type&quot;, &quot;price&quot;, // WebTau table API to create domain data ___________________________, cell.guid, &quot;RPG&quot;, 12, // cell.guid generated unique id for each row cell.guid, &quot;RPG&quot;, 28, cell.guid, &quot;RPG&quot;, 70, // three games with the same Type to make sure we pick only one distinct even though 2 match price criteria cell.guid, &quot;FPS&quot;, 30, cell.guid, &quot;FPS&quot;, 10, cell.guid, &quot;RTS&quot;, 60, cell.guid, &quot;Sport&quot;, 30)); // extra game type to make sure we stop at 3 int discountPercentage = new DiscountCalculator().calculateDiscountPercentage(checkoutGames); actual(discountPercentage, &quot;discount&quot;).should(equal(30)); // validate the result } } Let's take a look at implementation of createGames : public static List&lt;Game&gt; createGames(TableData table) { // table data is like list of map return table.rowsStream() // you can stream rows .map(GamesData::createGame) .collect(Collectors.toList()); } public static Game createGame(Record row) { Game game = new Game(); game.setId(row.get(&quot;id&quot;)); game.setType(row.get(&quot;type&quot;)); game.setTitle(row.get(&quot;title&quot;, &quot;&quot;)); // default values when not provided game.setPriceUsd(BigDecimal.valueOf((int) row.get(&quot;price&quot;, 0))); return game; // and create domain data you need }</p>
+<p>Business logic testing often involves creating data input and validating logic output. I want to show you how you can simplify complex domain data creation using WebTau API.Throughout this article we will be building a Game Store server and its various business rules.Let's start with implementation and testing of games checkout discount logic.Business department came up with the idea that we should encourage people to buy different game genres. So discount depends on:how many distinct type of games you buy each distinct game type will yield 10% discount, as long as games cost more than $15 no more than three distinct games types will be counted As an example, given the following checkout cart, a user will get a 20% discount: id type price g1 RPG 10 g2 RPG 50 g3 Action 70 g4 Puzzle 10 Let's create a discount calculator to implement the business rule: public class DiscountCalculator { public int calculateDiscountPercentage(List&lt;Game&gt; games) { long numberOfDistinctTypes = games.stream() .filter(game -&gt; game.getPriceUsd().compareTo(BigDecimal.valueOf(15)) &gt; 0) // price filter .map(Game::getType) .distinct() // only distinct game types .count(); long limitedDistinctTypes = Math.min(3, numberOfDistinctTypes); // no more than three return (int) (limitedDistinctTypes * 10); } } To test that code we will need to create a sufficient number of Game instances to make sure we cover:Count only one game per type Count only games with high enough price Should count no more than three distinct types Creating many Game instances is a lot of boilerplate: Game game1 = new Game(); game1.setId(&quot;id1&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(12)); Game game2 = new Game(); game1.setId(&quot;id2&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(28)); Game game3 = new Game(); game1.setId(&quot;id3&quot;); game1.setType(&quot;RPG&quot;); game1.setPriceUsd(BigDecimal.valueOf(70)); // .... List&lt;Game&gt; checkoutGames = Arrays.asList(game1, game2, game3); When we deal with boilerplate multiple things can happen:copy pasting and not updating values not creating enough instances To streamline the process of data creation, WebTau provides table API: public class DiscountCalculatorTest { @Test public void discountBasedUniqueGenresAbove15DollarsLimitedBy3() { List&lt;Game&gt; checkoutGames = createGames(table(&quot;id&quot; , &quot;type&quot;, &quot;price&quot;, // WebTau table API to create domain data ___________________________, cell.guid, &quot;RPG&quot;, 12, // cell.guid generated unique id for each row cell.guid, &quot;RPG&quot;, 28, cell.guid, &quot;RPG&quot;, 70, // three games with the same Type to make sure we pick only one distinct even though 2 match price criteria cell.guid, &quot;FPS&quot;, 30, cell.guid, &quot;FPS&quot;, 10, cell.guid, &quot;RTS&quot;, 60, cell.guid, &quot;Sport&quot;, 30)); // extra game type to make sure we stop at 3 int discountPercentage = new DiscountCalculator().calculateDiscountPercentage(checkoutGames); actual(discountPercentage, &quot;discount&quot;).should(equal(30)); // validate the result } } Let's take a look at implementation of createGames : public static List&lt;Game&gt; createGames(TableData table) { // table data is like list of map return table.rowsStream() // you can stream rows .map(GamesData::createGame) .collect(Collectors.toList()); } public static Game createGame(Record row) { Game game = new Game(); game.setId(row.get(&quot;id&quot;)); game.setType(row.get(&quot;type&quot;)); game.setTitle(row.get(&quot;title&quot;, &quot;&quot;)); // default values when not provided game.setPriceUsd(BigDecimal.valueOf((int) row.get(&quot;price&quot;, 0))); return game; // and create domain data you need } By using table and a domain specific methods like createGames you make your tests easier to write, read and maintain.</p>
 </article>
 
 <article>
 <header><h1>Business Logic Data Validation</h1></header>
-<p>Game server has a recommendation engine to provide a new game to play based on your stats. public class GameRecommendationEngineTest { @Test public void shouldRecommendNextGameWhereAccumulatedPerTypeIsLowest() { GamesLibrary library = createLibrary(table(&quot;id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;hoursPlayed&quot;, // create game library with play stats _________________________________________, &quot;g1&quot;, &quot;RPG&quot;, &quot;Divinity 2&quot;, 130, &quot;g2&quot;, &quot;Sport&quot;, &quot;NBA 2023&quot;, 1, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 300)); GameRecommendationEngine engine = new GameRecommendationEngine(library); actual(engine.recommendNextGame(), &quot;nextGame&quot;).should(equal(map( // assert on Game bean using map &quot;id&quot;, &quot;g2&quot;, &quot;type&quot;, &quot;Sport&quot;, &quot;title&quot;, &quot;NBA 2023&quot;, &quot;stats&quot;, map(&quot;hoursPlayed&quot;, 1)))); } } Our current implementation has a bug, and uses incorrect type for the returned game. WebTau output highlights mismatched values in the context of the whole object X failed expecting nextGame to equal {&quot;id&quot;: &quot;g2&quot;, &quot;type&quot;: &quot;Sport&quot;, &quot;title&quot;: &quot;NBA 2023&quot;, &quot;stats&quot;: {&quot;hoursPlayed&quot;: 1}}: nextGame.type: actual: &quot;RPG&quot; &lt;java.lang.String&gt; expected: &quot;Sport&quot; &lt;java.lang.String&gt; ^ (14ms) { &quot;id&quot;: &quot;g2&quot;, &quot;priceUsd&quot;: null, &quot;stats&quot;: {&quot;gameId&quot;: &quot;g2&quot;, &quot;hoursPlayed&quot;: 1}, &quot;title&quot;: &quot;NBA 2023&quot;, &quot;type&quot;: **&quot;RPG&quot;** } Games Library class has a method to find top N games. It returns a list of games. Let's test it. public class GamesLibraryTest { @Test public void shouldFindTopTwoGames() { GamesLibrary library = createLibrary(table(&quot;id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;hoursPlayed&quot;, &quot;price&quot;, _________________________________________________________, &quot;g1&quot;, &quot;RPG&quot;, &quot;Divinity 2&quot;, 130, 30, &quot;g2&quot;, &quot;Sport&quot;, &quot;NBA 2023&quot;, 1, 40, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 300, 20, &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 200, 60)); trace(&quot;all games&quot;, propertiesTable(library.getGames())); // tracing all games when need to debug List&lt;Game&gt; topTwoGames = library.findTopNGames(2); // find top two games as list of game TableData expected = table( &quot;*id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;priceUsd&quot;, &quot;stats&quot;, // expectation as table with key column &lt;id&gt; ______________________________________________________________________, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 20 , map(&quot;hoursPlayed&quot;, 300), &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 60 , map(&quot;hoursPlayed&quot;, 200)); actual(topTwoGames, &quot;top2&quot;).should(equal(expected)); // compare with list of java beans order agnostic } } [tracing] all games id │ priceUsd │ stats │ title │ type &quot;g1&quot; │ null │ {&quot;gameId&quot;: &quot;g1&quot;, &quot;hoursPlayed&quot;: 130} │ &quot;Divinity 2&quot; │ &quot;RPG&quot; &quot;g2&quot; │ null │ {&quot;gameId&quot;: &quot;g2&quot;, &quot;hoursPlayed&quot;: 1} │ &quot;NBA 2023&quot; │ &quot;Sport&quot; &quot;g3&quot; │ null │ {&quot;gameId&quot;: &quot;g3&quot;, &quot;hoursPlayed&quot;: 300} │ &quot;Persona 5&quot; │ &quot;JRPG&quot; &quot;g4&quot; │ null │ {&quot;gameId&quot;: &quot;g4&quot;, &quot;hoursPlayed&quot;: 200} │ &quot;Elden Ring&quot; │ &quot;PainAction&quot; X failed expecting top2 to equal *id │ type │ title │ priceUsd │ stats &quot;g3&quot; │ &quot;JRPG&quot; │ &quot;Persona 5&quot; │ 20 │ {&quot;hoursPlayed&quot;: 300} &quot;g4&quot; │ &quot;PainAction&quot; │ &quot;Elden Ring&quot; │ 60 │ {&quot;hoursPlayed&quot;: 200}: top2[0].priceUsd: actual: null expected: 20 &lt;java.lang.Integer&gt; top2[1].priceUsd: actual: null expected: 60 &lt;java.lang.Integer&gt; (53ms) id │ priceUsd │ stats │ title │ type &quot;g3&quot; │ **null** │ {&quot;gameId&quot;: &quot;g3&quot;, &quot;hoursPlayed&quot;: 300} │ &quot;Persona 5&quot; │ &quot;JRPG&quot; &quot;g4&quot; │ **null** │ {&quot;gameId&quot;: &quot;g4&quot;, &quot;hoursPlayed&quot;: 200} │ &quot;Elden Ring&quot; │ &quot;PainAction&quot; We did validation using TableData . Let's take a look at how a property by property validation would look like. List&lt;Game&gt; topTwoGames = library.findTopNGames(2); Game gameOne = topTwoGames.get(0); assertEquals(&quot;g3&quot;, gameOne.getId()); assertEquals(&quot;JRPG&quot;, gameOne.getType()); assertEquals(&quot;Persona 5&quot;, gameOne.getTitle()); assertEquals(BigDecimal.valueOf(20), gameOne.getPriceUsd()); assertEquals(300, gameOne.getStats().getHoursPlayed()); Game gameTwo = topTwoGames.get(1); assertEquals(&quot;g3&quot;, gameOne.getId()); assertEquals(&quot;PainAction&quot;, gameOne.getType()); assertEquals(&quot;Elden Ring&quot;, gameOne.getTitle()); assertEquals(BigDecimal.valueOf(60), gameOne.getPriceUsd()); assertEquals(200, gameOne.getStats().getHoursPlayed()); TableData expected = table( &quot;*id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;priceUsd&quot;, &quot;stats&quot;, // expectation as table with key column &lt;id&gt; ______________________________________________________________________, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 20 , map(&quot;hoursPlayed&quot;, 300), &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 60 , map(&quot;hoursPlayed&quot;, 200));</p>
+<p>We just simplified our data creation process. Now let's see how we can simplify data validation one.This time we will test a recommendation engine. One of its role is to provide a new game to play based on the games you already played. For now the engine will recommend the least played game in the least played type of games.Here is the test: public class GameRecommendationEngineTest { @Test public void shouldRecommendNextGameWhereAccumulatedPerTypeIsLowest() { GamesLibrary library = createLibrary(table(&quot;id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;hoursPlayed&quot;, // create game library with play stats _________________________________________, &quot;g1&quot;, &quot;RPG&quot;, &quot;Divinity 2&quot;, 130, &quot;g2&quot;, &quot;Sport&quot;, &quot;NBA 2023&quot;, 1, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 300)); GameRecommendationEngine engine = new GameRecommendationEngine(library); actual(engine.recommendNextGame(), &quot;nextGame&quot;).should(equal(map( // assert on Game bean using map &quot;id&quot;, &quot;g2&quot;, &quot;type&quot;, &quot;Sport&quot;, &quot;title&quot;, contain(&quot;2023&quot;), // using a matcher for a field &quot;stats&quot;, map(&quot;hoursPlayed&quot;, 1)))); } } Our current implementation has a bug, and uses incorrect type for the returned game. When mismatch occurs, WebTau output provides all the information you need to understand the issue and highlights important parts of the output: X failed expecting nextGame to equal {&quot;id&quot;: &quot;g2&quot;, &quot;type&quot;: &quot;Sport&quot;, &quot;title&quot;: &lt;contain &quot;2023&quot;&gt;, &quot;stats&quot;: {&quot;hoursPlayed&quot;: 1}}: nextGame.type: actual: &quot;RPG&quot; &lt;java.lang.String&gt; expected: &quot;Sport&quot; &lt;java.lang.String&gt; ^ (39ms) { &quot;id&quot;: &quot;g2&quot;, &quot;priceUsd&quot;: null, &quot;stats&quot;: {&quot;gameId&quot;: &quot;g2&quot;, &quot;hoursPlayed&quot;: 1}, &quot;title&quot;: &quot;NBA 2023&quot;, &quot;type&quot;: **&quot;RPG&quot;** } WebTau did good with an object validation with a nested object. Let's take a look at how it fares with a list of objects.Games Library class has a method to find top N games. It returns a list of games. Let's test it. public class GamesLibraryTest { @Test public void shouldFindTopTwoGames() { GamesLibrary library = createLibrary(table(&quot;id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;hoursPlayed&quot;, &quot;price&quot;, _________________________________________________________, &quot;g1&quot;, &quot;RPG&quot;, &quot;Divinity 2&quot;, 130, 30, &quot;g2&quot;, &quot;Sport&quot;, &quot;NBA 2023&quot;, 1, 40, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, 300, 20, &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 200, 60)); trace(&quot;all games&quot;, propertiesTable(library.getGames())); // tracing all games when need to debug List&lt;Game&gt; topTwoGames = library.findTopNGames(2); // find top two games as list of game TableData expected = table( &quot;*id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;priceUsd&quot; , &quot;stats&quot;, // expectation as table with key column &lt;id&gt; _____________________________________________________________________________, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, lessThan(60), map(&quot;hoursPlayed&quot;, 300), // using a matcher inside a table cell &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 60 , map(&quot;hoursPlayed&quot;, 200)); actual(topTwoGames, &quot;top2&quot;).should(equal(expected)); // compare with list of java beans order agnostic } } [tracing] all games id │ priceUsd │ stats │ title │ type &quot;g1&quot; │ null │ {&quot;gameId&quot;: &quot;g1&quot;, &quot;hoursPlayed&quot;: 130} │ &quot;Divinity 2&quot; │ &quot;RPG&quot; &quot;g2&quot; │ null │ {&quot;gameId&quot;: &quot;g2&quot;, &quot;hoursPlayed&quot;: 1} │ &quot;NBA 2023&quot; │ &quot;Sport&quot; &quot;g3&quot; │ null │ {&quot;gameId&quot;: &quot;g3&quot;, &quot;hoursPlayed&quot;: 300} │ &quot;Persona 5&quot; │ &quot;JRPG&quot; &quot;g4&quot; │ null │ {&quot;gameId&quot;: &quot;g4&quot;, &quot;hoursPlayed&quot;: 200} │ &quot;Elden Ring&quot; │ &quot;PainAction&quot; X failed expecting top2 to equal *id │ type │ title │ priceUsd │ stats &quot;g3&quot; │ &quot;JRPG&quot; │ &quot;Persona 5&quot; │ &lt;less than 60&gt; │ {&quot;hoursPlayed&quot;: 300} &quot;g4&quot; │ &quot;PainAction&quot; │ &quot;Elden Ring&quot; │ 60 │ {&quot;hoursPlayed&quot;: 200}: top2[0].priceUsd: actual: null expected: &lt;less than 60&gt; &lt;org.testingisdocumenting.webtau.expectation.equality.LessThanMatcher&gt; top2[1].priceUsd: actual: null expected: 60 &lt;java.lang.Integer&gt; (10ms) id │ priceUsd │ stats │ title │ type &quot;g3&quot; │ **null** │ {&quot;gameId&quot;: &quot;g3&quot;, &quot;hoursPlayed&quot;: 300} │ &quot;Persona 5&quot; │ &quot;JRPG&quot; &quot;g4&quot; │ **null** │ {&quot;gameId&quot;: &quot;g4&quot;, &quot;hoursPlayed&quot;: 200} │ &quot;Elden Ring&quot; │ &quot;PainAction&quot; Using trace method is optional and can be helpful when dealing with complex data to see what's going on. When failure happens, WebTau displays actual complex data and highlights values within that you need to take a look at.We did validation using TableData . Let's take a look at how a property by property validation would look like. List&lt;Game&gt; topTwoGames = library.findTopNGames(2); Game gameOne = topTwoGames.get(0); assertEquals(&quot;g3&quot;, gameOne.getId()); assertEquals(&quot;JRPG&quot;, gameOne.getType()); assertEquals(&quot;Persona 5&quot;, gameOne.getTitle()); assertEquals(BigDecimal.valueOf(20), gameOne.getPriceUsd()); assertEquals(300, gameOne.getStats().getHoursPlayed()); Game gameTwo = topTwoGames.get(1); assertEquals(&quot;g3&quot;, gameOne.getId()); assertEquals(&quot;PainAction&quot;, gameOne.getType()); assertEquals(&quot;Elden Ring&quot;, gameOne.getTitle()); assertEquals(BigDecimal.valueOf(60), gameOne.getPriceUsd()); assertEquals(200, gameOne.getStats().getHoursPlayed()); To contrast it with table approach: TableData expected = table( &quot;*id&quot;, &quot;type&quot;, &quot;title&quot;, &quot;priceUsd&quot; , &quot;stats&quot;, // expectation as table with key column &lt;id&gt; _____________________________________________________________________________, &quot;g3&quot;, &quot;JRPG&quot;, &quot;Persona 5&quot;, lessThan(60), map(&quot;hoursPlayed&quot;, 300), // using a matcher inside a table cell &quot;g4&quot;, &quot;PainAction&quot;, &quot;Elden Ring&quot;, 60 , map(&quot;hoursPlayed&quot;, 200)); When dealing with validation boilerplate code you can face even worse problems than with data preparation:ignore certain fields validation copy and paste wrong values and they match incorrect logic</p>
 </article>
 
 <article>
@@ -110,17 +110,17 @@
 
 <article>
 <header><h1>Reporting</h1></header>
-<p>As you may have noticed, WebTau produces useful output to the console. In addition, it also generates HTML rich report.</p>
+<p>As you may have noticed, WebTau produces a lot of useful output to the console. In addition, it also generates HTML rich self-contained report. A single HTML file anyone can slack or email to your colleagues. Continuous Integration can send it to a chat or put under shared file system, and it will just work. On top of it, the report supports permalink navigation, so you can have a handy link to a specific portion of your test suite.Even when your test passes, it still has plenty of information you can find useful. Here is an example of HTTP response fields your test validated.JSON fields your test touched are marked It marks both bulk and precise field assertion</p>
 </article>
 
 <article>
 <header><h1>There Is More</h1></header>
-<p>There are so many things WebTau can do and I want to share them with you very much. Head over to https://github.com/testingisdocumenting/webtau WebTau GitHub to learn more aboutREPL mode HTTP Response Coverage Open API Integration Performance Metrics Browser UI testing GraphQL CLI testing Fake and Proxy Servers Personas Test Containers Integration It is all modular, and you can use only what you need.</p>
+<p>There are so many things WebTau can do and I want to share them with you very much. But I want to keep this article short. Head over to https://github.com/testingisdocumenting/webtau WebTau GitHub to learn more aboutREPL mode HTTP Response Coverage Open API Integration Performance Metrics Browser UI testing GraphQL CLI testing Fake and Proxy Servers Personas Test Containers Integration Don't be afraid by the sheer amount of things the tool can do. It is all modular, and you can use only what you need.</p>
 </article>
 
 <article>
 <header><h1>GitHub And Star WebTau</h1></header>
-<p>If you find it interesting, go to https://github.com/testingisdocumenting/webtau WebTau GitHub page and star the project!</p>
+<p>If you find it interesting, go to https://github.com/testingisdocumenting/webtau WebTau GitHub page and star the project!There is also a link to https://discord.gg/aEHbzXTX6N Discord Server where you can ask any questions or report a bug.</p>
 </article>
 </section>
 </div>
@@ -155,13 +155,19 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "I want to show you how to create complex domain data using WebTau ",
+          "text" : "Business logic testing often involves creating data input and validating logic output. I want to show you how you can simplify complex domain data creation using ",
           "type" : "SimpleText"
         }, {
-          "code" : "table",
+          "code" : "WebTau",
           "type" : "InlinedCode"
         }, {
-          "text" : ".",
+          "text" : " API.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Throughout this article we will be building a Game Store server and its various business rules.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -170,7 +176,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Let's implement and test game store checkout price discount logic.",
+          "text" : "Let's start with implementation and testing of games checkout discount logic.",
           "type" : "SimpleText"
         } ]
       }, {
@@ -179,7 +185,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Discount logic depends on:",
+          "text" : "Business department came up with the idea that we should encourage people to buy different game genres. So discount depends on:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -217,7 +223,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "As an example, given the following checkout cart, a user will get 20% discount:",
+          "text" : "As an example, given the following checkout cart, a user will get a 20% discount:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -345,7 +351,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "content" : [ {
             "type" : "Paragraph",
             "content" : [ {
-              "text" : "Only one game per type",
+              "text" : "Count only one game per type",
               "type" : "SimpleText"
             } ]
           } ]
@@ -354,7 +360,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "content" : [ {
             "type" : "Paragraph",
             "content" : [ {
-              "text" : "Only games with ",
+              "text" : "Count only games with ",
               "type" : "SimpleText"
             }, {
               "type" : "Emphasis",
@@ -369,7 +375,7 @@ ReactDOM.render(React.createElement(Documentation, {
           "content" : [ {
             "type" : "Paragraph",
             "content" : [ {
-              "text" : "No more than ",
+              "text" : "Should count no more than ",
               "type" : "SimpleText"
             }, {
               "type" : "Emphasis",
@@ -401,6 +407,53 @@ ReactDOM.render(React.createElement(Documentation, {
         "anchorId" : "business-logic-data-preparation-boilerplate",
         "type" : "Snippet"
       }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "When we deal with boilerplate multiple things can happen:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "copy pasting and not updating values",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "not creating enough instances",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "To streamline the process of data creation, ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " provides ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "table",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " API:",
+          "type" : "SimpleText"
+        } ]
+      }, {
         "lang" : "java",
         "snippet" : "public class DiscountCalculatorTest {\n    @Test\n    public void discountBasedUniqueGenresAbove15DollarsLimitedBy3() {\n        List<Game> checkoutGames = createGames(table(\"id\"     , \"type\", \"price\", // WebTau table API to create domain data\n                                                     ___________________________,\n                                                     cell.guid, \"RPG\",   12, // cell.guid generated unique id for each row\n                                                     cell.guid, \"RPG\",   28,\n                                                     cell.guid, \"RPG\",   70, // three games with the same Type to make sure we pick only one distinct even though 2 match price criteria\n                                                     cell.guid, \"FPS\",   30,\n                                                     cell.guid, \"FPS\",   10,\n                                                     cell.guid, \"RTS\",   60,\n                                                     cell.guid, \"Sport\", 30)); // extra game type to make sure we stop at 3\n\n        int discountPercentage = new DiscountCalculator().calculateDiscountPercentage(checkoutGames);\n        actual(discountPercentage, \"discount\").should(equal(30)); // validate the result\n    }\n}",
         "title" : "discount calculator test",
@@ -430,18 +483,62 @@ ReactDOM.render(React.createElement(Documentation, {
         "commentsType" : "inline",
         "anchorId" : "business-logic-data-preparation-create-games",
         "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "By using ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "table",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " and a domain specific methods like ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "createGames",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " you make your tests easier to write, read and maintain.",
+          "type" : "SimpleText"
+        } ]
       } ]
     }, {
       "id" : "business-logic-data-validation",
       "title" : "Business Logic Data Validation",
       "type" : "Section",
       "content" : [ {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "We just simplified our data creation process. Now let's see how we can simplify data validation one.",
+          "type" : "SimpleText"
+        } ]
+      }, {
         "presentationParagraph" : "default",
         "type" : "Meta"
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "Game server has a recommendation engine to provide a new game to play based on your stats.",
+          "text" : "This time we will test a ",
+          "type" : "SimpleText"
+        }, {
+          "type" : "Emphasis",
+          "content" : [ {
+            "text" : "recommendation engine",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : ". One of its role is to provide a new game to play based on the games you already played.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "For now the engine will recommend the least played game in the least played type of games.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Here is the test:",
           "type" : "SimpleText"
         } ]
       }, {
@@ -449,7 +546,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "type" : "Meta"
       }, {
         "lang" : "java",
-        "snippet" : "public class GameRecommendationEngineTest {\n    @Test\n    public void shouldRecommendNextGameWhereAccumulatedPerTypeIsLowest() {\n        GamesLibrary library = createLibrary(table(\"id\",  \"type\",      \"title\", \"hoursPlayed\", // create game library with play stats\n                                                   _________________________________________,\n                                                   \"g1\",   \"RPG\", \"Divinity 2\", 130,\n                                                   \"g2\", \"Sport\",   \"NBA 2023\",   1,\n                                                   \"g3\",  \"JRPG\",  \"Persona 5\", 300));\n\n        GameRecommendationEngine engine = new GameRecommendationEngine(library);\n\n        actual(engine.recommendNextGame(), \"nextGame\").should(equal(map( // assert on Game bean using map\n                \"id\", \"g2\",\n                \"type\", \"Sport\",\n                \"title\", \"NBA 2023\",\n                \"stats\", map(\"hoursPlayed\", 1))));\n    }\n}",
+        "snippet" : "public class GameRecommendationEngineTest {\n    @Test\n    public void shouldRecommendNextGameWhereAccumulatedPerTypeIsLowest() {\n        GamesLibrary library = createLibrary(table(\"id\",  \"type\",      \"title\", \"hoursPlayed\", // create game library with play stats\n                                                   _________________________________________,\n                                                   \"g1\",   \"RPG\", \"Divinity 2\", 130,\n                                                   \"g2\", \"Sport\",   \"NBA 2023\",   1,\n                                                   \"g3\",  \"JRPG\",  \"Persona 5\", 300));\n\n        GameRecommendationEngine engine = new GameRecommendationEngine(library);\n\n        actual(engine.recommendNextGame(), \"nextGame\").should(equal(map( // assert on Game bean using map\n                \"id\", \"g2\",\n                \"type\", \"Sport\",\n                \"title\", contain(\"2023\"), // using a matcher for a field\n                \"stats\", map(\"hoursPlayed\", 1))));\n    }\n}",
         "title" : "recommendation logic test",
         "entry" : "GameRecommendationEngineTest",
         "commentsType" : "inline",
@@ -470,16 +567,25 @@ ReactDOM.render(React.createElement(Documentation, {
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "WebTau output highlights mismatched values in the context of the whole object",
+          "text" : "When mismatch occurs, WebTau output provides all the information you need to understand the issue and highlights important parts of the output:",
           "type" : "SimpleText"
         } ]
       }, {
         "title" : "console output",
         "revealLineStop" : [ 0, 3 ],
         "highlight" : [ 10 ],
-        "lines" : [ "\u001B[31mX \u001B[31mfailed \u001B[34mexpecting \u001B[0m\u001B[1mnextGame \u001B[0m\u001B[34mto equal \u001B[33m{\u001B[35m\"id\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"type\"\u001B[33m: \u001B[32m\"Sport\"\u001B[33m, \u001B[35m\"title\"\u001B[33m: \u001B[32m\"NBA 2023\"\u001B[33m, \u001B[35m\"stats\"\u001B[33m: \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}\u001B[33m}\u001B[0m:\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mnextGame.type\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m:\u001B[0m \u001B[32m\"RPG\"\u001B[0m \u001B[33m<java.lang.String>\u001B[0m", "\u001B[0m    \u001B[0m              \u001B[36mexpected\u001B[0m: \u001B[32m\"Sport\"\u001B[0m \u001B[33m<java.lang.String>\u001B[0m", "\u001B[0m    \u001B[0m              \u001B[0m           ^\u001B[33m (\u001B[32m14ms\u001B[33m)\u001B[0m", "  \u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"id\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m,\u001B[0m", "    \u001B[35m\"priceUsd\"\u001B[33m: \u001B[36mnull\u001B[33m,\u001B[0m", "    \u001B[35m\"stats\"\u001B[33m: \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}\u001B[33m,\u001B[0m", "    \u001B[35m\"title\"\u001B[33m: \u001B[32m\"NBA 2023\"\u001B[33m,\u001B[0m", "    \u001B[35m\"type\"\u001B[33m: \u001B[31m**\"RPG\"**\u001B[0m", "  \u001B[33m}\u001B[0m" ],
+        "lines" : [ "\u001B[31mX \u001B[31mfailed \u001B[34mexpecting \u001B[0m\u001B[1mnextGame \u001B[0m\u001B[34mto equal \u001B[33m{\u001B[35m\"id\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"type\"\u001B[33m: \u001B[32m\"Sport\"\u001B[33m, \u001B[35m\"title\"\u001B[33m: \u001B[36m<contain \"2023\">\u001B[33m, \u001B[35m\"stats\"\u001B[33m: \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}\u001B[33m}\u001B[0m:\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mnextGame.type\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m:\u001B[0m \u001B[32m\"RPG\"\u001B[0m \u001B[33m<java.lang.String>\u001B[0m", "\u001B[0m    \u001B[0m              \u001B[36mexpected\u001B[0m: \u001B[32m\"Sport\"\u001B[0m \u001B[33m<java.lang.String>\u001B[0m", "\u001B[0m    \u001B[0m              \u001B[0m           ^\u001B[33m (\u001B[32m39ms\u001B[33m)\u001B[0m", "  \u001B[0m", "  \u001B[33m{\u001B[0m", "    \u001B[35m\"id\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m,\u001B[0m", "    \u001B[35m\"priceUsd\"\u001B[33m: \u001B[36mnull\u001B[33m,\u001B[0m", "    \u001B[35m\"stats\"\u001B[33m: \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}\u001B[33m,\u001B[0m", "    \u001B[35m\"title\"\u001B[33m: \u001B[32m\"NBA 2023\"\u001B[33m,\u001B[0m", "    \u001B[35m\"type\"\u001B[33m: \u001B[31m**\"RPG\"**\u001B[0m", "  \u001B[33m}\u001B[0m" ],
         "anchorId" : "business-logic-data-validation-console-output",
         "type" : "CliOutput"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " did good with an object validation with a nested object. Let's take a look at how it fares with a list of objects.",
+          "type" : "SimpleText"
+        } ]
       }, {
         "presentationParagraph" : "default",
         "type" : "Meta"
@@ -494,7 +600,7 @@ ReactDOM.render(React.createElement(Documentation, {
         "type" : "Meta"
       }, {
         "lang" : "java",
-        "snippet" : "public class GamesLibraryTest {\n    @Test\n    public void shouldFindTopTwoGames() {\n        GamesLibrary library = createLibrary(table(\"id\",        \"type\",      \"title\", \"hoursPlayed\", \"price\",\n                                                   _________________________________________________________,\n                                                   \"g1\",         \"RPG\",  \"Divinity 2\", 130,           30,\n                                                   \"g2\",       \"Sport\",    \"NBA 2023\",   1,           40,\n                                                   \"g3\",        \"JRPG\",   \"Persona 5\", 300,           20,\n                                                   \"g4\",  \"PainAction\",  \"Elden Ring\", 200,           60));\n        trace(\"all games\", propertiesTable(library.getGames())); // tracing all games when need to debug\n\n        List<Game> topTwoGames = library.findTopNGames(2); // find top two games as list of game\n\n        TableData expected = table( \"*id\",        \"type\",      \"title\", \"priceUsd\",  \"stats\",  // expectation as table with key column <id>\n                                   ______________________________________________________________________,\n                                     \"g3\",        \"JRPG\",   \"Persona 5\", 20       , map(\"hoursPlayed\", 300),\n                                     \"g4\",  \"PainAction\",  \"Elden Ring\", 60       , map(\"hoursPlayed\", 200));\n\n        actual(topTwoGames, \"top2\").should(equal(expected)); // compare with list of java beans order agnostic\n    }\n}",
+        "snippet" : "public class GamesLibraryTest {\n  @Test\n  public void shouldFindTopTwoGames() {\n    GamesLibrary library = createLibrary(table(\"id\",        \"type\",      \"title\", \"hoursPlayed\", \"price\",\n                                               _________________________________________________________,\n                                               \"g1\",         \"RPG\",  \"Divinity 2\", 130,           30,\n                                               \"g2\",       \"Sport\",    \"NBA 2023\",   1,           40,\n                                               \"g3\",        \"JRPG\",   \"Persona 5\", 300,           20,\n                                               \"g4\",  \"PainAction\",  \"Elden Ring\", 200,           60));\n    trace(\"all games\", propertiesTable(library.getGames())); // tracing all games when need to debug\n\n    List<Game> topTwoGames = library.findTopNGames(2); // find top two games as list of game\n\n    TableData expected = table( \"*id\",        \"type\",      \"title\", \"priceUsd\"   ,  \"stats\",  // expectation as table with key column <id>\n                               _____________________________________________________________________________,\n                                 \"g3\",        \"JRPG\",   \"Persona 5\", lessThan(60), map(\"hoursPlayed\", 300), // using a matcher inside a table cell\n                                 \"g4\",  \"PainAction\",  \"Elden Ring\",          60 , map(\"hoursPlayed\", 200));\n\n    actual(topTwoGames, \"top2\").should(equal(expected)); // compare with list of java beans order agnostic\n  }\n}",
         "title" : "top two games test",
         "entry" : "GamesLibraryTest",
         "commentsType" : "inline",
@@ -505,12 +611,35 @@ ReactDOM.render(React.createElement(Documentation, {
         "title" : "console output",
         "revealLineStop" : [ 0, 5, 8, 12 ],
         "highlight" : [ 15, 16 ],
-        "lines" : [ "\u001B[1m[tracing]\u001B[0m \u001B[34mall games\u001B[0m", "  \u001B[35mid  \u001B[33m │ \u001B[35mpriceUsd\u001B[33m │ \u001B[35mstats                               \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mtype        \u001B[0m", "  \u001B[32m\"g1\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g1\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m130\u001B[33m}\u001B[33m │ \u001B[32m\"Divinity 2\"\u001B[33m │ \u001B[32m\"RPG\"       \u001B[0m", "  \u001B[32m\"g2\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}  \u001B[33m │ \u001B[32m\"NBA 2023\"  \u001B[33m │ \u001B[32m\"Sport\"     \u001B[0m", "  \u001B[32m\"g3\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g3\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}\u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │ \u001B[32m\"JRPG\"      \u001B[0m", "  \u001B[32m\"g4\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g4\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[0m", "\u001B[31mX \u001B[31mfailed \u001B[34mexpecting \u001B[0m\u001B[1mtop2 \u001B[0m\u001B[34mto equal \u001B[33m*\u001B[35mid \u001B[33m │ \u001B[35mtype        \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mpriceUsd\u001B[33m │ \u001B[35mstats               ", "                                 \u001B[32m\"g3\"\u001B[33m │ \u001B[32m\"JRPG\"      \u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │       \u001B[34m20\u001B[33m │ \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}", "                                 \u001B[32m\"g4\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │       \u001B[34m60\u001B[33m │ \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[0m:\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mtop2[0].priceUsd\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m: \u001B[31mnull\u001B[0m", "\u001B[0m    \u001B[0m                 \u001B[36mexpected\u001B[0m: \u001B[34m20\u001B[0m \u001B[33m<java.lang.Integer>\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mtop2[1].priceUsd\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m: \u001B[31mnull\u001B[0m", "\u001B[0m    \u001B[0m                 \u001B[36mexpected\u001B[0m: \u001B[34m60\u001B[0m \u001B[33m<java.lang.Integer>\u001B[33m (\u001B[32m53ms\u001B[33m)\u001B[0m", "  \u001B[0m", "  \u001B[35mid  \u001B[33m │ \u001B[35mpriceUsd\u001B[33m │ \u001B[35mstats                               \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mtype        \u001B[0m", "  \u001B[32m\"g3\"\u001B[33m │ \u001B[31m**null**\u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g3\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}\u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │ \u001B[32m\"JRPG\"      \u001B[0m", "  \u001B[32m\"g4\"\u001B[33m │ \u001B[31m**null**\u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g4\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[0m" ],
+        "lines" : [ "\u001B[1m[tracing]\u001B[0m \u001B[34mall games\u001B[0m", "  \u001B[35mid  \u001B[33m │ \u001B[35mpriceUsd\u001B[33m │ \u001B[35mstats                               \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mtype        \u001B[0m", "  \u001B[32m\"g1\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g1\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m130\u001B[33m}\u001B[33m │ \u001B[32m\"Divinity 2\"\u001B[33m │ \u001B[32m\"RPG\"       \u001B[0m", "  \u001B[32m\"g2\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g2\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m1\u001B[33m}  \u001B[33m │ \u001B[32m\"NBA 2023\"  \u001B[33m │ \u001B[32m\"Sport\"     \u001B[0m", "  \u001B[32m\"g3\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g3\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}\u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │ \u001B[32m\"JRPG\"      \u001B[0m", "  \u001B[32m\"g4\"\u001B[33m │ \u001B[36mnull    \u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g4\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[0m", "\u001B[31mX \u001B[31mfailed \u001B[34mexpecting \u001B[0m\u001B[1mtop2 \u001B[0m\u001B[34mto equal \u001B[33m*\u001B[35mid \u001B[33m │ \u001B[35mtype        \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mpriceUsd      \u001B[33m │ \u001B[35mstats               ", "                                 \u001B[32m\"g3\"\u001B[33m │ \u001B[32m\"JRPG\"      \u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │ \u001B[36m<less than 60>\u001B[33m │ \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}", "                                 \u001B[32m\"g4\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │             \u001B[34m60\u001B[33m │ \u001B[33m{\u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[0m:\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mtop2[0].priceUsd\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m: \u001B[31mnull\u001B[0m", "\u001B[0m    \u001B[0m                 \u001B[36mexpected\u001B[0m: \u001B[36m<less than 60>\u001B[0m \u001B[33m<org.testingisdocumenting.webtau.expectation.equality.LessThanMatcher>\u001B[0m", "\u001B[0m    \u001B[0m\u001B[1mtop2[1].priceUsd\u001B[0m:\u001B[0m  \u001B[36mactual\u001B[0m: \u001B[31mnull\u001B[0m", "\u001B[0m    \u001B[0m                 \u001B[36mexpected\u001B[0m: \u001B[34m60\u001B[0m \u001B[33m<java.lang.Integer>\u001B[33m (\u001B[32m10ms\u001B[33m)\u001B[0m", "  \u001B[0m", "  \u001B[35mid  \u001B[33m │ \u001B[35mpriceUsd\u001B[33m │ \u001B[35mstats                               \u001B[33m │ \u001B[35mtitle       \u001B[33m │ \u001B[35mtype        \u001B[0m", "  \u001B[32m\"g3\"\u001B[33m │ \u001B[31m**null**\u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g3\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m300\u001B[33m}\u001B[33m │ \u001B[32m\"Persona 5\" \u001B[33m │ \u001B[32m\"JRPG\"      \u001B[0m", "  \u001B[32m\"g4\"\u001B[33m │ \u001B[31m**null**\u001B[33m │ \u001B[33m{\u001B[35m\"gameId\"\u001B[33m: \u001B[32m\"g4\"\u001B[33m, \u001B[35m\"hoursPlayed\"\u001B[33m: \u001B[34m200\u001B[33m}\u001B[33m │ \u001B[32m\"Elden Ring\"\u001B[33m │ \u001B[32m\"PainAction\"\u001B[0m" ],
         "anchorId" : "business-logic-data-validation-console-output-2",
         "type" : "CliOutput"
       }, {
         "presentationParagraph" : "default",
         "type" : "Meta"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Using ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "trace",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " method is optional and can be helpful when dealing with complex data to see what's going on.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "When failure happens, ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "WebTau",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " displays actual complex data and highlights values within that you need to take a look at.",
+          "type" : "SimpleText"
+        } ]
       }, {
         "type" : "Paragraph",
         "content" : [ {
@@ -542,14 +671,55 @@ ReactDOM.render(React.createElement(Documentation, {
         "anchorId" : "business-logic-data-validation-property-by-property-validation",
         "type" : "Snippet"
       }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "To contrast it with ",
+          "type" : "SimpleText"
+        }, {
+          "code" : "table",
+          "type" : "InlinedCode"
+        }, {
+          "text" : " approach:",
+          "type" : "SimpleText"
+        } ]
+      }, {
         "lang" : "java",
-        "snippet" : "TableData expected = table( \"*id\",        \"type\",      \"title\", \"priceUsd\",  \"stats\",  // expectation as table with key column <id>\n                           ______________________________________________________________________,\n                             \"g3\",        \"JRPG\",   \"Persona 5\", 20       , map(\"hoursPlayed\", 300),\n                             \"g4\",  \"PainAction\",  \"Elden Ring\", 60       , map(\"hoursPlayed\", 200));",
+        "snippet" : "TableData expected = table( \"*id\",        \"type\",      \"title\", \"priceUsd\"   ,  \"stats\",  // expectation as table with key column <id>\n                           _____________________________________________________________________________,\n                             \"g3\",        \"JRPG\",   \"Persona 5\", lessThan(60), map(\"hoursPlayed\", 300), // using a matcher inside a table cell\n                             \"g4\",  \"PainAction\",  \"Elden Ring\",          60 , map(\"hoursPlayed\", 200));",
         "title" : "table data validation",
         "startLine" : "TableData expected",
         "endLine" : "));",
         "commentsType" : "remove",
         "anchorId" : "business-logic-data-validation-table-data-validation",
         "type" : "Snippet"
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "When dealing with validation boilerplate code you can face even worse problems than with data preparation:",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "bulletMarker" : "*",
+        "tight" : true,
+        "type" : "BulletList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "ignore certain fields validation",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "copy and paste wrong values and they match incorrect logic",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
       } ]
     }, {
       "id" : "rest-api-and-database",
@@ -626,32 +796,71 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "As you may have noticed, WebTau produces useful output to the console.",
+          "text" : "As you may have noticed, WebTau produces a lot of useful output to the console.",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
         }, {
-          "text" : "In addition, it also generates HTML rich report.",
+          "text" : "In addition, it also generates HTML rich self-contained report. A single HTML file anyone can slack or email to your colleagues.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "Continuous Integration can send it to a chat or put under shared file system, and it will just work.",
+          "type" : "SimpleText"
+        }, {
+          "type" : "SoftLineBreak"
+        }, {
+          "text" : "On top of it, the report supports permalink navigation, so you can have a handy link to a specific portion of your test suite.",
           "type" : "SimpleText"
         } ]
       }, {
         "pixelRatio" : 2,
         "border" : true,
         "imageSrc" : "/blog/testing/img/game-report-failed-summary.png",
-        "timestamp" : 1677130426000,
+        "timestamp" : 1677515153000,
         "shapes" : [ ],
         "width" : 1160.0,
         "height" : 714.0,
         "type" : "AnnotatedImage"
       }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "Even when your test passes, it still has plenty of information you can find useful. Here is an example of HTTP response fields your test validated.",
+          "type" : "SimpleText"
+        } ]
+      }, {
+        "delimiter" : ".",
+        "startNumber" : 1,
+        "type" : "OrderedList",
+        "content" : [ {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "JSON fields your test touched are marked",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        }, {
+          "type" : "ListItem",
+          "content" : [ {
+            "type" : "Paragraph",
+            "content" : [ {
+              "text" : "It marks both bulk and precise field assertion",
+              "type" : "SimpleText"
+            } ]
+          } ]
+        } ]
+      }, {
         "pixelRatio" : 2,
         "border" : true,
         "imageSrc" : "/blog/testing/img/game-report-http-details.png",
-        "timestamp" : 1677130441000,
+        "timestamp" : 1677515153000,
         "shapes" : [ {
           "invertedColors" : true,
-          "x" : 922.0,
-          "y" : 253.0,
+          "x" : 942.0,
+          "y" : 294.0,
           "text" : "1",
           "type" : "badge"
         }, {
@@ -672,7 +881,7 @@ ReactDOM.render(React.createElement(Documentation, {
       "content" : [ {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "There are so many things WebTau can do and I want to share them with you very much.",
+          "text" : "There are so many things WebTau can do and I want to share them with you very much. But I want to keep this article short.",
           "type" : "SimpleText"
         }, {
           "type" : "SoftLineBreak"
@@ -804,7 +1013,7 @@ ReactDOM.render(React.createElement(Documentation, {
       }, {
         "type" : "Paragraph",
         "content" : [ {
-          "text" : "It is all modular, and you can use only what you need.",
+          "text" : "Don't be afraid by the sheer amount of things the tool can do. It is all modular, and you can use only what you need.",
           "type" : "SimpleText"
         } ]
       } ]
@@ -829,16 +1038,33 @@ ReactDOM.render(React.createElement(Documentation, {
           "text" : " page and star the project!",
           "type" : "SimpleText"
         } ]
+      }, {
+        "type" : "Paragraph",
+        "content" : [ {
+          "text" : "There is also a link to ",
+          "type" : "SimpleText"
+        }, {
+          "url" : "https://discord.gg/aEHbzXTX6N",
+          "isFile" : false,
+          "type" : "Link",
+          "content" : [ {
+            "text" : "Discord Server",
+            "type" : "SimpleText"
+          } ]
+        }, {
+          "text" : " where you can ask any questions or report a bug.",
+          "type" : "SimpleText"
+        } ]
       } ]
     } ],
-    "lastModifiedTime" : 1677174293000,
+    "lastModifiedTime" : 1677515153000,
     "tocItem" : {
       "chapterTitle" : "Testing",
       "pageTitle" : "Simplified Unit And E2E testing with WebTau",
       "pageMeta" : {
         "date" : [ "2023-02-22" ],
         "title" : [ "Simplified Unit And E2E testing with WebTau" ],
-        "summary" : [ "Learn about simplified way of writing and investigating tests on all levels" ]
+        "summary" : [ "Learn how to simplify your data input and output preparation for your business and infrastructure logic." ]
       },
       "dirName" : "testing",
       "fileName" : "simplified-unit-and-e2e-testing",
